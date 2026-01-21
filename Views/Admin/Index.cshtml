@@ -1,0 +1,1223 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<style>
+    :root {
+        --o: #F58220;
+        --o2: #E36F15;
+        --b: #0D47A1;
+        --b2: #1E88E5;
+        --bg: #eef3fb;
+        --txt: #0e1320;
+        --mut: #6b7280;
+        --glass: rgba(255,255,255,.54);
+        --glass-2: rgba(255,255,255,.82);
+        --glass-stroke: rgba(13,25,55,.12);
+        --shadow: 0 18px 40px rgba(9,22,48,.16);
+        --radius: 22px;
+        --bd: #e7ebf3;
+        --ok: #10B981;
+        --warn: #F59E0B;
+        --crit: #EF4444;
+        --info: #3B82F6;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(180deg,#fff 0%,#fff9f3 100%);
+        color: var(--txt);
+    }
+
+        /* background vision */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(800px 600px at 10% 0%, rgba(30,136,229,0.18), transparent 70%), radial-gradient(900px 600px at 90% 100%, rgba(245,130,32,0.18), transparent 70%);
+            opacity: .65;
+            pointer-events: none;
+        }
+
+    .elx-dashboard {
+        font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        color: var(--txt);
+        position: relative;
+        z-index: 0;
+        padding-bottom: 22px;
+    }
+
+        .elx-dashboard a {
+            text-decoration: none;
+        }
+
+    /* ===== Hero ===== */
+    .elx-hero {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 8px 18px 16px;
+        align-items: center;
+    }
+
+    .elx-hero-left h1 {
+        font-size: 1.45rem;
+        font-weight: 900;
+        margin: 0 0 4px 0;
+        letter-spacing: .01em;
+    }
+
+    .elx-hero-left p {
+        margin: 0;
+        color: var(--mut);
+        font-size: .92rem;
+    }
+
+    .elx-hero-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+
+    .elx-hero-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: .8rem;
+        background: rgba(255,255,255,.75);
+        border: 1px solid rgba(148,163,184,.55);
+        box-shadow: 0 10px 26px rgba(15,23,42,.18);
+        backdrop-filter: blur(10px);
+    }
+
+        .elx-hero-pill i {
+            color: var(--o2);
+        }
+
+    /* ===== Cards ===== */
+    .elx-card {
+        background: rgba(255,255,255,.92);
+        border: 1px solid var(--bd);
+        border-radius: 18px;
+        padding: 14px 16px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05), 0 12px 32px rgba(0,0,0,0.15), 0 25px 55px rgba(0,0,0,0.12);
+        position: relative;
+        overflow: hidden;
+        transition: transform .35s cubic-bezier(.22,1,.36,1);
+    }
+
+        .elx-card:hover {
+            transform: translateY(-4px);
+        }
+
+    .elx-card-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+        .elx-card-header h5 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 900;
+        }
+
+    .elx-card-sub {
+        color: var(--mut);
+        font-size: .85rem;
+    }
+
+    /* ===== Buttons & inputs ===== */
+    .elx-btn {
+        padding: 9px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--bd);
+        background: #fff;
+        color: #111827;
+        font-weight: 900;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 26px rgba(15,23,42,.10);
+        font-size: .85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .elx-btn.primary {
+            background: linear-gradient(180deg,var(--o),var(--o2));
+            border: 0;
+            color: #111827;
+        }
+
+        .elx-btn.outline {
+            border-color: var(--o);
+            color: var(--o);
+            background: #fff;
+        }
+
+        .elx-btn:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+            filter: grayscale(.2);
+        }
+
+    .elx-input {
+        width: 100%;
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-weight: 800;
+        outline: none;
+        background: #fff;
+        box-shadow: 0 10px 26px rgba(15,23,42,.10);
+    }
+
+        .elx-input:focus {
+            border-color: rgba(245,130,32,.65);
+            box-shadow: 0 0 0 3px rgba(245,130,32,.16), 0 10px 26px rgba(15,23,42,.10);
+        }
+
+    .elx-form-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .elx-col-12 {
+        grid-column: span 12;
+    }
+
+    .elx-col-6 {
+        grid-column: span 12;
+    }
+
+    @@media (min-width: 768px) {
+        .elx-col-6 {
+            grid-column: span 6;
+        }
+    }
+
+    .elx-help {
+        font-size: .8rem;
+        color: var(--mut);
+        margin-top: 6px;
+        line-height: 1.25rem;
+    }
+
+    .elx-kv {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 6px 12px;
+        font-size: .85rem;
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: rgba(248,250,252,.75);
+        border: 1px dashed #e5e7eb;
+    }
+
+        .elx-kv b {
+            color: #111827;
+        }
+
+        .elx-kv span {
+            color: #334155;
+            word-break: break-word;
+        }
+
+    /* ===== Module grid ===== */
+    .elx-modules {
+        margin: 0 18px 18px;
+    }
+
+    .elx-mod-headbar {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+
+    .elx-mod-head-title {
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: .95rem;
+    }
+
+        .elx-mod-head-title i {
+            color: var(--o2);
+        }
+
+    .elx-mod-head-hint {
+        font-size: .85rem;
+        color: var(--mut);
+        text-align: right;
+    }
+
+    .elx-mod-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 14px;
+        align-items: start;
+        grid-auto-rows: max-content;
+    }
+
+    .elx-mod {
+        align-self: start;
+        grid-column: span 12;
+        background: rgba(255,255,255,.92);
+        border: 1px solid rgba(226,232,240,.9);
+        border-radius: 18px;
+        box-shadow: 0 6px 18px rgba(15,23,42,.10);
+        overflow: hidden;
+        transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    @@media (min-width: 768px) {
+        .elx-mod {
+            grid-column: span 6;
+        }
+    }
+
+    .elx-mod:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(15,23,42,.18);
+    }
+
+    .elx-mod-toggle {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px 14px;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+    }
+
+    .elx-mod-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-size: 18px;
+        color: var(--b2);
+        background: #eff6ff;
+        box-shadow: inset 0 0 0 1px rgba(13,71,161,.08);
+    }
+
+    .elx-mod-txt {
+        flex: 1;
+        text-align: left;
+    }
+
+    .elx-mod-title {
+        font-weight: 900;
+        font-size: .92rem;
+        margin-bottom: 2px;
+    }
+
+    .elx-mod-sub {
+        font-size: .82rem;
+        color: var(--mut);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 520px;
+    }
+
+    .elx-mod-arrow {
+        margin-left: auto;
+        font-size: 1rem;
+        color: #6b7280;
+        transition: transform .18s ease;
+    }
+
+    .elx-mod-body {
+        padding: 0 14px 0;
+        font-size: .85rem;
+        color: #4b5563;
+        border-top: 1px dashed #e5e7eb;
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-4px);
+        overflow: hidden;
+        transition: max-height .22s ease, opacity .18s ease, transform .18s ease;
+    }
+
+    .elx-mod-foot {
+        padding: 10px 0 14px;
+        font-size: .82rem;
+        color: #f97316;
+        font-weight: 700;
+    }
+
+    .elx-mod.is-open .elx-mod-body {
+        max-height: 520px; /* tăng để chứa form + table */
+        opacity: 1;
+        transform: translateY(0);
+        padding-top: 10px;
+    }
+
+    .elx-mod.is-open .elx-mod-arrow {
+        transform: rotate(180deg);
+    }
+
+    /* ===== Table ===== */
+    .elx-table-wrap {
+        overflow: auto;
+        margin-top: 8px;
+        max-height: 260px;
+    }
+
+    .elx-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: .86rem;
+    }
+
+        .elx-table th, .elx-table td {
+            padding: 10px 10px;
+            border-bottom: 1px solid rgba(231,235,243,.9);
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .elx-table thead th {
+            color: #637085;
+            font-weight: 900;
+            background: rgba(248,250,252,.85);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+    .elx-chip-status {
+        display: inline-block;
+        padding: .18rem .62rem;
+        border-radius: 9999px;
+        font-size: .75rem;
+        font-weight: 900;
+        border: 1px solid transparent;
+    }
+
+        .elx-chip-status.ok {
+            background: #e8fff1;
+            color: #059669;
+            border-color: #bbf7d0;
+        }
+
+        .elx-chip-status.warn {
+            background: #fff4e5;
+            color: #d97706;
+            border-color: #fed7aa;
+        }
+
+        .elx-chip-status.crit {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .elx-chip-status.info {
+            background: #e0edff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+    .elx-table tr:hover td {
+        background: #fff7ef;
+    }
+
+    /* ===== Toast ===== */
+    .elx-toast {
+        position: fixed;
+        right: 18px;
+        top: 18px;
+        z-index: 9999;
+        min-width: 260px;
+        max-width: 420px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(255,255,255,.96);
+        border: 1px solid rgba(226,232,240,.9);
+        box-shadow: 0 16px 45px rgba(15,23,42,.20);
+        display: none;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+    }
+
+        .elx-toast.show {
+            display: block;
+        }
+
+    .elx-toast-title {
+        font-weight: 900;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .elx-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        display: inline-block;
+    }
+
+        .elx-dot.ok {
+            background: var(--ok);
+        }
+
+        .elx-dot.err {
+            background: var(--crit);
+        }
+
+        .elx-dot.warn {
+            background: var(--warn);
+        }
+
+    .elx-toast-msg {
+        font-size: .85rem;
+        color: #334155;
+        line-height: 1.25rem;
+    }
+
+    /* ===== Ripple ===== */
+    .elx-ripple {
+        position: absolute;
+        border-radius: 50%;
+        transform: scale(0);
+        animation: elx-ripple .55s linear;
+        background: rgba(255,255,255,.55);
+        pointer-events: none;
+    }
+
+    @@keyframes elx-ripple {
+        to {
+            transform: scale(10);
+            opacity: 0;
+        }
+    }
+
+    /* ===== Dock bottom ===== */
+    .elx-dock {
+        position: sticky;
+        bottom: 18px;
+        display: flex;
+        justify-content: center;
+        margin-top: 18px;
+        z-index: 5;
+    }
+
+    .elx-dock-inner {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 10px 25px rgba(15,23,42,.18), 0 1px 3px rgba(15,23,42,.08);
+    }
+
+    .elx-dock a {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: .82rem;
+        font-weight: 900;
+        color: #111827;
+        transition: background .15s ease, color .15s ease, transform .12s ease;
+    }
+
+        .elx-dock a i {
+            font-size: 15px;
+        }
+
+        .elx-dock a.active {
+            background: linear-gradient(180deg,#F58220,#E36F15);
+            color: #111827;
+        }
+
+    @@media (max-width: 576px) {
+        .elx-dock {
+            bottom: 12px;
+            margin-top: 14px;
+        }
+
+        .elx-dock-inner {
+            width: calc(100% - 24px);
+            box-sizing: border-box;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 6px 10px;
+            flex-wrap: wrap;
+        }
+
+        .elx-dock a {
+            flex: 1 1 25%;
+            justify-content: center;
+            padding: 4px 4px;
+            font-size: .78rem;
+        }
+
+            .elx-dock a i {
+                font-size: 14px;
+            }
+
+        .elx-mod-headbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .elx-mod-head-hint {
+            text-align: left;
+        }
+    }
+</style>
+
+<div class="elx-toast" id="elxToast">
+    <div class="elx-toast-title">
+        <span class="elx-dot ok" id="elxToastDot"></span>
+        <span id="elxToastText">Thông báo</span>
+    </div>
+    <div class="elx-toast-msg" id="elxToastMsg"></div>
+</div>
+
+<div class="elx-dashboard">
+
+    <!-- Hero -->
+    <div class="elx-hero">
+        <div class="elx-hero-left">
+            <h1>Dashboard giám sát thiết bị</h1>
+            <p>Toàn cảnh trạng thái thiết bị, cảnh báo & realtime trong một màn hình.</p>
+        </div>
+
+        <div class="elx-hero-right">
+            <span class="elx-hero-pill">
+                <i class="bi bi-cloud-check"></i> Elitech Cloud • Production
+            </span>
+            <small class="text-muted" style="font-size:.78rem;">
+                Giờ hệ thống: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")
+            </small>
+        </div>
+    </div>
+
+    <!-- MODULE GRID – COLLAPSIBLE -->
+    <div class="elx-modules">
+        <div class="elx-mod-headbar">
+            <div class="elx-mod-head-title">
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+                <span>Khu chức năng mở rộng</span>
+            </div>
+            <div class="elx-mod-head-hint">
+                Các ô bên dưới đang để trống – sau này gắn route / React module / popup tuỳ ý.
+            </div>
+        </div>
+
+        <div class="elx-mod-grid">
+            <!-- Module #1 (Set Param) -->
+            <div class="elx-mod">
+                <button type="button" class="elx-mod-toggle" data-mod-toggle>
+                    <div class="elx-mod-icon"><i class="bi bi-sliders2-vertical"></i></div>
+                    <div class="elx-mod-txt">
+                        <div class="elx-mod-title">SetParam (Cấu hình thiết bị)</div>
+                        <div class="elx-mod-sub">Thiết lập interval • ngưỡng nhiệt/ẩm • waybill start</div>
+                    </div>
+                    <i class="bi bi-chevron-down elx-mod-arrow"></i>
+                </button>
+
+                <div class="elx-mod-body">
+                    <p class="mb-1">
+                        Vào trang SetParam để cấu hình <b>recordInterval</b>, <b>uploadInterval</b>,
+                        <b>tmp/hum upper-lower</b>, và các tham số waybill.
+                    </p>
+
+                    <div class="elx-mod-foot d-flex justify-content-between align-items-center">
+                        <a asp-controller="ElitechSetParam" asp-action="Index" class="elx-btn outline">
+                            <i class="bi bi-gear-wide-connected"></i>
+                            Mở SetParam
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Module #2 (Login Sessions) -->
+            <div class="elx-mod">
+                <button type="button" class="elx-mod-toggle" data-mod-toggle>
+                    <div class="elx-mod-icon"><i class="bi bi-shield-check"></i></div>
+                    <div class="elx-mod-txt">
+                        <div class="elx-mod-title">Login Sessions</div>
+                        <div class="elx-mod-sub">Theo dõi phiên đăng nhập • revoke • kiểm tra IP/UA</div>
+                    </div>
+                    <i class="bi bi-chevron-down elx-mod-arrow"></i>
+                </button>
+
+                <div class="elx-mod-body">
+                    <p class="mb-1">
+                        Xem danh sách phiên đăng nhập hiện tại, thời hạn, revoke nếu cần.
+                    </p>
+
+                    <div class="elx-mod-foot d-flex justify-content-between align-items-center">
+                        <a asp-controller="Admin" asp-action="Sessions" class="elx-btn outline">
+                            <i class="bi bi-shield-check"></i> Mở Login Sessions
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module #3 (Waybill) -->
+            <div class="elx-mod">
+                <button type="button" class="elx-mod-toggle" data-mod-toggle>
+                    <div class="elx-mod-icon"><i class="bi bi-truck"></i></div>
+                    <div class="elx-mod-txt">
+                        <div class="elx-mod-title">Waybill (Chuyến / Vận đơn)</div>
+                        <div class="elx-mod-sub">Batch set waybill • start/stop time • nhiều thiết bị</div>
+                    </div>
+                    <i class="bi bi-chevron-down elx-mod-arrow"></i>
+                </button>
+
+                <div class="elx-mod-body">
+                    <p class="mb-1">
+                        Vào trang Waybill để set <b>waybillStartTime</b> / <b>waybillStopTime</b> theo lô (max 200 GUID).
+                    </p>
+
+                    <div class="elx-mod-foot d-flex justify-content-between align-items-center">
+                        <a asp-controller="ElitechWaybill" asp-action="Index" class="elx-btn outline">
+                            <i class="bi bi-box-seam"></i>
+                            Mở Waybill
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Module #4 (Add Device - API #8) -->
+            <div class="elx-mod">
+                <button type="button" class="elx-mod-toggle" data-mod-toggle>
+                    <div class="elx-mod-icon"><i class="bi bi-plus-circle"></i></div>
+                    <div class="elx-mod-txt">
+                        <div class="elx-mod-title">Thêm thiết bị (Bind Elitech)</div>
+                        <div class="elx-mod-sub">API #8 • /api/admin/elitech/add-device</div>
+                    </div>
+                    <i class="bi bi-chevron-down elx-mod-arrow"></i>
+                </button>
+
+                <div class="elx-mod-body">
+                    <div class="elx-card" style="margin:10px 0 0; box-shadow:none;">
+                        <div class="elx-card-sub">
+                            Nhập <b>Device GUID</b> và <b>Tên thiết bị</b>. Backend sẽ gọi Elitech <b>addDevice</b> để “bind” vào API account.
+                        </div>
+
+                        <div class="elx-form-grid">
+                            <div class="elx-col-6">
+                                <label style="font-weight:900;font-size:.85rem;">Device GUID</label>
+                                <input class="elx-input" id="devGuid" placeholder="VD: 90319774496194524687" />
+                                <div class="elx-help">GUID phải đúng như Elitech cấp. Nếu chưa bind thì getDeviceGuids/realtime/history sẽ không thấy.</div>
+                            </div>
+
+                            <div class="elx-col-6">
+                                <label style="font-weight:900;font-size:.85rem;">Device Name</label>
+                                <input class="elx-input" id="devName" placeholder="VD: Kho A - RCW-360P" />
+                                <div class="elx-help">Tên hiển thị trên Elitech Cloud (bạn có thể đặt theo kho/xe/chuyến).</div>
+                            </div>
+
+                            <div class="elx-col-12" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                                <button type="button" class="elx-btn primary" id="btnAddDevice">
+                                    <i class="bi bi-plus-circle"></i> Add Device
+                                </button>
+
+                                <button type="button" class="elx-btn outline" id="btnFillDemo">
+                                    <i class="bi bi-magic"></i> Điền mẫu
+                                </button>
+
+                                <span class="elx-help" id="addDeviceHint" style="margin:0;">
+                                    Chỉ Admin mới gọi được. Nếu bị 401/403: kiểm tra cookie/role.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="elx-kv" id="addDeviceResult" style="display:none;">
+                            <b>HTTP</b><span id="rHttp">-</span>
+                            <b>code</b><span id="rCode">-</span>
+                            <b>message</b><span id="rMsg">-</span>
+                            <b>added</b><span id="rAdded">-</span>
+                            <b>deviceGuid</b><span id="rGuid">-</span>
+                            <b>deviceName</b><span id="rName">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module #5 (Device GUIDs - API #7) -->
+            <div class="elx-mod">
+                <button type="button" class="elx-mod-toggle" data-mod-toggle>
+                    <div class="elx-mod-icon"><i class="bi bi-list-ul"></i></div>
+                    <div class="elx-mod-txt">
+                        <div class="elx-mod-title">Danh sách thiết bị (GUIDs)</div>
+                        <div class="elx-mod-sub">API #7 • /api/elitech/device-guids</div>
+                    </div>
+                    <i class="bi bi-chevron-down elx-mod-arrow"></i>
+                </button>
+
+                <div class="elx-mod-body">
+                    <div class="elx-card" style="margin:10px 0 0; box-shadow:none;">
+                        <div class="elx-card-sub">
+                            Lấy danh sách GUID các thiết bị đang “nhìn thấy được” bởi API account.
+                        </div>
+
+                        <div class="elx-form-grid">
+                            <div class="elx-col-12" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                                <button type="button" class="elx-btn primary" id="btnLoadGuids">
+                                    <i class="bi bi-arrow-repeat"></i> Load GUIDs
+                                </button>
+                                <span class="elx-help" id="guidsHint" style="margin:0;">
+                                    Nếu rỗng: có thể chưa bind thiết bị hoặc account không thấy thiết bị.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="elx-table-wrap" id="guidsTableWrap" style="display:none;">
+                            <table class="elx-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>deviceGuid</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="guidsTbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module #6 -->
+            <div class="elx-mod">
+                <button type="button" class="elx-mod-toggle" data-mod-toggle>
+                    <div class="elx-mod-icon"><i class="bi bi-plug"></i></div>
+                    <div class="elx-mod-txt">
+                        <div class="elx-mod-title">Module #6</div>
+                        <div class="elx-mod-sub">Tích hợp ERP / IoT platform / webhook…</div>
+                    </div>
+                    <i class="bi bi-chevron-down elx-mod-arrow"></i>
+                </button>
+
+                <div class="elx-mod-body">
+                    <p class="mb-1">
+                        Slot cho tích hợp bên thứ 3: ERP/WMS, webhook cảnh báo, push notification, đồng bộ kho/site…
+                    </p>
+                    <div class="elx-mod-foot">Placeholder • tuỳ chỉnh sau</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create User hero strip (đã bỏ nút Login Sessions ở đây vì đã chuyển vào Module #2) -->
+    <div class="elx-hero" style="margin-top: 0;">
+        <div class="elx-hero-left" style="display:flex;gap:14px;align-items:center;">
+            <div style="
+                width:52px;height:52px;border-radius:16px;
+                display:grid;place-items:center;
+                background:linear-gradient(180deg,#F58220,#E36F15);
+                box-shadow:0 12px 28px rgba(245,130,32,.45);
+                color:#111827;font-size:26px;">
+                <i class="bi bi-person-plus"></i>
+            </div>
+
+            <div>
+                <h1 style="margin-bottom:2px;">Tạo tài khoản người dùng</h1>
+                <p>Admin tạo user mới • mật khẩu được hash • role kiểm soát ở backend</p>
+            </div>
+        </div>
+
+        <div class="elx-hero-right">
+            <span class="elx-hero-pill">
+                <i class="bi bi-shield-lock"></i> Admin only
+            </span>
+            <span class="elx-hero-pill">
+                <i class="bi bi-database-lock"></i> Password hashed
+            </span>
+        </div>
+
+        <!-- Create User quick link -->
+        <div class="elx-mod" style="grid-column: span 12;">
+            <a asp-controller="Admin" asp-action="CreateUser" class="elx-mod-toggle" style="text-decoration:none;color:inherit">
+                <div class="elx-mod-icon"><i class="bi bi-person-plus"></i></div>
+                <div class="elx-mod-txt">
+                    <div class="elx-mod-title">Tạo tài khoản user</div>
+                    <div class="elx-mod-sub">Thêm người dùng mới • phân quyền • hash mật khẩu</div>
+                </div>
+                <i class="bi bi-arrow-right elx-mod-arrow"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Accounts -->
+    <div class="elx-card" style="margin: 0 18px 18px">
+        <div class="elx-card-header">
+            <h5>Danh sách Accounts</h5>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                <button class="elx-btn primary" id="btnLoadAccounts">
+                    <i class="bi bi-arrow-repeat"></i> Load Accounts
+                </button>
+                <span class="elx-card-sub" id="accountsHint" style="margin:0;">
+                    Danh sách từ MongoDB (ElitechAuth.Accounts).
+                </span>
+            </div>
+        </div>
+
+        <div class="elx-table-wrap" id="accountsTableWrap" style="display:none;">
+            <table class="elx-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody id="accountsTbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- Dock -->
+    <div class="elx-dock">
+        <div class="elx-dock-inner">
+            <a asp-controller="Admin" asp-action="Index" class="active">
+                <i class="bi bi-grid-1x2"></i> Dashboard
+            </a>
+            <a asp-controller="ElitechHistoryPage" asp-action="Index">
+                <i class="bi bi-clock-history"></i> History
+            </a>
+            <a asp-controller="ElitechDevicePage" asp-action="Index">
+                <i class="bi bi-bell"></i> Alerts
+            </a>
+            <a asp-controller="ElitechRealtime" asp-action="Index">
+                <i class="bi bi-geo-alt"></i> Map
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // ====== Toggle module open/close ======
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.elx-mod-toggle[data-mod-toggle]');
+            if (!btn) return;
+
+            const card = btn.closest('.elx-mod');
+            if (!card) return;
+
+            const willOpen = !card.classList.contains('is-open');
+
+            document.querySelectorAll('.elx-mod.is-open').forEach(x => {
+                if (x !== card) x.classList.remove('is-open');
+            });
+
+            if (willOpen) card.classList.add('is-open');
+            else card.classList.remove('is-open');
+        });
+
+        // ===== Toast helper =====
+        const toastEl = document.getElementById('elxToast');
+        const toastDot = document.getElementById('elxToastDot');
+        const toastText = document.getElementById('elxToastText');
+        const toastMsg = document.getElementById('elxToastMsg');
+
+        function showToast(type, title, msg) {
+            toastEl.classList.add('show');
+            toastText.textContent = title || 'Thông báo';
+            toastMsg.textContent = msg || '';
+
+            toastDot.classList.remove('ok', 'err', 'warn');
+            if (type === 'ok') toastDot.classList.add('ok');
+            else if (type === 'warn') toastDot.classList.add('warn');
+            else toastDot.classList.add('err');
+
+            clearTimeout(window.__elxToastT);
+            window.__elxToastT = setTimeout(() => toastEl.classList.remove('show'), 3200);
+        }
+
+        // Ripple effect
+        document.addEventListener('click', e => {
+            const t = e.target.closest('.elx-btn');
+            if (!t) return;
+            const r = document.createElement('span');
+            const d = Math.max(t.clientWidth, t.clientHeight);
+            r.className = 'elx-ripple';
+            r.style.width = r.style.height = d + 'px';
+            const rect = t.getBoundingClientRect();
+            r.style.left = (e.clientX - rect.left - d / 2) + 'px';
+            r.style.top = (e.clientY - rect.top - d / 2) + 'px';
+            t.appendChild(r);
+            setTimeout(() => r.remove(), 600);
+        });
+
+        // ===== Add Device UI logic =====
+        const $guid = document.getElementById('devGuid');
+        const $name = document.getElementById('devName');
+        const $btnAdd = document.getElementById('btnAddDevice');
+        const $btnDemo = document.getElementById('btnFillDemo');
+
+        const $rs = document.getElementById('addDeviceResult');
+        const $rHttp = document.getElementById('rHttp');
+        const $rCode = document.getElementById('rCode');
+        const $rMsg = document.getElementById('rMsg');
+        const $rAdded = document.getElementById('rAdded');
+        const $rGuid = document.getElementById('rGuid');
+        const $rName = document.getElementById('rName');
+
+        $btnDemo?.addEventListener('click', () => {
+            if ($guid) $guid.value = '90319774496194524687';
+            if ($name) $name.value = 'Kho A - RCW-360P';
+            showToast('warn', 'Điền mẫu', 'Bạn thay GUID thật trước khi Add Device nhé.');
+        });
+
+        $btnAdd?.addEventListener('click', async () => {
+            const deviceGuid = (($guid?.value) || '').trim();
+            const deviceName = (($name?.value) || '').trim();
+
+            if (!deviceGuid) {
+                showToast('err', 'Thiếu Device GUID', 'Vui lòng nhập deviceGuid.');
+                $guid?.focus();
+                return;
+            }
+
+            $btnAdd.disabled = true;
+            $btnAdd.innerHTML = '<i class="bi bi-arrow-repeat"></i> Đang gửi...';
+            if ($rs) $rs.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/admin/elitech/add-device', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ deviceGuid, deviceName })
+                });
+
+                let json = null;
+                try { json = await res.json(); } catch { /* ignore */ }
+
+                const isOk = res.ok && (json?.code === 0 || json?.code === '0');
+
+                let uiMsg = isOk
+                    ? (json?.message ?? json?.msg ?? 'OK')
+                    : (json?.message ?? json?.msg ?? 'Vui lòng thử lại');
+
+                if ($rs) $rs.style.display = 'grid';
+                if ($rHttp) $rHttp.textContent = String(res.status);
+                if ($rCode) $rCode.textContent = (json?.code ?? '-');
+                if ($rMsg)  $rMsg.textContent = uiMsg;
+                if ($rAdded) $rAdded.textContent = (json?.added ?? json?.data ?? '-');
+                if ($rGuid) $rGuid.textContent = (json?.deviceGuid ?? deviceGuid);
+                if ($rName) $rName.textContent = (json?.deviceName ?? deviceName);
+
+                if (isOk) {
+                    showToast('ok', 'Add Device thành công', `GUID: ${deviceGuid}`);
+                } else {
+                    showToast('err', 'Add Device thất bại', uiMsg);
+                }
+            } catch (err) {
+                if ($rs) $rs.style.display = 'grid';
+                if ($rHttp) $rHttp.textContent = '-';
+                if ($rCode) $rCode.textContent = '-';
+                if ($rMsg)  $rMsg.textContent = 'Vui lòng thử lại';
+                if ($rAdded) $rAdded.textContent = '-';
+                if ($rGuid) $rGuid.textContent = deviceGuid;
+                if ($rName) $rName.textContent = deviceName;
+
+                showToast('err', 'Lỗi mạng / server', 'Vui lòng thử lại');
+            } finally {
+                $btnAdd.disabled = false;
+                $btnAdd.innerHTML = '<i class="bi bi-plus-circle"></i> Add Device';
+            }
+        });
+
+        // ===== Device GUIDs (API #7) =====
+        const $btnLoadGuids = document.getElementById('btnLoadGuids');
+        const $guidsHint = document.getElementById('guidsHint');
+        const $guidsTableWrap = document.getElementById('guidsTableWrap');
+        const $guidsTbody = document.getElementById('guidsTbody');
+
+        function escapeHtml(s) {
+            return String(s ?? '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[m]));
+        }
+
+        $btnLoadGuids?.addEventListener('click', async () => {
+            $btnLoadGuids.disabled = true;
+            $btnLoadGuids.innerHTML = '<i class="bi bi-arrow-repeat"></i> Đang tải...';
+            if ($guidsTableWrap) $guidsTableWrap.style.display = 'none';
+            if ($guidsTbody) $guidsTbody.innerHTML = '';
+
+            try {
+                const res = await fetch('/api/elitech/device-guids', { method: 'GET' });
+                const json = await res.json().catch(() => null);
+
+                if (!res.ok || !json || json.code !== 0) {
+                    const msg = json?.message ?? 'Không tải được danh sách GUID.';
+                    showToast('err', 'Load GUIDs thất bại', msg);
+                    if ($guidsHint) $guidsHint.textContent = msg;
+                    return;
+                }
+
+                const arr = json.data || [];
+                if (!arr.length) {
+                    showToast('warn', 'Không có thiết bị', 'Danh sách GUID rỗng (chưa bind hoặc account không thấy thiết bị).');
+                    if ($guidsHint) $guidsHint.textContent = 'Danh sách rỗng.';
+                    return;
+                }
+
+                if ($guidsTableWrap) $guidsTableWrap.style.display = 'block';
+                if ($guidsTbody) {
+                    $guidsTbody.innerHTML = arr.map((g, i) => `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td style="font-weight:900">${escapeHtml(g)}</td>
+                            <td>
+                                <button class="elx-btn outline" data-copy-guid="${escapeHtml(g)}">
+                                    <i class="bi bi-clipboard"></i> Copy
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                if ($guidsHint) $guidsHint.textContent = `Đã tải ${arr.length} GUID.`;
+                showToast('ok', 'Load GUIDs thành công', `Tổng: ${arr.length}`);
+            } catch (e) {
+                showToast('err', 'Lỗi mạng / server', 'Không gọi được /api/elitech/device-guids');
+            } finally {
+                $btnLoadGuids.disabled = false;
+                $btnLoadGuids.innerHTML = '<i class="bi bi-arrow-repeat"></i> Load GUIDs';
+            }
+        });
+
+        // Copy handler
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('[data-copy-guid]');
+            if (!btn) return;
+            const guid = btn.getAttribute('data-copy-guid') || '';
+            try {
+                await navigator.clipboard.writeText(guid);
+                showToast('ok', 'Đã copy', guid);
+            } catch {
+                showToast('warn', 'Copy không được', 'Trình duyệt chặn clipboard.');
+            }
+        });
+
+              
+        // ===== Accounts list =====
+        const $btnLoadAccounts = document.getElementById('btnLoadAccounts');
+        const $accountsHint = document.getElementById('accountsHint');
+        const $accountsTableWrap = document.getElementById('accountsTableWrap');
+        const $accountsTbody = document.getElementById('accountsTbody');
+
+        function escapeHtml(s) {
+          return String(s ?? '').replace(/[&<>"']/g, m => ({
+            '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+          }[m]));
+        }
+
+        function roleLabel(role) {
+          if (role === 1) return 'Admin';
+          if (role === 2) return 'User';
+          return String(role ?? '-');
+        }
+
+        function fmtDate(iso) {
+          try { return new Date(iso).toLocaleString(); }
+          catch { return iso ?? '-'; }
+        }
+
+        $btnLoadAccounts?.addEventListener('click', async () => {
+          $btnLoadAccounts.disabled = true;
+          $btnLoadAccounts.innerHTML = '<i class="bi bi-arrow-repeat"></i> Đang tải...';
+          $accountsTableWrap.style.display = 'none';
+          $accountsTbody.innerHTML = '';
+
+          try {
+            const res = await fetch('/api/admin/accounts', { method: 'GET' });
+            const json = await res.json().catch(() => null);
+
+            if (!res.ok || !json || json.code !== 0) {
+              const msg = json?.message ?? 'Không tải được danh sách accounts.';
+              showToast('err', 'Load Accounts thất bại', msg);
+              $accountsHint.textContent = msg;
+              return;
+            }
+
+            const arr = json.data || [];
+            if (!arr.length) {
+              showToast('warn', 'Không có account', 'Collection Accounts đang rỗng.');
+              $accountsHint.textContent = 'Danh sách rỗng.';
+              return;
+            }
+
+            $accountsTableWrap.style.display = 'block';
+            $accountsTbody.innerHTML = arr.map((a, i) => {
+              const statusChip = a.isActive
+                ? `<span class="elx-chip-status ok">Active</span>`
+                : `<span class="elx-chip-status crit">Disabled</span>`;
+
+              const roleChip = a.role === 1
+                ? `<span class="elx-chip-status info">${roleLabel(a.role)}</span>`
+                : `<span class="elx-chip-status warn">${roleLabel(a.role)}</span>`;
+
+              return `
+                <tr>
+                  <td>${i + 1}</td>
+                  <td style="font-weight:900">${escapeHtml(a.username)}</td>
+                  <td>${roleChip}</td>
+                  <td>${statusChip}</td>
+                  <td>${escapeHtml(fmtDate(a.createdAtUtc))}</td>
+                </tr>
+              `;
+            }).join('');
+
+            $accountsHint.textContent = `Đã tải ${arr.length} accounts.`;
+            showToast('ok', 'Load Accounts thành công', `Tổng: ${arr.length}`);
+          } catch (e) {
+            showToast('err', 'Lỗi mạng / server', 'Không gọi được /api/admin/accounts');
+          } finally {
+            $btnLoadAccounts.disabled = false;
+            $btnLoadAccounts.innerHTML = '<i class="bi bi-arrow-repeat"></i> Load Accounts';
+          }
+        });
+    </script>
+
+
+    <script type="module" src="/app/entry-admin.js"></script>
+}

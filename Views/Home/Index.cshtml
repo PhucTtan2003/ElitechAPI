@@ -1,0 +1,975 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --o: #F58220;
+        --o2: #E36F15;
+        --b: #0D47A1;
+        --b2: #1E88E5;
+        --text: #0f172a;
+        --muted: #6b7280;
+        /* Liquid Glass */
+        --glass: rgba(255,255,255,0.32);
+        --glass-strong: rgba(255,255,255,0.55);
+        --glass-border: rgba(255,255,255,0.25);
+        --glass-border-soft: rgba(148,163,184,0.45);
+        --glass-glow: rgba(88,130,255,0.35);
+        /* Shadows */
+        --shadow-soft: 0 10px 25px rgba(15,23,42,.12);
+        --shadow-strong: 0 18px 40px rgba(10,20,40,.18);
+        --shadow-glow: 0 0 40px rgba(55,130,255,.25);
+        --radius-lg: 30px;
+        --radius: 22px;
+    }
+
+    /* ===== Background Parallax Gradient ===== */
+    body {
+        background: radial-gradient(900px 520px at 0% -10%, rgba(30,136,229,.18), transparent 60%), radial-gradient(1000px 620px at 100% 0%, rgba(245,130,32,.20), transparent 70%), #eef3fb;
+        animation: bgMove 28s ease-in-out infinite alternate;
+        background-attachment: fixed;
+        color: var(--text);
+    }
+
+    @@keyframes bgMove {
+        from {
+            background-position: 0% 0%, 100% 0%;
+        }
+
+        to {
+            background-position: 0% 18%, 100% -18%;
+        }
+    }
+
+    /* ===== Base ===== */
+    .home-shell {
+        position: relative;
+        z-index: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+        .home-shell h1,
+        .home-shell h2,
+        .home-shell h3,
+        .home-shell h4,
+        .home-shell h5 {
+            font-weight: 800;
+        }
+
+    .home-section-title {
+        font-weight: 900;
+        letter-spacing: .02em;
+    }
+
+    .home-section-sub {
+        color: var(--muted);
+        font-size: .95rem;
+    }
+
+    /* ===== HERO LIQUID GLASS ===== */
+    .hero {
+        border-radius: var(--radius-lg);
+        background: var(--glass);
+        backdrop-filter: blur(28px) saturate(185%);
+        -webkit-backdrop-filter: blur(28px) saturate(185%);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--shadow-soft), var(--shadow-strong), inset 0 0 18px rgba(255,255,255,.35), inset 0 0 32px rgba(255,255,255,.10);
+        position: relative;
+        overflow: hidden;
+    }
+
+        /* Liquid border */
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            border-radius: var(--radius-lg);
+            background: conic-gradient( from 180deg, rgba(255,255,255,0.0), rgba(255,255,255,0.7), rgba(37,99,235,0.9), rgba(245,130,32,0.9), rgba(255,255,255,0.7), rgba(255,255,255,0.0) );
+            background-size: 260% 260%;
+            filter: blur(9px) opacity(.36);
+            animation: borderFlow 12s linear infinite;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+    @@keyframes borderFlow {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .hero-inner {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-content {
+        padding: 3.25rem 3rem;
+    }
+
+    .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.82);
+        border: 1px solid rgba(148,163,184,.6);
+        font-size: .8rem;
+        font-weight: 700;
+        color: var(--muted);
+        margin-bottom: 10px;
+        box-shadow: 0 10px 26px rgba(15,23,42,.18);
+    }
+
+        .hero-eyebrow i {
+            color: var(--o2);
+        }
+
+    .hero-title {
+        font-size: 2.4rem;
+        line-height: 1.25;
+        margin-bottom: .75rem;
+    }
+
+        .hero-title span {
+            background: linear-gradient(90deg, var(--b2), var(--o));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+    .hero-text {
+        font-size: 1rem;
+        color: var(--muted);
+        max-width: 34rem;
+    }
+
+    .hero-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 14px;
+        font-size: .8rem;
+        color: var(--muted);
+    }
+
+    .hero-meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.92);
+        border: 1px solid rgba(226,232,240,1);
+        box-shadow: var(--shadow-soft);
+    }
+
+        .hero-meta-pill i {
+            color: var(--b2);
+        }
+
+    /* CTA buttons */
+    .hero-btns {
+        margin-top: 26px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--b2), var(--b));
+        border: none;
+        border-radius: 16px;
+        font-weight: 800;
+        padding: 12px 28px;
+        box-shadow: 0 10px 25px rgba(30,120,255,.30), inset 0 0 14px rgba(255,255,255,.40);
+        transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s cubic-bezier(.22,1,.36,1), filter .15s;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px rgba(30,120,255,.40), inset 0 0 22px rgba(255,255,255,.45);
+            filter: brightness(1.03);
+        }
+
+    .btn-outline {
+        background: var(--glass-strong);
+        border-radius: 16px;
+        border: 1px solid var(--glass-border-soft);
+        backdrop-filter: blur(16px);
+        font-weight: 800;
+        padding: 12px 24px;
+        color: var(--text);
+        box-shadow: 0 8px 20px rgba(15,23,42,.10);
+        transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s, background .18s;
+    }
+
+        .btn-outline:hover {
+            background: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 26px rgba(15,23,42,.18);
+        }
+
+    /* Hero illustration side */
+    .hero-visual-wrap {
+        padding: 2rem 2.5rem 2.5rem 1rem;
+    }
+
+    .hero-visual-card {
+        border-radius: 24px;
+        background: radial-gradient(circle at 0 0, rgba(255,255,255,.65), transparent 55%), rgba(15,23,42,.96);
+        border: 1px solid rgba(148,163,184,.4);
+        box-shadow: 0 20px 45px rgba(15,23,42,.6), 0 0 40px rgba(37,99,235,.35);
+        padding: 1rem;
+        color: #e5e7eb;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .hero-visual-card::after {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: radial-gradient(circle at 0 0, rgba(59,130,246,.25), transparent 55%), radial-gradient(circle at 100% 100%, rgba(248,113,113,.25), transparent 55%);
+            opacity: .55;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+        }
+
+    .hero-visual-inner {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-mini-label {
+        font-size: .7rem;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+        color: #9ca3af;
+        margin-bottom: 4px;
+    }
+
+    .hero-visual-title {
+        font-size: .95rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .hero-chip-row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    .hero-chip {
+        font-size: .7rem;
+        padding: 3px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(148,163,184,.8);
+        background: rgba(15,23,42,.85);
+    }
+
+    .hero-map {
+        margin-top: 8px;
+        border-radius: 16px;
+        border: 1px solid rgba(148,163,184,.6);
+        background: radial-gradient(circle at 0 0, rgba(56,189,248,.85), transparent 55%), radial-gradient(circle at 100% 100%, rgba(249,115,22,.85), transparent 55%), #020617;
+        padding: 10px;
+    }
+
+    .hero-map-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .hero-map-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 0 rgba(34,197,94,.7);
+        animation: dotPulse 1.6s infinite;
+    }
+
+    @@keyframes dotPulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(34,197,94,.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 12px rgba(34,197,94,0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(34,197,94,0);
+        }
+    }
+
+    .hero-stat-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        font-size: .75rem;
+        background: rgba(15,23,42,.9);
+        border: 1px solid rgba(148,163,184,.8);
+    }
+
+        .hero-stat-badge i {
+            color: #22c55e;
+        }
+
+    /* ===== QUICK STATS STRIP ===== */
+    .stats {
+        border-radius: var(--radius);
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(20px);
+        padding: 18px;
+        box-shadow: var(--shadow-soft), inset 0 0 12px rgba(255,255,255,.22);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0,1fr));
+        gap: 12px;
+    }
+
+    .stats-item {
+        text-align: center;
+    }
+
+    .stats .num {
+        font-size: 2.1rem;
+        font-weight: 900;
+        background: linear-gradient(90deg, var(--b2), var(--o));
+        -webkit-background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 18px rgba(255,255,255,.25);
+        margin-bottom: 2px;
+    }
+
+    .stats .label {
+        font-size: .85rem;
+        color: var(--muted);
+        font-weight: 600;
+    }
+
+    /* ===== FEATURE CARDS ===== */
+    .feature {
+        border-radius: 20px;
+        background: var(--glass);
+        backdrop-filter: blur(22px) saturate(180%);
+        border: 1px solid var(--glass-border);
+        padding: 22px;
+        height: 100%;
+        transition: .35s cubic-bezier(.3,1,.4,1);
+        box-shadow: var(--shadow-soft), inset 0 0 14px rgba(255,255,255,.22);
+    }
+
+        .feature:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-glow), 0 14px 28px rgba(15,23,42,.18), inset 0 0 20px rgba(255,255,255,.35);
+            border-color: rgba(255,255,255,.6);
+        }
+
+    .feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        background: rgba(88,130,255,.20);
+        border-radius: 18px;
+        padding: 12px;
+        color: var(--b2);
+        margin-bottom: 10px;
+    }
+
+    .feature h5 {
+        margin-bottom: 4px;
+    }
+
+    .feature p {
+        color: var(--muted);
+        font-size: .9rem;
+    }
+
+    /* ===== WHY CARDS ===== */
+    .why-card {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        border-radius: 18px;
+        padding: 14px 16px;
+        background: rgba(255,255,255,.9);
+        border: 1px solid rgba(226,232,240,.9);
+        box-shadow: var(--shadow-soft);
+        height: 100%;
+        transition: transform .2s ease-out, box-shadow .2s ease-out;
+    }
+
+        .why-card i {
+            width: 30px;
+            height: 30px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: rgba(37,99,235,.08);
+            color: var(--b2);
+        }
+
+        .why-card h5 {
+            font-size: .95rem;
+            margin-bottom: 4px;
+        }
+
+        .why-card p {
+            font-size: .86rem;
+        }
+
+        .why-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(15,23,42,.16);
+        }
+
+    /* ===== LOGOS STRIP ===== */
+    .logos {
+        border-radius: 20px;
+        background: var(--glass);
+        border: 1px dashed rgba(255,255,255,.55);
+        backdrop-filter: blur(20px);
+        padding: 16px 18px;
+        box-shadow: var(--shadow-soft);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .logos img {
+            opacity: .7;
+            filter: grayscale(1);
+            transition: .22s ease-out;
+            max-height: 44px;
+        }
+
+            .logos img:hover {
+                opacity: 1;
+                filter: none;
+                transform: translateY(-4px);
+            }
+
+    /* ===== TESTIMONIAL ===== */
+    .testi {
+        border-radius: 20px;
+        background: var(--glass-strong);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(20px);
+        padding: 18px 18px 16px;
+        box-shadow: var(--shadow-soft), inset 0 0 14px rgba(255,255,255,.20);
+        position: relative;
+        overflow: hidden;
+        font-size: .9rem;
+    }
+
+        .testi::before {
+            content: "“";
+            position: absolute;
+            font-size: 4rem;
+            color: rgba(148,163,184,.4);
+            top: -18px;
+            left: 10px;
+        }
+
+        .testi p {
+            margin: 8px 0 0;
+            color: var(--muted);
+        }
+
+        .testi .name {
+            font-weight: 700;
+            font-size: .86rem;
+            color: var(--text);
+        }
+
+    /* ===== FAQ ===== */
+    .faq .accordion-button {
+        font-weight: 600;
+    }
+
+    .faq .accordion-item {
+        border-radius: 14px !important;
+        overflow: hidden;
+        border: 1px solid rgba(226,232,240,1);
+        box-shadow: 0 8px 18px rgba(15,23,42,.08);
+    }
+
+    .faq .accordion-button:not(.collapsed) {
+        background: linear-gradient(135deg, rgba(30,64,175,.06), rgba(59,130,246,.06));
+        color: var(--text);
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+        border-radius: 26px;
+        background: radial-gradient(circle at 0 0, rgba(96,165,250,.35), transparent 55%), radial-gradient(circle at 100% 100%, rgba(248,113,113,.28), transparent 55%), linear-gradient(135deg, var(--b2), var(--b));
+        padding: 3rem 2rem;
+        text-align: center;
+        color: #fff;
+        box-shadow: 0 12px 28px rgba(15,23,42,.45), inset 0 0 20px rgba(255,255,255,.22);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .cta::after {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: radial-gradient(circle at 0 0, rgba(255,255,255,.18), transparent 55%), radial-gradient(circle at 100% 0, rgba(251,191,36,.20), transparent 55%);
+            opacity: .7;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+        }
+
+    .cta-inner {
+        position: relative;
+        z-index: 1;
+    }
+
+    .cta .btn-light {
+        padding: 12px 28px;
+        font-weight: 800;
+        border-radius: 16px;
+        box-shadow: 0 10px 24px rgba(15,23,42,.45);
+    }
+
+    /* ===== Responsive tweaks ===== */
+    @@media (max-width: 991.98px) {
+        .hero-content {
+            padding: 2.4rem 1.6rem 2.2rem;
+        }
+
+        .hero-visual-wrap {
+            padding: 0 1.6rem 2rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, minmax(0,1fr));
+        }
+    }
+
+    @@media (max-width: 767.98px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: minmax(0,1fr);
+        }
+    }
+</style>
+
+<div class="home-shell">
+    <div class="container py-5">
+
+        <!-- HERO -->
+        <section class="hero mb-4">
+            <div class="hero-inner">
+                <div class="row g-0 align-items-center">
+                    <div class="col-lg-7">
+                        <div class="hero-content">
+                            <div class="hero-eyebrow">
+                                <i class="bi bi-cloud-check"></i>
+                                Elitech Cloud • Device Monitoring Suite
+                            </div>
+
+                            <h1 class="hero-title mb-2">
+                                Giải pháp quản lý <span>Elitech</span> toàn diện cho doanh nghiệp hiện đại
+                            </h1>
+
+                            <p class="hero-text">
+                                Hợp nhất theo dõi thiết bị, cảnh báo, báo cáo và người dùng trong một nền tảng duy nhất.
+                                Dễ dàng triển khai, bảo mật cao, realtime mượt mà.
+                            </p>
+
+                            <div class="hero-meta-row">
+                                <span class="hero-meta-pill">
+                                    <i class="bi bi-activity"></i> Realtime &lt; 0.3s
+                                </span>
+                                <span class="hero-meta-pill">
+                                    <i class="bi bi-shield-lock"></i> Bảo mật chuẩn doanh nghiệp
+                                </span>
+                                <span class="hero-meta-pill">
+                                    <i class="bi bi-patch-check"></i> SLA 99.9% Uptime
+                                </span>
+                            </div>
+
+                            <div class="hero-btns d-flex flex-wrap gap-3">
+                                <a asp-controller="Admin" asp-action="Index" class="btn btn-primary">
+                                    <i class="bi bi-speedometer2 me-1"></i> Vào Dashboard
+                                </a>
+                                <a asp-controller="Login" asp-action="Index" class="btn btn-outline">
+                                    <i class="bi bi-person-check me-1"></i> Đăng nhập
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="hero-visual-wrap">
+                            <div class="hero-visual-card">
+                                <div class="hero-visual-inner">
+                                    <div class="hero-mini-label">Live overview</div>
+                                    <div class="hero-visual-title">Elitech Network – Realtime Map</div>
+                                    <div class="hero-chip-row">
+                                        <span class="hero-chip">120 thiết bị online</span>
+                                        <span class="hero-chip">38 cảnh báo hôm nay</span>
+                                        <span class="hero-chip">24 chi nhánh</span>
+                                    </div>
+
+                                    <div class="hero-map mt-2">
+                                        <div class="hero-map-row">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="hero-map-dot"></span>
+                                                <span style="font-size:.8rem;">Tất cả cụm chính hoạt động ổn định</span>
+                                            </div>
+                                            <span class="hero-stat-badge">
+                                                <i class="bi bi-lightning-charge-fill"></i> Live Sync
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3 d-flex justify-content-between" style="font-size:.78rem;">
+                                        <span>Giờ hệ thống: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")</span>
+                                        <span class="text-muted">Powered by SmartTech • Elitech</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUICK STATS -->
+        <section class="mb-5">
+            <div class="stats">
+                <div class="stats-grid">
+                    <div class="stats-item">
+                        <div class="num" data-counter="120">0</div>
+                        <div class="label">Thiết bị đang online</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="num" data-counter="38">0</div>
+                        <div class="label">Cảnh báo hôm nay</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="num" data-counter="24">0</div>
+                        <div class="label">Chi nhánh giám sát</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="num" data-counter="99.9">0</div>
+                        <div class="label">SLA Uptime (%)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section id="features" class="mb-5">
+            <div class="text-center mb-4">
+                <h2 class="home-section-title">Tính năng nổi bật</h2>
+                <p class="home-section-sub">
+                    Cung cấp mọi công cụ cần thiết cho vận hành &amp; giám sát thiết bị của bạn.
+                </p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+                        <h5>Realtime Dashboard</h5>
+                        <p>Quan sát toàn bộ cảm biến &amp; trạng thái thiết bị trong thời gian thực, gom theo site và khu vực.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h5>Phân quyền nhóm</h5>
+                        <p>Hỗ trợ vai trò quản trị, nhân viên, khách hàng với giới hạn truy cập rõ ràng, audit đầy đủ.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-bell"></i>
+                        </div>
+                        <h5>Cảnh báo linh hoạt</h5>
+                        <p>Nhận thông báo qua Email, SMS, Push khi vượt ngưỡng nhiệt độ, độ ẩm, nguồn điện…</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-file-earmark-bar-graph"></i>
+                        </div>
+                        <h5>Báo cáo thông minh</h5>
+                        <p>Biểu đồ, CSV, PDF — phân tích dữ liệu theo KPI, lịch đo và chuẩn audit.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                        </div>
+                        <h5>Đồng bộ đám mây</h5>
+                        <p>Tự động sao lưu, phục hồi cấu hình và dữ liệu an toàn 24/7 trên Elitech Cloud.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-lock"></i>
+                        </div>
+                        <h5>Bảo mật tối đa</h5>
+                        <p>Hỗ trợ SSO, 2FA, mã hóa TLS/SSL và nhật ký Audit trên từng thao tác quan trọng.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY CHOOSE -->
+        <section class="mb-5">
+            <div class="text-center mb-4">
+                <h2 class="home-section-title">Tại sao chọn Elitech?</h2>
+                <p class="home-section-sub">
+                    Chúng tôi cam kết hiệu suất, bảo mật và sự linh hoạt cao nhất cho doanh nghiệp.
+                </p>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6 col-lg-3">
+                    <div class="why-card">
+                        <i class="bi bi-rocket-takeoff"></i>
+                        <div>
+                            <h5>Triển khai nhanh chóng</h5>
+                            <p class="text-muted mb-0">
+                                Cài đặt trong vài phút, tự động kết nối thiết bị &amp; đồng bộ dữ liệu.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="why-card">
+                        <i class="bi bi-globe"></i>
+                        <div>
+                            <h5>Quản lý từ xa</h5>
+                            <p class="text-muted mb-0">
+                                Truy cập dashboard ở bất kỳ đâu, theo dõi realtime trên mọi thiết bị.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="why-card">
+                        <i class="bi bi-patch-check"></i>
+                        <div>
+                            <h5>Độ tin cậy cao</h5>
+                            <p class="text-muted mb-0">
+                                SLA 99.9%, sao lưu đa tầng và giám sát 24/7.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="why-card">
+                        <i class="bi bi-cpu"></i>
+                        <div>
+                            <h5>Tối ưu hiệu năng</h5>
+                            <p class="text-muted mb-0">
+                                Xử lý dữ liệu nhanh, độ trễ trung bình ~0.3s cho mỗi gói tin.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CUSTOMERS LOGOS -->
+        <section class="mb-5">
+            <div class="text-center mb-3">
+                <h2 class="home-section-title">Được tin dùng bởi</h2>
+                <p class="home-section-sub">Hơn 200 doanh nghiệp &amp; tổ chức</p>
+            </div>
+            <div class="logos">
+                <img src="https://dummyimage.com/180x80/edf2f7/888.png&text=Partner+A" alt="Partner A" />
+                <img src="https://dummyimage.com/180x80/edf2f7/888.png&text=Partner+B" alt="Partner B" />
+                <img src="https://dummyimage.com/180x80/edf2f7/888.png&text=Partner+C" alt="Partner C" />
+                <img src="https://dummyimage.com/180x80/edf2f7/888.png&text=Partner+D" alt="Partner D" />
+                <img src="https://dummyimage.com/180x80/edf2f7/888.png&text=Partner+E" alt="Partner E" />
+            </div>
+        </section>
+
+        <!-- TESTIMONIAL -->
+        <section class="mb-5">
+            <div class="text-center mb-4">
+                <h2 class="home-section-title">Khách hàng nói gì?</h2>
+                <p class="home-section-sub">Hơn 200 doanh nghiệp tin dùng Elitech mỗi ngày.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testi">
+                        <p>
+                            “Từ khi dùng Elitech, đội vận hành tiết kiệm hơn 40% thời gian giám sát và báo cáo.”
+                        </p>
+                        <div class="name mt-3">Nguyễn Văn Nam • Kho lạnh ABC</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testi">
+                        <p>
+                            “Giao diện đẹp, trực quan, cảnh báo hoạt động cực kỳ chính xác và nhanh.”
+                        </p>
+                        <div class="name mt-3">Trần Thị Hòa • Nhà máy XYZ</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testi">
+                        <p>
+                            “Báo cáo KPI giúp ban quản lý dễ dàng nắm tình hình vận hành thực tế.”
+                        </p>
+                        <div class="name mt-3">Phạm Dũng • Chuỗi cửa hàng E-Lab</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="mb-5 faq">
+            <div class="text-center mb-4">
+                <h2 class="home-section-title">Câu hỏi thường gặp</h2>
+                <p class="home-section-sub">Một vài thắc mắc phổ biến</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-8 mx-auto">
+                    <div class="accordion" id="faqAcc">
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="q1">
+                                <button class="accordion-button" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#a1"
+                                        aria-expanded="true">
+                                    Elitech hỗ trợ loại cảm biến nào?
+                                </button>
+                            </h2>
+                            <div id="a1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc">
+                                <div class="accordion-body text-muted">
+                                    Nhiệt độ, độ ẩm, điện áp, dòng điện… và có thể mở rộng thông qua Modbus/TCP, MQTT.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="q2">
+                                <button class="accordion-button collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#a2">
+                                    Có gói dùng thử không?
+                                </button>
+                            </h2>
+                            <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+                                <div class="accordion-body text-muted">
+                                    Có, miễn phí 14 ngày đầu, không cần thẻ tín dụng.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="q3">
+                                <button class="accordion-button collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#a3">
+                                    Hệ thống lưu trữ dữ liệu bao lâu?
+                                </button>
+                            </h2>
+                            <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+                                <div class="accordion-body text-muted">
+                                    Tùy theo gói dịch vụ; mặc định 12 tháng và có tùy chọn lưu trữ dài hạn.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta">
+            <div class="cta-inner">
+                <h2 class="fw-bold mb-3">Sẵn sàng nâng cấp hệ thống giám sát của bạn?</h2>
+                <p class="fs-5 mb-4">
+                    Tham gia Elitech ngay hôm nay — miễn phí 14 ngày đầu, không cần thẻ tín dụng.
+                </p>
+                <a asp-controller="Login" asp-action="Index" class="btn btn-light px-4">
+                    <i class="bi bi-person-plus-fill me-1"></i> Đăng ký dùng thử
+                </a>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Counter số động khi lướt đến
+        (function () {
+            const els = document.querySelectorAll("[data-counter]");
+            if (!els.length) return;
+
+            const ease = t => 1 - Math.pow(1 - t, 3);
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+
+                    const el = entry.target;
+                    const target = parseFloat(el.dataset.counter || "0");
+                    const duration = 1200;
+                    const start = performance.now();
+
+                    function tick(now) {
+                        const p = Math.min((now - start) / duration, 1);
+                        const val = ease(p) * target;
+                        const hasDecimal = String(target).includes(".");
+                        el.textContent = hasDecimal
+                            ? (Math.round(val * 10) / 10).toFixed(1)
+                            : Math.round(val).toString();
+
+                        if (p < 1) requestAnimationFrame(tick);
+                        else el.textContent = hasDecimal ? target.toString() : Math.round(target).toString();
+                    }
+
+                    requestAnimationFrame(tick);
+                    observer.unobserve(el);
+                });
+            }, { threshold: 0.4 });
+
+            els.forEach(el => {
+                el.textContent = "0";
+                observer.observe(el);
+            });
+        })();
+    </script>
+}

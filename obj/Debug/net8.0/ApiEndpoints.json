@@ -1,0 +1,299 @@
+[
+  {
+    "ContainingType": "Elitech.Admin.Controllers.AdminAccountsController",
+    "Method": "GetAll",
+    "RelativePath": "api/admin/accounts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "role",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Admin.Controllers.AdminAccountsController",
+    "Method": "SetActive",
+    "RelativePath": "api/admin/accounts/{username}/active",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "req",
+        "Type": "Elitech.Admin.Controllers.AdminAccountsController\u002BSetActiveReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.AdminDeviceAssignmentsController",
+    "Method": "Assign",
+    "RelativePath": "api/admin/device-assignments/assign",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "Elitech.Controllers.AdminDeviceAssignmentsController\u002BAssignReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.AdminDeviceAssignmentsController",
+    "Method": "ByUser",
+    "RelativePath": "api/admin/device-assignments/by-user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.AdminDeviceAssignmentsController",
+    "Method": "Unassign",
+    "RelativePath": "api/admin/device-assignments/unassign",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "deviceGuid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.UserController",
+    "Method": "Index",
+    "RelativePath": "api/elitech",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechAlarmController",
+    "Method": "GetAlarmRecord",
+    "RelativePath": "api/elitech/alarm-record",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "deviceGuid",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "subUid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "lastHours",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechAlertsNotifyController",
+    "Method": "MarkAllRead",
+    "RelativePath": "api/elitech/alerts/mark-all-read",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechAlertsNotifyController",
+    "Method": "MarkRead",
+    "RelativePath": "api/elitech/alerts/mark-read",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechAlertRulesController",
+    "Method": "GetRules",
+    "RelativePath": "api/elitech/alerts/rules",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechAlertRulesController",
+    "Method": "UpsertRule",
+    "RelativePath": "api/elitech/alerts/rules",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "input",
+        "Type": "Elitech.Models.AlertRule.ElitechAlertRuleViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechAlertRulesController",
+    "Method": "Delete",
+    "RelativePath": "api/elitech/alerts/rules",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "deviceGuid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechAlertsNotifyController",
+    "Method": "Unread",
+    "RelativePath": "api/elitech/alerts/unread",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "take",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechMyDevicesController",
+    "Method": "AllDevices",
+    "RelativePath": "api/elitech/all-devices",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ElitechDeviceController",
+    "Method": "GetDeviceGuids",
+    "RelativePath": "api/elitech/device-guids",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ElitechDeviceController",
+    "Method": "GetDeviceInfo",
+    "RelativePath": "api/elitech/device-info",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "deviceGuids",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechHistoryController",
+    "Method": "GetHistory",
+    "RelativePath": "api/elitech/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "deviceGuid",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "lastHours",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechMyDevicesController",
+    "Method": "MyDevices",
+    "RelativePath": "api/elitech/my-devices",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

@@ -1,0 +1,366 @@
+﻿@{
+    ViewData["Title"] = "📡 Elitech Realtime Monitor";
+    var deviceGuids = (ViewBag.DeviceGuids as string) ?? "";
+}
+
+<style>
+    :root {
+        --brand: #F58220; /* cam chủ đạo */
+        --brand-600: #e36f15;
+        --brand-700: #cc6200;
+        --brand-50: #fff6ec;
+        --brand-100: #ffe8d3;
+        --ink: #1f2937; /* màu chữ chính */
+        --muted: #6b7280;
+        --bg: #fafafa; /* nền sáng */
+        --glass: rgba(255,255,255,.8);
+        --glass-stroke: rgba(31,41,55,.08);
+        --shadow: 0 14px 40px rgba(0,0,0,.06);
+        --ok: #10B981;
+        --warn: #F59E0B;
+        --crit: #EF4444;
+        --info: #2563eb;
+        --radius: 16px;
+    }
+
+    .realtime-root {
+        min-height: 100vh;
+        background: radial-gradient(900px 520px at -10% -10%, var(--brand-50) 0%, transparent 60%), radial-gradient(900px 520px at 110% 120%, #fef3c7 0%, transparent 60%), linear-gradient(180deg, #fff, var(--bg));
+        padding: 24px;
+        color: var(--ink);
+    }
+
+    .title {
+        font-weight: 900;
+        letter-spacing: .2px;
+        color: var(--ink);
+    }
+
+    .badge-live {
+        background: linear-gradient(180deg,#34d39922,#10b98122);
+        color: #065f46;
+        border: 1px solid #10b98155;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .glass-card {
+        backdrop-filter: blur(10px);
+        background: var(--glass);
+        border: 1px solid var(--glass-stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+    }
+
+    .toolbar .form-control {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        color: var(--ink);
+        height: 42px;
+    }
+
+    .toolbar .btn {
+        height: 42px;
+        font-weight: 800;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: var(--ink);
+    }
+
+        .toolbar .btn.btn-primary {
+            background: linear-gradient(180deg,var(--brand),var(--brand-600));
+            border: 0;
+            color: #111;
+            box-shadow: 0 8px 20px #f5822030;
+        }
+
+        .toolbar .btn.btn-outline-light {
+            border-color: var(--brand);
+            color: var(--brand-700);
+            background: linear-gradient(180deg,#fff,#fff);
+        }
+
+    .muted {
+        color: var(--muted);
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    /* Table */
+    .table-realtime {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+        border-radius: 12px;
+    }
+
+        .table-realtime thead th {
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            font-size: 12px;
+            color: #6b7280;
+            background: linear-gradient(180deg,#fff,#fff);
+            border-bottom: 1px solid #f1f5f9;
+            padding: 12px 12px;
+            position: sticky;
+            top: 0; /* nếu trong container cuộn */
+        }
+
+        .table-realtime td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            font-size: 14px;
+            color: var(--ink);
+            background: #fff;
+        }
+
+        .table-realtime tbody tr:hover td {
+            background: #fffaf5; /* nhấn hover tông cam nhạt */
+        }
+
+    .pill {
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        border: 1px solid transparent;
+        display: inline-block;
+    }
+
+    .ok {
+        color: #065f46;
+        background: #d1fae5;
+        border-color: #a7f3d0;
+    }
+
+    .warn {
+        color: #92400e;
+        background: #ffedd5;
+        border-color: #fed7aa;
+    }
+
+    .alarm {
+        color: #7f1d1d;
+        background: #fee2e2;
+        border-color: #fecaca;
+    }
+
+    .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
+
+    /* Status chips for cells */
+    .v-bad {
+        color: #b91c1c;
+        font-weight: 800;
+    }
+
+    .v-good {
+        color: #065f46;
+        font-weight: 800;
+    }
+
+    /* Tiny footnote */
+    .footer-note {
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    /* Subtle loading shimmer (khi refresh) */
+    .shimmer td {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .shimmer td::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 0%, #ffffff66 50%, transparent 100%);
+            animation: shine 1.2s linear infinite;
+            transform: translateX(-100%);
+        }
+
+    @@keyframes shine {
+        from {
+            transform: translateX(-100%);
+        }
+
+        to {
+            transform: translateX(100%);
+        }
+    }
+</style>
+
+<div class="realtime-root">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-3">
+            <h2 class="title mb-0">📡 Elitech Realtime Monitor</h2>
+            <span class="badge-live">Live</span>
+        </div>
+        <small class="muted">
+            Device GUIDs: <span class="mono" id="guidShow">@deviceGuids</span>
+        </small>
+    </div>
+
+    <div class="glass-card p-3 mb-3 toolbar">
+        <form method="get" class="d-flex gap-2 flex-wrap align-items-center">
+            <input name="deviceGuids" type="text" class="form-control"
+                   placeholder="Nhập GUID, ngăn cách dấu phẩy"
+                   value="@deviceGuids" />
+            <button class="btn btn-primary" type="submit">Load</button>
+            <button class="btn btn-outline-light" type="button" id="btnExport">Export CSV</button>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <span class="muted">Cập nhật mỗi <span class="mono" id="tickSec">5s</span></span>
+                <span class="muted">Lần cuối: <span id="lastUpdate" class="mono">—</span></span>
+            </div>
+        </form>
+    </div>
+
+    <div class="grid">
+        <div class="glass-card p-3">
+            <div class="table-responsive">
+                <table class="table-realtime" id="rtTable">
+                    <thead>
+                        <tr>
+                            <th>Thiết bị</th>
+                            <th>GUID</th>
+                            <th>Nhiệt (°C)</th>
+                            <th>Ẩm (%RH)</th>
+                            <th>Nguồn</th>
+                            <th>Tín hiệu</th>
+                            <th>Địa chỉ</th>
+                            <th>Thời điểm</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rtBody">
+                        <tr><td colspan="9" class="muted">Chưa có dữ liệu…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-2 footer-note">
+                * Demo rule: nhiệt độ an toàn 2–8°C; độ ẩm 30–70%RH. Có thể điều chỉnh theo cấu hình hệ thống.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const qs = new URLSearchParams(window.location.search);
+    const deviceGuids = (qs.get('deviceGuids') || '@deviceGuids').trim();
+    const rtBody = document.getElementById('rtBody');
+    const lastUpdate = document.getElementById('lastUpdate');
+
+    // ===== Helpers =====
+    function c(u){ return u==null || u===undefined ? "" : String(u); }
+    function asNumber(x){
+        if(!x) return null;
+        const m = String(x).match(/-?\d+(\.\d+)?/);
+        return m ? parseFloat(m[0]) : null;
+    }
+    function tsSecToLocal(sec){
+        if(!sec) return "";
+        const d = new Date(sec*1000);
+        return d.toLocaleString();
+    }
+    function classify(temp, hum){
+        const badT = (temp!=null) && (temp < 2 || temp > 8);
+        const badH = (hum!=null) && (hum < 30 || hum > 70);
+        if (badT || badH) return "alarm";
+        return "ok";
+    }
+
+    // ===== Render =====
+    function renderRows(rows){
+        if(rows.length === 0){
+            rtBody.innerHTML = `<tr><td colspan="9" class="muted">Không có dữ liệu.</td></tr>`;
+            return;
+        }
+
+        rtBody.innerHTML = rows.map(x=>{
+            const t1 = asNumber(x.tmp1);
+            const h1 = asNumber(x.hum1);
+            const cls = classify(t1, h1);
+            const stateLabel = x.alarmState ? "ALARM" : (x.warnState ? "WARN" : "OK");
+
+            const tClass = t1!=null ? (t1<2||t1>8?'v-bad':'v-good') : '';
+            const hClass = h1!=null ? (h1<30||h1>70?'v-bad':'v-good') : '';
+
+            return `
+                <tr>
+                    <td class="mono">${c(x.deviceName) || "-"}</td>
+                    <td class="mono">${c(x.deviceGuid)}</td>
+                    <td class="${tClass}">${c(x.tmp1) || "-"}</td>
+                    <td class="${hClass}">${c(x.hum1) || "-"}</td>
+                    <td>${c(x.power) || "-"}</td>
+                    <td>${c(x.signal) || "-"}</td>
+                    <td title="${c(x.address)||''}">${c(x.address)||"-"}</td>
+                    <td class="mono">${tsSecToLocal(x.lastSessionTime)}</td>
+                    <td><span class="pill ${cls}">${stateLabel}</span></td>
+                </tr>
+            `;
+        }).join("");
+    }
+
+    // ===== Data fetch =====
+    async function loadOnce(){
+        if(!deviceGuids){
+            rtBody.innerHTML = `<tr><td colspan="9" class="muted">Hãy nhập deviceGuids để bắt đầu.</td></tr>`;
+            return;
+        }
+        const url = `/api/elitech/realtime?deviceGuids=${encodeURIComponent(deviceGuids)}`;
+
+        // shimmer nhẹ trong lúc load
+        const current = rtBody.innerHTML;
+        rtBody.querySelectorAll('tr').forEach(tr=>tr.classList.add('shimmer'));
+
+        try{
+            const res = await fetch(url);
+            if(!res.ok){
+                rtBody.innerHTML = `<tr><td colspan="9" class="muted">API lỗi: ${res.status}</td></tr>`;
+                return;
+            }
+            const json = await res.json();
+            const rows = (json?.data ?? []);
+            renderRows(rows);
+            lastUpdate.textContent = new Date().toLocaleTimeString();
+        }catch(err){
+            rtBody.innerHTML = `<tr><td colspan="9" class="muted">Không thể tải dữ liệu.</td></tr>`;
+        }finally{
+            rtBody.querySelectorAll('.shimmer').forEach(tr=>tr.classList.remove('shimmer'));
+        }
+    }
+
+    // ===== Start =====
+    loadOnce();
+
+    // Nhịp cập nhật 5 giây (đúng với label hiển thị)
+    const INTERVAL_MS = 180000;
+    const tickLabel = document.getElementById('tickSec');
+    if(tickLabel) tickLabel.textContent = (INTERVAL_MS/1000)+'s';
+
+    const timer = setInterval(loadOnce, INTERVAL_MS);
+    window.addEventListener('beforeunload', () => clearInterval(timer));
+
+    // Export CSV
+    document.getElementById('btnExport').addEventListener('click', ()=>{
+        const rows = [...document.querySelectorAll('#rtTable tr')].map(tr =>
+            [...tr.children].map(td => `"${td.textContent.replaceAll('"','""').trim()}"`).join(',')
+        ).join('\n');
+        const blob = new Blob([rows], {type:'text/csv;charset=utf-8;'});
+        const url = URL.createObjectURL(blob);
+        const a = Object.assign(document.createElement('a'), {href:url, download:'elitech_realtime.csv'});
+        a.click();
+        setTimeout(()=>URL.revokeObjectURL(url), 1500);
+    });
+</script>

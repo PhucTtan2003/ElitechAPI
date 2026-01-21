@@ -1,0 +1,609 @@
+﻿@model Elitech.Controllers.AdminController.CreateUserViewModel
+
+@{
+    ViewData["Title"] = "Tạo tài khoản người dùng";
+}
+
+<style>
+    /* ===== CreateUser page polish (v2 full) ===== */
+    .cu-wrap {
+        margin: 0 18px 22px;
+    }
+
+    .cu-shell {
+        max-width: 980px;
+        margin: 0 auto;
+    }
+
+    /* Breadcrumb mini */
+    .cu-bc {
+        font-size: .82rem;
+        color: #64748b;
+        margin: 4px 0 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+        .cu-bc a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+            .cu-bc a:hover {
+                text-decoration: underline;
+            }
+
+        .cu-bc .cur {
+            color: #0f172a;
+            font-weight: 900;
+        }
+
+    /* Card */
+    .cu-card {
+        margin: 0 0 18px;
+        background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(245,130,32,.62), rgba(30,136,229,.50)) border-box;
+        border: 2px solid transparent;
+        border-radius: 18px;
+        box-shadow: 0 14px 34px rgba(15,23,42,.12);
+        overflow: hidden;
+        position: relative;
+    }
+
+        .cu-card::before {
+            content: "";
+            position: absolute;
+            inset: -80px -120px auto auto;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle at 30% 30%, rgba(245,130,32,.22), transparent 60%);
+            pointer-events: none;
+            filter: blur(1px);
+        }
+
+        .cu-card::after {
+            content: "";
+            position: absolute;
+            inset: auto auto -120px -120px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle at 60% 40%, rgba(30,136,229,.18), transparent 62%);
+            pointer-events: none;
+        }
+
+    .cu-head {
+        padding: 14px 16px 10px;
+        border-bottom: 1px dashed rgba(226,232,240,.9);
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+        .cu-head h5 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+    .cu-sub {
+        color: var(--mut);
+        font-size: .85rem;
+        font-weight: 800;
+    }
+
+    .cu-body {
+        padding: 14px 16px 16px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Alerts */
+    .cu-alert {
+        border-radius: 14px;
+        padding: 12px 12px;
+        border: 1px solid rgba(226,232,240,.9);
+        background: rgba(248,250,252,.70);
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+
+        .cu-alert .ico {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: #fff;
+            border: 1px solid rgba(226,232,240,.9);
+            box-shadow: 0 10px 24px rgba(15,23,42,.10);
+            flex: 0 0 auto;
+            color: #111827;
+        }
+
+        .cu-alert .txt b {
+            display: block;
+            font-weight: 900;
+            margin-bottom: 2px;
+        }
+
+        .cu-alert .txt div {
+            color: #334155;
+            font-weight: 700;
+            font-size: .85rem;
+            line-height: 1.25rem;
+        }
+
+        .cu-alert.ok {
+            border-color: #bbf7d0;
+            background: #ecfdf5;
+        }
+
+            .cu-alert.ok .ico {
+                color: #059669;
+                border-color: #bbf7d0;
+            }
+
+        .cu-alert.err {
+            border-color: #fecaca;
+            background: #fff1f2;
+        }
+
+            .cu-alert.err .ico {
+                color: #b91c1c;
+                border-color: #fecaca;
+            }
+
+    /* Shake when error */
+    @@keyframes cu-shake {
+        0% {
+            transform: translateX(0);
+        }
+
+        20% {
+            transform: translateX(-4px);
+        }
+
+        40% {
+            transform: translateX(4px);
+        }
+
+        60% {
+            transform: translateX(-3px);
+        }
+
+        80% {
+            transform: translateX(3px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+    .cu-alert.err {
+        animation: cu-shake .35s ease;
+    }
+
+    /* Form micro */
+    .cu-label {
+        font-weight: 900;
+        font-size: .85rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+        .cu-label i {
+            color: #f97316;
+        }
+
+    .cu-help {
+        margin-top: 6px;
+        font-size: .8rem;
+        color: var(--mut);
+        line-height: 1.25rem;
+    }
+
+    .cu-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 6px;
+    }
+
+        .cu-actions .elx-btn.primary {
+            padding: 11px 18px;
+            font-size: .9rem;
+            position: relative;
+        }
+
+    /* input focus ring (xịn hơn) */
+    .elx-input:focus {
+        outline: none;
+        border-color: rgba(245,130,32,.8);
+        box-shadow: 0 0 0 3px rgba(245,130,32,.18), 0 12px 28px rgba(15,23,42,.14);
+    }
+
+    /* Strength pill (re-used for pwd + role) */
+    .cu-strength {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(226,232,240,.9);
+        background: rgba(255,255,255,.8);
+        box-shadow: 0 10px 24px rgba(15,23,42,.10);
+        font-size: .8rem;
+        font-weight: 900;
+        color: #111827;
+        margin-top: 8px;
+        width: fit-content;
+    }
+
+        .cu-strength .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #cbd5e1;
+        }
+
+        .cu-strength.ok .dot {
+            background: #10B981;
+        }
+
+        .cu-strength.warn .dot {
+            background: #F59E0B;
+        }
+
+        .cu-strength.bad .dot {
+            background: #EF4444;
+        }
+
+    /* Inline kv note */
+    .cu-note {
+        border-radius: 14px;
+        padding: 12px 12px;
+        background: linear-gradient(180deg,#f8fafc,#fff);
+        border: 1px dashed rgba(245,130,32,.45);
+    }
+
+        .cu-note b {
+            display: block;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .cu-note span {
+            color: #334155;
+            font-weight: 700;
+            font-size: .85rem;
+            line-height: 1.3rem;
+            display: block;
+        }
+
+    /* Hero icon animated gradient */
+    .cu-hero-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        color: #111827;
+        font-size: 26px;
+        box-shadow: 0 12px 28px rgba(245,130,32,.45);
+        background: linear-gradient(135deg,#F58220,#E36F15,#1E88E5);
+        background-size: 200% 200%;
+        animation: cu-gradient 6s ease infinite;
+    }
+
+    @@keyframes cu-gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* Loading icon spin */
+    @@keyframes cu-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .cu-spin {
+        display: inline-block;
+        animation: cu-spin 1s linear infinite;
+    }
+
+    /* Mobile */
+    @@media (max-width: 576px) {
+        .cu-wrap {
+            margin: 0 12px 18px;
+        }
+
+        .cu-head {
+            padding: 12px 12px 10px;
+        }
+
+        .cu-body {
+            padding: 12px;
+        }
+    }
+    /* ===== Back to Admin button ===== */
+    .sx-btn.back-admin {
+        border: 1px solid rgba(30, 136, 229, .35);
+        background: linear-gradient(180deg, #e0edff, #f8fbff);
+        color: #1e40af;
+        font-weight: 900;
+        box-shadow: 0 10px 26px rgba(30,136,229,.18);
+    }
+
+        .sx-btn.back-admin i {
+            font-size: 1rem;
+        }
+
+        .sx-btn.back-admin:hover {
+            background: linear-gradient(180deg, #dbeafe, #eef6ff);
+            transform: translateY(-1px);
+        }
+
+        .sx-btn.back-admin:active {
+            transform: scale(.97);
+        }
+</style>
+
+<div class="elx-dashboard">
+    <div class="cu-wrap">
+        <div class="cu-shell">
+
+            <!-- ===== Breadcrumb mini ===== -->
+            <div class="cu-bc">
+                <a asp-controller="Admin" asp-action="Index">Admin</a>
+                <span> / </span>
+                <span class="cur">Create User</span>
+            </div>
+
+            <!-- ===== HERO ===== -->
+            <div class="elx-hero" style="margin: 8px 0 16px;">
+                <div class="elx-hero-left" style="display:flex;gap:14px;align-items:center;">
+                    <div class="cu-hero-icon">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+
+                    <div>
+                        <h1 style="margin-bottom:2px;">Tạo tài khoản người dùng</h1>
+                        <p>Admin tạo user mới • mật khẩu được hash • phân quyền rõ ràng</p>
+                    </div>
+                </div>
+
+                <div class="elx-hero-right">
+                    <span class="elx-hero-pill"><i class="bi bi-shield-lock"></i> Admin only</span>
+                    <span class="elx-hero-pill"><i class="bi bi-database-lock"></i> Password hashed</span>
+                </div>
+                <form asp-controller="Admin" asp-action="Index" method="get" style="display:inline;">
+                    <button type="submit" class="sx-btn back-admin">
+                        <i class="bi bi-arrow-left"></i> Về Admin
+                    </button>
+                </form>
+            </div>
+
+            <!-- ===== CARD ===== -->
+            <div class="cu-card">
+                <div class="cu-head">
+                    <h5><i class="bi bi-person-badge"></i> Thông tin tài khoản</h5>
+                    <span class="cu-sub">Username + Password • Role • MongoDB</span>
+                </div>
+
+                <div class="cu-body">
+                    @* Success *@
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="cu-alert ok">
+                            <div class="ico"><i class="bi bi-check-circle"></i></div>
+                            <div class="txt">
+                                <b>Thành công</b>
+                                <div>@TempData["Success"]</div>
+                            </div>
+                        </div>
+                    }
+
+                    @* Validation errors *@
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="cu-alert err">
+                            <div class="ico"><i class="bi bi-exclamation-triangle"></i></div>
+                            <div class="txt">
+                                <b>Có lỗi cần sửa</b>
+                                <div>
+                                    <ul style="margin:0;padding-left:16px">
+                                        @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                        {
+                                            <li style="color:#b91c1c;font-weight:800">@err.ErrorMessage</li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <form asp-action="CreateUser" method="post" autocomplete="off" id="createUserForm">
+                        @Html.AntiForgeryToken()
+
+                        <div class="elx-form-grid">
+
+                            <!-- Username -->
+                            <div class="elx-col-6">
+                                <div class="cu-label"><i class="bi bi-person"></i> Username</div>
+                                <input asp-for="Username" class="elx-input" placeholder="VD: user_kho_a" />
+                                <div class="cu-help">Không dấu • không khoảng trắng • duy nhất</div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="elx-col-6">
+                                <div class="cu-label"><i class="bi bi-key"></i> Password</div>
+                                <input asp-for="Password" type="password" class="elx-input" placeholder="••••••••" id="pwd" />
+                                <div class="cu-help">Mật khẩu được <b>hash BCrypt</b>, không lưu plain text</div>
+
+                                <div class="cu-strength bad" id="pwdStrength" aria-live="polite">
+                                    <span class="dot"></span>
+                                    <span id="pwdStrengthText">Độ mạnh: yếu</span>
+                                </div>
+                            </div>
+
+                            <!-- Role -->
+                            <div class="elx-col-6">
+                                <div class="cu-label"><i class="bi bi-shield-check"></i> Role</div>
+                                <select asp-for="Role" class="elx-input" id="roleSel">
+                                    <option value="User">User</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                                <div class="cu-help">User: sử dụng hệ thống • Admin: toàn quyền</div>
+
+                                <!-- Role preview badge -->
+                                <div class="cu-strength warn" id="rolePreview" aria-live="polite">
+                                    <span class="dot"></span>
+                                    <span id="rolePreviewText">Role: User</span>
+                                </div>
+                            </div>
+
+                            <!-- Security note -->
+                            <div class="elx-col-12">
+                                <div class="cu-note">
+                                    <b><i class="bi bi-info-circle"></i> Gợi ý bảo mật</b>
+                                    <span>
+                                        • Password hash bằng <b>BCrypt</b><br />
+                                        • Không lưu thông tin nhạy cảm ở frontend<br />
+                                        • Nên dùng mật khẩu dài ≥ 8 ký tự, có chữ hoa + số + ký tự đặc biệt
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="elx-col-12">
+                                <div class="cu-actions">
+                                    <button type="submit" class="elx-btn primary" id="btnSubmit">
+                                        <i class="bi bi-person-check"></i>
+                                        Tạo & kích hoạt tài khoản
+                                    </button>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== Dock ===== -->
+            <div class="elx-dock" style="margin: 0;">
+                <div class="elx-dock-inner">
+                    <a asp-controller="Admin" asp-action="Index">
+                        <i class="bi bi-grid-1x2"></i> Dashboard
+                    </a>
+                    <a asp-controller="Admin" asp-action="CreateUser" class="active">
+                        <i class="bi bi-person-plus"></i> Create User
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // ===== Password strength (client-side hint only) =====
+        (function () {
+            const pwd = document.getElementById('pwd');
+            const box = document.getElementById('pwdStrength');
+            const text = document.getElementById('pwdStrengthText');
+
+            if (!pwd || !box || !text) return;
+
+            function score(p) {
+                if (!p) return 0;
+                let s = 0;
+                if (p.length >= 8) s++;
+                if (p.length >= 12) s++;
+                if (/[A-Z]/.test(p)) s++;
+                if (/[a-z]/.test(p)) s++;
+                if (/[0-9]/.test(p)) s++;
+                if (/[^A-Za-z0-9]/.test(p)) s++;
+                return s;
+            }
+
+            function render(p) {
+                const s = score(p);
+                box.classList.remove('ok', 'warn', 'bad');
+
+                if (s >= 5) {
+                    box.classList.add('ok');
+                    text.textContent = 'Độ mạnh: mạnh';
+                } else if (s >= 3) {
+                    box.classList.add('warn');
+                    text.textContent = 'Độ mạnh: trung bình';
+                } else {
+                    box.classList.add('bad');
+                    text.textContent = 'Độ mạnh: yếu';
+                }
+            }
+
+            render(pwd.value);
+            pwd.addEventListener('input', () => render(pwd.value));
+        })();
+
+        // ===== Role preview badge =====
+        (function () {
+            const sel = document.getElementById('roleSel');
+            const box = document.getElementById('rolePreview');
+            const txt = document.getElementById('rolePreviewText');
+            if (!sel || !box || !txt) return;
+
+            function render() {
+                box.classList.remove('ok', 'warn', 'bad');
+                if (sel.value === 'Admin') {
+                    box.classList.add('ok');
+                    txt.textContent = 'Role: Admin (toàn quyền)';
+                } else {
+                    box.classList.add('warn');
+                    txt.textContent = 'Role: User (giới hạn)';
+                }
+            }
+
+            render();
+            sel.addEventListener('change', render);
+        })();
+
+        // ===== Prevent double submit + loading state =====
+        (function () {
+            const form = document.getElementById('createUserForm');
+            const btn = document.getElementById('btnSubmit');
+            if (!form || !btn) return;
+
+            form.addEventListener('submit', () => {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="bi bi-arrow-repeat cu-spin"></i> Đang tạo...';
+            });
+        })();
+    </script>
+}

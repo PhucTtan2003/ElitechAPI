@@ -1,0 +1,1023 @@
+﻿@{
+    ViewData["Title"] = "Elitech - Lịch sử thiết bị";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --ink: #0f172a;
+        --muted: #64748b;
+        --border: #e5e7eb;
+        --card: #ffffff;
+        --brand: #4f46e5;
+        --brand-600: #4338ca;
+        --brand-700: #3730a3;
+        --brand-50: #eef2ff;
+        --brand-100: #c7d2fe;
+        --accent: #14b8a6;
+        --accent-50: #ecfeff;
+    }
+
+    html, body {
+        height: 100%;
+    }
+
+    body {
+        background: radial-gradient(1200px 600px at 100% -20%, rgba(79,70,229,.10), transparent 55%), radial-gradient(900px 520px at 0% 0%, rgba(20,184,166,.10), transparent 55%), #f1f5f9;
+        color: var(--ink);
+    }
+
+    @@keyframes glow {
+        0% {
+            box-shadow: 0 10px 24px rgba(79,70,229,.08)
+        }
+
+        50% {
+            box-shadow: 0 14px 28px rgba(79,70,229,.14)
+        }
+
+        100% {
+            box-shadow: 0 10px 24px rgba(79,70,229,.08)
+        }
+    }
+
+    @@keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .fx-card {
+        position: relative;
+        border-radius: 18px;
+        padding: 1px;
+        overflow: hidden;
+        background: linear-gradient(135deg, rgba(79,70,229,.28), transparent 35%), linear-gradient(315deg, rgba(20,184,166,.22), transparent 35%);
+        transition: transform .25s ease, box-shadow .25s ease;
+        animation: glow 3s ease-in-out infinite;
+    }
+
+        .fx-card > .inner {
+            border-radius: 17px;
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+        }
+
+        .fx-card:hover {
+            transform: translateY(-3px);
+        }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: .6rem
+    }
+
+        .page-title i {
+            color: var(--brand);
+        }
+
+    .badge-soft {
+        background: var(--brand-50);
+        color: var(--brand-700);
+        border: 1px solid var(--brand-100);
+        padding: .35rem .6rem;
+        border-radius: 999px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .form-compact .form-control, .form-compact .form-select {
+        height: 44px;
+    }
+
+    .btn-primary {
+        --bs-btn-bg: var(--brand);
+        --bs-btn-border-color: var(--brand);
+        --bs-btn-hover-bg: var(--brand-600);
+        --bs-btn-hover-border-color: var(--brand-600);
+        --bs-btn-active-bg: var(--brand-700);
+        --bs-btn-active-border-color: var(--brand-700);
+        box-shadow: 0 8px 18px rgba(79,70,229,.18);
+        position: relative;
+        overflow: hidden;
+        transition: transform .12s ease, box-shadow .2s ease;
+    }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+    .btn-outline-primary {
+        --bs-btn-color: var(--brand);
+        --bs-btn-border-color: var(--brand);
+        --bs-btn-hover-bg: var(--brand);
+        --bs-btn-hover-border-color: var(--brand);
+        --bs-btn-hover-color: #fff;
+    }
+
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        transform: scale(0);
+        animation: ripple .6s linear;
+        background: rgba(255,255,255,.55);
+        pointer-events: none;
+    }
+
+    @@keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0
+        }
+    }
+
+    .stat {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid var(--border);
+        transition: box-shadow .2s ease, transform .2s ease;
+    }
+
+        .stat:hover {
+            box-shadow: 0 10px 24px rgba(2,6,23,.06);
+            transform: translateY(-2px)
+        }
+
+        .stat i {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--accent-50);
+            color: var(--accent);
+            border: 1px solid rgba(20,184,166,.20);
+        }
+
+        .stat .num {
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+    .subtle {
+        color: var(--muted);
+    }
+
+    .table-sticky thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #f8fafc;
+        color: var(--ink);
+        border-bottom: 1px solid var(--brand-100) !important
+    }
+
+    #tbl tbody tr {
+        transition: background .15s ease;
+    }
+
+        #tbl tbody tr:hover {
+            background: #f8fafc;
+        }
+
+    .loading {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        color: var(--brand-700);
+        font-weight: 600;
+    }
+
+    .skeleton-row td {
+        height: 32px;
+        background: linear-gradient(90deg,#f3f4f6 25%,#e5e7eb 37%,#f3f4f6 63%);
+        background-size: 400% 100%;
+        animation: shimmer 1.2s infinite;
+    }
+
+    .toasty {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 1055;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .toast-item {
+        background: #0b1220;
+        color: #fff;
+        padding: .7rem .9rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.2);
+        opacity: 0;
+        transform: translateY(6px);
+        animation: toastIn .2s ease forwards;
+    }
+
+    @@keyframes toastIn {
+        to {
+            opacity: 1;
+            transform: none
+        }
+    }
+</style>
+
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="page-title">
+            <i class="bi bi-activity fs-4"></i>
+            <h3 class="mb-0">Elitech – Lịch sử thiết bị</h3>
+            <span class="badge-soft">Asia/Ho_Chi_Minh (UTC+7)</span>
+        </div>
+        <div class="text-end">
+            <small class="subtle d-block">Cập nhật: <span id="nowText"></span></small>
+            <div class="mt-1 small" id="status"></div>
+        </div>
+    </div>
+
+    <!-- Query -->
+    <div class="fx-card mb-3">
+        <div class="inner">
+            <form id="qForm" class="row g-3 form-compact">
+                <div class="col-lg-4">
+                    <label class="form-label">Device GUID</label>
+                    <input class="form-control" id="deviceGuid" placeholder="Ví dụ: 90319774496194524687" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Từ (local)</label>
+                    <input type="datetime-local" class="form-control" id="from" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Đến (local)</label>
+                    <input type="datetime-local" class="form-control" id="to" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Khoảng nhanh</label>
+                    <select id="quick" class="form-select">
+                        <option value="1">1 giờ</option>
+                        <option value="6">6 giờ</option>
+                        <option value="24" selected>24 giờ</option>
+                        <option value="72">3 ngày</option>
+                        <option value="240">10 ngày</option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex flex-wrap gap-2 align-items-center">
+                    <button class="btn btn-primary" id="btnFetch" type="submit">
+                        <i class="bi bi-cloud-download me-1"></i> Lấy dữ liệu
+                    </button>
+                    <button class="btn btn-outline-primary" type="button" id="btnClear">
+                        <i class="bi bi-eraser me-1"></i> Xoá
+                    </button>
+                    <div class="vr mx-1 d-none d-md-block"></div>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="autoToggle">
+                            <label class="form-check-label" for="autoToggle">Tự động cập nhật</label>
+                        </div>
+                        <select id="autoInterval" class="form-select" style="width:140px">
+                            <option value="0">Tắt</option>
+                            <option value="30">30 giây</option>
+                            <option value="60" selected>1 phút</option>
+                            <option value="300">5 phút</option>
+                        </select>
+                        <span class="badge-soft" id="autoCountdown">—</span>
+                    </div>
+                    <div class="loading ms-auto" id="loading">
+                        <span class="spinner-border spinner-border-sm" style="color:var(--brand)"></span> Đang tải…
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="fx-card h-100">
+                <div class="inner">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>Biểu đồ</strong>
+
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <span class="badge-soft" id="pointCount">0 điểm</span>
+                            <span class="badge-soft" id="rangeText">—</span>
+
+                            <div class="vr mx-1 d-none d-md-block"></div>
+
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" id="zoomTempToggle" checked>
+                                <label class="form-check-label small" for="zoomTempToggle">Zoom °C</label>
+                            </div>
+                            <span class="badge-soft" id="zoomTempBadge">°C —</span>
+
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" id="zoomRhToggle" checked>
+                                <label class="form-check-label small" for="zoomRhToggle">Zoom %RH</label>
+                            </div>
+                            <span class="badge-soft" id="zoomRhBadge">%RH —</span>
+                        </div>
+                    </div>
+
+                    <canvas id="chartTemp" height="160"></canvas>
+                    <div class="mt-2 subtle small">* Nhiệt độ lấy từ trường <code>tmp1</code>, nếu có.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="fx-card h-100">
+                <div class="inner">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <strong>Thống kê nhanh</strong>
+                        <span class="badge-soft" id="deviceText">—</span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <div class="stat"><i class="bi bi-thermometer-half"></i><div><div class="subtle">Trung bình</div><div class="num" id="avgTemp">—</div></div></div>
+                        <div class="stat"><i class="bi bi-thermometer-high"></i><div><div class="subtle">Cao nhất</div><div class="num" id="maxTemp">—</div></div></div>
+                        <div class="stat"><i class="bi bi-thermometer-low"></i><div><div class="subtle">Thấp nhất</div><div class="num" id="minTemp">—</div></div></div>
+                        <div class="stat"><i class="bi bi-droplet-half"></i><div><div class="subtle">Độ ẩm gần nhất</div><div class="num" id="lastHum">—</div></div></div>
+                    </div>
+                    <div class="mt-2 small subtle">* Thời gian hiển thị theo UTC+7.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="fx-card">
+                <div class="inner">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>Bảng dữ liệu</strong>
+                        <button class="btn btn-sm btn-outline-primary" id="btnExport"><i class="bi bi-file-earmark-arrow-down"></i> Xuất CSV</button>
+                    </div>
+                    <div class="table-responsive table-sticky" style="max-height:420px;">
+                        <table class="table table-bordered align-middle mb-0" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th>Time (UTC+7)</th>
+                                    <th>tmp1</th>
+                                    <th>hum1</th>
+                                    <th>signal</th>
+                                    <th>power</th>
+                                    <th>address</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody"></tbody>
+                        </table>
+                    </div>
+                    <div class="subtle small mt-2" id="apiMsg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toasty" id="toasty"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    (function () {
+      const nowText = document.getElementById('nowText');
+      const statusEl = document.getElementById('status');
+      const deviceGuidEl = document.getElementById('deviceGuid');
+      const fromEl = document.getElementById('from');
+      const toEl = document.getElementById('to');
+      const quickEl = document.getElementById('quick');
+      const tbody = document.getElementById('tbody');
+      const apiMsg = document.getElementById('apiMsg');
+      const loading = document.getElementById('loading');
+      const pointCount = document.getElementById('pointCount');
+      const rangeText = document.getElementById('rangeText');
+      const deviceText = document.getElementById('deviceText');
+      const avgTemp = document.getElementById('avgTemp');
+      const maxTemp = document.getElementById('maxTemp');
+      const minTemp = document.getElementById('minTemp');
+      const lastHum = document.getElementById('lastHum');
+      const btnFetch = document.getElementById('btnFetch');
+
+      const zoomTempToggle = document.getElementById('zoomTempToggle');
+      const zoomRhToggle = document.getElementById('zoomRhToggle');
+      const zoomTempBadge = document.getElementById('zoomTempBadge');
+      const zoomRhBadge = document.getElementById('zoomRhBadge');
+
+      const autoToggle = document.getElementById('autoToggle');
+      const autoInterval = document.getElementById('autoInterval');
+      const autoCountdownEl = document.getElementById('autoCountdown');
+      const toasty = document.getElementById('toasty');
+
+      let inflightAbort = null, latestQueryKey = null, retryCountdown = null;
+      let autoTimer = null, autoTicker = null;
+      let chart = null;
+
+      // =========================
+      // Time
+      // =========================
+      function tickNow() {
+        nowText.textContent = new Date().toLocaleString('vi-VN', { hour12: false });
+      }
+      tickNow(); setInterval(tickNow, 1000);
+
+      // =========================
+      // Defaults
+      // =========================
+      quickEl.value = '24';
+      setDefaultRange();
+      prefillFromQuery();
+
+      function prefillFromQuery() {
+        const p = new URLSearchParams(location.search);
+        if (p.get('deviceGuid')) deviceGuidEl.value = p.get('deviceGuid');
+      }
+
+      function setDefaultRange() {
+        const end = new Date();
+        const start = new Date(end.getTime() - 24 * 3600 * 1000);
+        fromEl.value = toLocalInputValue(start);
+        toEl.value = toLocalInputValue(end);
+      }
+
+      function toLocalInputValue(d) {
+        const pad = n => n.toString().padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      }
+
+      function parseLocalInputValue(s) { return s ? new Date(s) : null; }
+      function setStatus(msg) { if (statusEl) statusEl.textContent = msg || ''; }
+      function showLoading(b) { loading.style.display = b ? 'flex' : 'none'; btnFetch.disabled = !!b; }
+
+      // =========================
+      // Toast
+      // =========================
+      function toast(msg, type = 'ok') {
+        const el = document.createElement('div');
+        el.className = 'toast-item';
+        el.style.background = type === 'err' ? '#b91c1c' : (type === 'warn' ? '#d97706' : '#0b1220');
+        el.innerHTML = msg;
+        toasty.appendChild(el);
+        setTimeout(() => {
+          el.style.opacity = .0;
+          el.style.transform = 'translateY(6px)';
+          setTimeout(() => el.remove(), 200);
+        }, 2800);
+      }
+
+      // Ripple
+      document.addEventListener('click', e => {
+        const b = e.target.closest('.btn');
+        if (!b) return;
+        const r = document.createElement('span'); r.className = 'ripple';
+        const rect = b.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        r.style.width = r.style.height = size + 'px';
+        r.style.left = (e.clientX - rect.left - size / 2) + 'px';
+        r.style.top = (e.clientY - rect.top - size / 2) + 'px';
+        b.appendChild(r);
+        setTimeout(() => r.remove(), 600);
+      });
+
+      // Lock canvas height to avoid jitter
+      const chartCanvas = document.getElementById('chartTemp');
+      if (chartCanvas) {
+        chartCanvas.style.display = 'block';
+        chartCanvas.style.height = '260px';
+        chartCanvas.style.maxHeight = '260px';
+      }
+
+      // =========================
+      // Helpers
+      // =========================
+      function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
+      function minMaxNums(arr) {
+        let mn = Infinity, mx = -Infinity, ok = false;
+        for (const v of arr) {
+          if (typeof v === 'number' && isFinite(v)) {
+            ok = true;
+            if (v < mn) mn = v;
+            if (v > mx) mx = v;
+          }
+        }
+        return ok ? { mn, mx } : null;
+      }
+
+      function fmt1(n) { return (Math.round(n * 10) / 10).toFixed(1); }
+      function setBadge(el, text) { if (el) el.textContent = text; }
+
+      function applyZoomScalesAndBadges(temps, hums) {
+        if (!chart || !chart.options?.scales) return;
+
+        const zoomTemp = zoomTempToggle ? !!zoomTempToggle.checked : true;
+        const zoomRh = zoomRhToggle ? !!zoomRhToggle.checked : true;
+
+        // ---- Temp axis (y)
+        if (chart.options.scales.y) {
+          if (zoomTemp) {
+            const mmT = minMaxNums(temps);
+            if (mmT) {
+              const pad = 0.5;
+              let ymin = mmT.mn - pad;
+              let ymax = mmT.mx + pad;
+
+              if (ymax - ymin < 2) {
+                const mid = (ymin + ymax) / 2;
+                ymin = mid - 1;
+                ymax = mid + 1;
+              }
+
+              const yMinFinal = Math.floor(ymin * 10) / 10;
+              const yMaxFinal = Math.ceil(ymax * 10) / 10;
+
+              chart.options.scales.y.min = yMinFinal;
+              chart.options.scales.y.max = yMaxFinal;
+
+              setBadge(zoomTempBadge, `°C ${fmt1(yMinFinal)}–${fmt1(yMaxFinal)}`);
+            } else {
+              chart.options.scales.y.min = undefined;
+              chart.options.scales.y.max = undefined;
+              setBadge(zoomTempBadge, '°C —');
+            }
+          } else {
+            chart.options.scales.y.min = undefined;
+            chart.options.scales.y.max = undefined;
+            setBadge(zoomTempBadge, '°C Auto');
+          }
+        }
+
+        // ---- RH axis (y1)
+        if (chart.options.scales.y1) {
+          if (zoomRh) {
+            const mmH = minMaxNums(hums);
+            if (mmH) {
+              const pad = 2;
+              let ymin = clamp(Math.floor(mmH.mn - pad), 0, 100);
+              let ymax = clamp(Math.ceil(mmH.mx + pad), 0, 100);
+
+              if (ymax - ymin < 8) {
+                const mid = (ymin + ymax) / 2;
+                ymin = clamp(Math.floor(mid - 4), 0, 100);
+                ymax = clamp(Math.ceil(mid + 4), 0, 100);
+              }
+
+              chart.options.scales.y1.min = ymin;
+              chart.options.scales.y1.max = ymax;
+
+              setBadge(zoomRhBadge, `%RH ${ymin}–${ymax}`);
+            } else {
+              chart.options.scales.y1.min = 0;
+              chart.options.scales.y1.max = 100;
+              setBadge(zoomRhBadge, '%RH —');
+            }
+          } else {
+            chart.options.scales.y1.min = 0;
+            chart.options.scales.y1.max = 100;
+            setBadge(zoomRhBadge, '%RH 0–100');
+          }
+        }
+      }
+
+      // =========================
+      // Chart
+      // =========================
+      function ensureChart(labels, temps, hums) {
+        const canvas = document.getElementById('chartTemp');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        function buildGradients() {
+          const h = canvas.clientHeight || canvas.height || 260;
+
+          const gTemp = ctx.createLinearGradient(0, 0, 0, h);
+          gTemp.addColorStop(0, 'rgba(79,70,229,0.22)');
+          gTemp.addColorStop(1, 'rgba(79,70,229,0.02)');
+
+          const gHum = ctx.createLinearGradient(0, 0, 0, h);
+          gHum.addColorStop(0, 'rgba(20,184,166,0.18)');
+          gHum.addColorStop(1, 'rgba(20,184,166,0.02)');
+
+          return { gTemp, gHum };
+        }
+
+        // UPDATE ONLY
+        if (chart) {
+          chart.data.labels = labels;
+          chart.data.datasets[0].data = temps;
+          chart.data.datasets[1].data = hums;
+
+          chart.options.animation = false;
+          chart.options.transitions = {
+            active: { animation: { duration: 0 } },
+            resize: { animation: { duration: 0 } },
+            show: { animations: { x: { duration: 0 }, y: { duration: 0 }, colors: { duration: 0 } } },
+            hide: { animations: { x: { duration: 0 }, y: { duration: 0 }, colors: { duration: 0 } } }
+          };
+
+          const { gTemp, gHum } = buildGradients();
+          chart.data.datasets[0].backgroundColor = gTemp;
+          chart.data.datasets[1].backgroundColor = gHum;
+
+          applyZoomScalesAndBadges(temps, hums);
+
+          chart.update('none');
+          return;
+        }
+
+        // CREATE FIRST TIME
+        const { gTemp, gHum } = buildGradients();
+
+        chart = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: 'Nhiệt độ (°C)',
+                data: temps,
+                yAxisID: 'y',
+                borderColor: '#4f46e5',
+                backgroundColor: gTemp,
+                borderWidth: 2.5,
+                tension: 0.35,
+                cubicInterpolationMode: 'monotone',
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                pointHoverBorderWidth: 2,
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#4f46e5',
+                fill: true,
+                spanGaps: false
+              },
+              {
+                label: 'Độ ẩm (%RH)',
+                data: hums,
+                yAxisID: 'y1',
+                borderColor: '#14b8a6',
+                backgroundColor: gHum,
+                borderWidth: 2,
+                borderDash: [6, 4],
+                tension: 0.35,
+                cubicInterpolationMode: 'monotone',
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                pointHoverBorderWidth: 2,
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#14b8a6',
+                fill: true,
+                spanGaps: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            resizeDelay: 250,
+            interaction: { mode: 'index', intersect: false },
+            animation: false,
+            transitions: {
+              active: { animation: { duration: 0 } },
+              resize: { animation: { duration: 0 } },
+              show: { animations: { x: { duration: 0 }, y: { duration: 0 }, colors: { duration: 0 } } },
+              hide: { animations: { x: { duration: 0 }, y: { duration: 0 }, colors: { duration: 0 } } }
+            },
+            plugins: {
+              legend: { labels: { color: '#0f172a', usePointStyle: true, pointStyle: 'line' } },
+              tooltip: {
+                backgroundColor: '#0b1220',
+                titleColor: '#fff',
+                bodyColor: '#e5e7eb',
+                padding: 10,
+                callbacks: {
+                  label(ctx) {
+                    const v = ctx.parsed.y;
+                    if (v == null || !isFinite(v)) return `${ctx.dataset.label}: —`;
+                    const unit = ctx.dataset.yAxisID === 'y1' ? ' %RH' : ' °C';
+                    return `${ctx.dataset.label}: ${v.toFixed(2)}${unit}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { ticks: { color: '#64748b', maxRotation: 0, autoSkip: true }, grid: { display: false } },
+              y: {
+                position: 'left',
+                ticks: { color: '#64748b' },
+                grid: { color: 'rgba(79,70,229,.10)' },
+                title: { display: true, text: '°C', color: '#64748b' }
+              },
+              y1: {
+                position: 'right',
+                min: 0,
+                max: 100,
+                ticks: { color: '#64748b' },
+                grid: { drawOnChartArea: false },
+                title: { display: true, text: '%RH', color: '#64748b' }
+              }
+            }
+          }
+        });
+
+        applyZoomScalesAndBadges(temps, hums);
+        chart.update('none');
+      }
+
+      // Toggle change => reapply zoom/badge instantly (no refetch)
+      function refreshAxisZoom() {
+        if (!chart) return;
+        const temps = chart.data.datasets?.[0]?.data || [];
+        const hums = chart.data.datasets?.[1]?.data || [];
+        applyZoomScalesAndBadges(temps, hums);
+        chart.update('none');
+      }
+      zoomTempToggle?.addEventListener('change', refreshAxisZoom);
+      zoomRhToggle?.addEventListener('change', refreshAxisZoom);
+
+      // =========================
+      // Parse helpers
+      // =========================
+      const num = s => (s && /-?\d+(\.\d+)?/.test(s)) ? parseFloat(s) : null;
+
+      function normalizeUnixToDate(v) {
+        if (v == null) return null;
+        if (v > 1e12) return new Date(v);
+        if (v > 1e9) return new Date(v * 1000);
+        return null;
+      }
+
+      function toLocalStringFromUnix(v) {
+        const d = normalizeUnixToDate(v);
+        return d ? d.toLocaleString('vi-VN', { hour12: false }) : '';
+      }
+
+      function smoothText(el, target, suffix = '') {
+        if (target == null || !isFinite(target)) { el.textContent = '—'; return; }
+        const start = parseFloat(el.dataset.val || '0') || 0;
+        const dur = 380; const t0 = performance.now();
+        function step(t) {
+          const k = Math.min(1, (t - t0) / dur);
+          const v = start + (target - start) * k;
+          el.textContent = v.toFixed(2) + suffix;
+          if (k < 1) requestAnimationFrame(step); else el.dataset.val = String(target);
+        }
+        requestAnimationFrame(step);
+      }
+
+      function lastNonNull(arr) {
+        for (let i = arr.length - 1; i >= 0; i--) {
+          if (typeof arr[i] === 'number' && isFinite(arr[i])) return arr[i];
+        }
+        return null;
+      }
+
+      const esc = s => (s ?? '').toString().replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      function updateStats(temps, hums, guid, from, to) {
+        deviceText.textContent = guid || '—';
+        pointCount.textContent = `${temps.filter(x => x != null).length} điểm`;
+        rangeText.textContent = `${from.toLocaleString('vi-VN', { hour12: false })} → ${to.toLocaleString('vi-VN', { hour12: false })}`;
+
+        const nums = temps.filter(v => typeof v === 'number' && isFinite(v));
+        if (nums.length) {
+          const avg = nums.reduce((a, b) => a + b, 0) / nums.length;
+          const mx = Math.max(...nums), mn = Math.min(...nums);
+          smoothText(avgTemp, avg, ' °C');
+          smoothText(maxTemp, mx, ' °C');
+          smoothText(minTemp, mn, ' °C');
+        } else {
+          avgTemp.textContent = maxTemp.textContent = minTemp.textContent = '—';
+        }
+
+        const lastH = lastNonNull(hums);
+        lastHum.textContent = lastH != null ? lastH.toFixed(1) + ' %RH' : '—';
+      }
+
+      // =========================
+      // Retry
+      // =========================
+      function clearRetryCountdown() {
+        if (retryCountdown?.intervalId) clearInterval(retryCountdown.intervalId);
+        if (retryCountdown?.timeoutId) clearTimeout(retryCountdown.timeoutId);
+        retryCountdown = null;
+      }
+
+      function startRetryCountdown(seconds, onDone) {
+        clearRetryCountdown();
+        let remain = Math.max(1, Math.ceil(seconds));
+        setStatus(`⏳ Bị giới hạn. Tự thử lại sau ${remain}s`);
+        const intervalId = setInterval(() => {
+          remain--;
+          if (remain > 0) setStatus(`⏳ Còn ${remain}s`);
+        }, 1000);
+        const timeoutId = setTimeout(() => {
+          clearInterval(intervalId);
+          setStatus('');
+          onDone && onDone();
+        }, Math.max(1, seconds) * 1000);
+        retryCountdown = { intervalId, timeoutId };
+      }
+
+      // =========================
+      // Auto refresh
+      // =========================
+      function stopAuto() {
+        if (autoTimer) clearInterval(autoTimer); autoTimer = null;
+        if (autoTicker) clearInterval(autoTicker); autoTicker = null;
+        autoCountdownEl.textContent = '—';
+        autoToggle.checked = false;
+      }
+
+      function startAuto() {
+        const s = parseInt(autoInterval.value || '0', 10);
+        if (!isFinite(s) || s <= 0) { stopAuto(); return; }
+
+        autoToggle.checked = true;
+        if (autoTimer) clearInterval(autoTimer);
+        if (autoTicker) clearInterval(autoTicker);
+
+        autoCountdownEl.textContent = s + 's';
+        autoTicker = setInterval(() => {
+          let left = parseInt(autoCountdownEl.textContent) || s;
+          left = left - 1;
+          autoCountdownEl.textContent = (left > 0 ? left : s) + 's';
+        }, 1000);
+
+        autoTimer = setInterval(() => {
+          fetchData(null, { silent: true });
+          autoCountdownEl.textContent = s + 's';
+        }, s * 1000);
+
+        toast('Tự động cập nhật đã bật');
+      }
+
+      autoToggle.addEventListener('change', e => e.target.checked ? startAuto() : stopAuto());
+      autoInterval.addEventListener('change', () => { if (autoToggle.checked) startAuto(); });
+
+      // =========================
+      // Fetch
+      // =========================
+      async function fetchData(e, opts) {
+        e?.preventDefault?.();
+        const silent = !!opts?.silent;
+
+        const guid = (deviceGuidEl.value || '').trim();
+        if (!guid) { alert('Nhập Device GUID!'); return; }
+
+        const f = parseLocalInputValue(fromEl.value);
+        const t = parseLocalInputValue(toEl.value);
+        const qh = parseInt(quickEl.value, 10);
+        const quickHours = isFinite(qh) ? qh : 24;
+
+        const baseUrl = '@Url.Content("~/")';
+        let url = baseUrl + 'api/elitech/history?deviceGuid=' + encodeURIComponent(guid);
+        if (f && t) url += `&from=${encodeURIComponent(f.toISOString())}&to=${encodeURIComponent(t.toISOString())}`;
+        else url += `&lastHours=${quickHours}`;
+
+        const key = url;
+        if (latestQueryKey === key && inflightAbort && !silent) return;
+        latestQueryKey = key;
+
+        if (inflightAbort) { inflightAbort.abort(); inflightAbort = null; }
+        clearRetryCountdown();
+        setStatus('');
+        inflightAbort = new AbortController();
+
+        if (!silent) {
+          tbody.innerHTML = skeletonRows(8);
+          apiMsg.textContent = '';
+        }
+        showLoading(true);
+
+        try {
+          const res = await fetch(url, { credentials: 'include', signal: inflightAbort.signal });
+
+          if (res.status === 429 || res.status === 504) {
+            let sec = parseInt(res.headers.get('Retry-After') || '0', 10);
+            if (!isFinite(sec) || sec <= 0) sec = res.status === 429 ? 60 : 10;
+            showLoading(false);
+            startRetryCountdown(sec, () => fetchData());
+            toast('Server đang giới hạn, sẽ thử lại…', 'warn');
+            return;
+          }
+
+          if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`HTTP ${res.status}: ${text}`);
+          }
+
+          const data = await res.json();
+          if (data.code !== 0) {
+            apiMsg.textContent = `API code=${data.code} message=${data.message || data.msg || data.error || 'error'}`;
+            ensureChart([], [], []);
+            const fromFor = f || new Date(Date.now() - quickHours * 3600 * 1000);
+            const toFor = t || new Date();
+            updateStats([], [], guid, fromFor, toFor);
+            toast('Không lấy được dữ liệu', 'err');
+            return;
+          }
+
+          const items = Array.isArray(data.data) ? data.data : [];
+          items.sort((a, b) => (a.monitorTime || 0) - (b.monitorTime || 0));
+
+          const labels = [], temps = [], hums = [];
+          tbody.innerHTML = '';
+
+          for (const it of items) {
+            const timeStr = toLocalStringFromUnix(it.monitorTime);
+            const tnum = num(it.tmp1);
+            const hnum = num(it.hum1);
+
+            labels.push(timeStr);
+            temps.push(tnum);
+            hums.push(hnum);
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${timeStr}</td><td>${esc(it.tmp1)}</td><td>${esc(it.hum1)}</td><td>${esc(it.signal)}</td><td>${esc(it.power)}</td><td>${esc(it.address)}</td>`;
+            tbody.appendChild(tr);
+          }
+
+          ensureChart(labels, temps, hums);
+
+          const fromFor = f || new Date(Date.now() - quickHours * 3600 * 1000);
+          const toFor = t || new Date();
+          updateStats(temps, hums, guid, fromFor, toFor);
+
+          apiMsg.textContent = `Nhận ${items.length} mẫu.`;
+          if (!silent) toast('Đã cập nhật dữ liệu');
+
+        } catch (err) {
+          if (err?.name === 'AbortError') return;
+          console.error(err);
+          apiMsg.textContent = 'Lỗi: ' + (err?.message || err);
+
+          ensureChart([], [], []);
+          const fromFor = f || new Date(Date.now() - quickHours * 3600 * 1000);
+          const toFor = t || new Date();
+          updateStats([], [], guid, fromFor, toFor);
+
+          toast('Lỗi tải dữ liệu', 'err');
+        } finally {
+          showLoading(false);
+          inflightAbort = null;
+        }
+      }
+
+      function skeletonRows(n) {
+        let html = '';
+        for (let i = 0; i < n; i++) html += `<tr class="skeleton-row"><td colspan="6"></td></tr>`;
+        return html;
+      }
+
+      // Events
+      document.getElementById('qForm').addEventListener('submit', e => {
+        if (autoToggle.checked) autoCountdownEl.textContent = (parseInt(autoInterval.value || '60', 10)) + 's';
+        fetchData(e, { silent: false });
+      });
+
+      document.getElementById('btnClear').addEventListener('click', () => {
+        if (inflightAbort) { inflightAbort.abort(); inflightAbort = null; }
+        stopAuto();
+        setStatus('');
+
+        deviceGuidEl.value = '';
+        setDefaultRange();
+        quickEl.value = '24';
+
+        tbody.innerHTML = '';
+        ensureChart([], [], []);
+
+        setBadge(zoomTempBadge, '°C —');
+        setBadge(zoomRhBadge, '%RH —');
+
+        updateStats([], [], '', new Date(Date.now() - 24 * 3600 * 1000), new Date());
+        apiMsg.textContent = '';
+      });
+
+      quickEl.addEventListener('change', () => { fromEl.value = ''; toEl.value = ''; });
+
+      document.getElementById('btnExport').addEventListener('click', () => {
+        const rows = [['Time(UTC+7)', 'tmp1', 'hum1', 'signal', 'power', 'address']];
+        for (const tr of tbody.querySelectorAll('tr')) {
+          const tds = [...tr.children].map(td => `"${(td.textContent || '').replace(/"/g, '""')}"`);
+          rows.push(tds);
+        }
+        const csv = rows.map(r => r.join(',')).join('\r\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `elitech_history_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.csv`;
+        a.click();
+      });
+
+      document.querySelectorAll('.fx-card').forEach(c => c.style.animationDelay = (Math.random() * 0.3) + 's');
+    })();
+</script>

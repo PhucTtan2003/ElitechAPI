@@ -1,0 +1,1014 @@
+﻿@{
+    ViewData["Title"] = "Alarm Records";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --bg: #eef3fb;
+        --card: rgba(255,255,255,.82);
+        --stroke: rgba(13,25,55,.10);
+        --shadow: 0 18px 40px rgba(9,22,48,.14);
+        --radius: 18px;
+        --txt: #0f172a;
+        --mut: #64748b;
+        --brand: #f58220;
+        --brand2: #e36f15;
+        --ok: #16a34a;
+        --warn: #f59e0b;
+        --bad: #ef4444;
+        --info: #3b82f6;
+        --tableHead: #f8fafc;
+        --tableLine: #eef2f7;
+    }
+
+    .alarm-wrap {
+        padding: 18px 18px 28px;
+        background: radial-gradient(1100px 420px at 20% 0%, rgba(245,130,32,.16), transparent 60%), radial-gradient(900px 360px at 90% 10%, rgba(59,130,246,.12), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.0));
+    }
+
+    .alarm-hero {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 6px 0 14px;
+    }
+
+    .alarm-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .alarm-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(245,130,32,.20), rgba(245,130,32,.06));
+        border: 1px solid rgba(245,130,32,.25);
+        display: grid;
+        place-items: center;
+        box-shadow: 0 10px 22px rgba(245,130,32,.14);
+        font-size: 22px;
+    }
+
+    .alarm-title h2 {
+        margin: 0;
+        font-size: 30px;
+        letter-spacing: .2px;
+        color: var(--txt);
+    }
+
+    .alarm-sub {
+        margin: 4px 0 0;
+        color: var(--mut);
+        font-size: 13px;
+    }
+
+    .alarm-right {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .pill {
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--stroke);
+        background: rgba(255,255,255,.74);
+        color: #334155;
+        font-size: 12px;
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        box-shadow: 0 10px 25px rgba(9,22,48,.08);
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #cbd5e1;
+    }
+
+        .dot.ok {
+            background: var(--ok);
+        }
+
+        .dot.warn {
+            background: var(--warn);
+        }
+
+        .dot.bad {
+            background: var(--bad);
+        }
+
+    /* Filter Card */
+    .alarm-card {
+        background: var(--card);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 14px;
+        overflow: hidden;
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: 1.4fr .6fr 1fr 1fr;
+        gap: 12px;
+        align-items: end;
+    }
+
+    .field label {
+        font-size: 12px;
+        color: #475569;
+        margin-bottom: 6px;
+        display: block;
+        font-weight: 600;
+        letter-spacing: .2px;
+    }
+
+    .field input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.88);
+        outline: none;
+        transition: .15s ease;
+        font-size: 13px;
+        color: #0f172a;
+    }
+
+        .field input:focus {
+            border-color: rgba(245,130,32,.65);
+            box-shadow: 0 0 0 4px rgba(245,130,32,.15);
+        }
+
+    .filter-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+    }
+
+    .quick {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .qbtn {
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.7);
+        color: #334155;
+        padding: 8px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: .15s ease;
+        user-select: none;
+    }
+
+        .qbtn:hover {
+            border-color: rgba(245,130,32,.45);
+            box-shadow: 0 8px 18px rgba(245,130,32,.12);
+            transform: translateY(-1px);
+        }
+
+        .qbtn.active {
+            border-color: rgba(245,130,32,.65);
+            background: rgba(245,130,32,.10);
+            color: #7c2d12;
+            font-weight: 700;
+        }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.75);
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13px;
+        transition: .15s ease;
+        color: #334155;
+    }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(9,22,48,.10);
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--brand), var(--brand2));
+        border: none;
+        color: #fff;
+        box-shadow: 0 16px 28px rgba(245,130,32,.18);
+        min-width: 140px;
+    }
+
+        .btn-primary:hover {
+            filter: brightness(1.02);
+        }
+
+    .btn-ghost {
+        background: transparent;
+    }
+
+    /* Stats + Search */
+    .topbar {
+        margin-top: 14px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .searchbox {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+        .searchbox input {
+            min-width: 280px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(148,163,184,.35);
+            background: rgba(255,255,255,.88);
+            outline: none;
+            font-size: 13px;
+        }
+
+    .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .chip {
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.72);
+        font-size: 12px;
+        cursor: pointer;
+        user-select: none;
+        transition: .15s ease;
+        color: #334155;
+        font-weight: 700;
+    }
+
+        .chip.active {
+            border-color: rgba(59,130,246,.55);
+            background: rgba(59,130,246,.10);
+            color: #1d4ed8;
+        }
+
+    /* Table */
+    .table-wrap {
+        margin-top: 12px;
+        background: rgba(255,255,255,.86);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: transparent;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: linear-gradient(180deg, var(--tableHead), rgba(248,250,252,.85));
+        color: #334155;
+        font-weight: 800;
+        font-size: 12px;
+        letter-spacing: .2px;
+        padding: 12px 12px;
+        border-bottom: 1px solid var(--tableLine);
+        white-space: nowrap;
+    }
+
+    tbody td {
+        padding: 12px 12px;
+        font-size: 13px;
+        border-bottom: 1px solid var(--tableLine);
+        vertical-align: top;
+    }
+
+    tbody tr:hover {
+        background: rgba(2,6,23,.02);
+    }
+
+    .col-time {
+        width: 170px;
+        white-space: nowrap;
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .col-device {
+        width: 270px;
+    }
+
+    .col-type {
+        width: 240px;
+    }
+
+    .col-metric {
+        width: 160px;
+        white-space: nowrap;
+    }
+
+    .col-msg {
+        width: auto;
+    }
+
+    .subline {
+        font-size: 12px;
+        color: var(--mut);
+        margin-top: 2px;
+    }
+
+    /* Badges */
+    .badge {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.75);
+        max-width: 100%;
+    }
+
+        .badge .b-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #cbd5e1;
+            flex: 0 0 auto;
+        }
+
+        .badge.high {
+            border-color: rgba(239,68,68,.35);
+            background: rgba(239,68,68,.08);
+            color: #991b1b;
+        }
+
+            .badge.high .b-dot {
+                background: var(--bad);
+            }
+
+        .badge.low {
+            border-color: rgba(59,130,246,.35);
+            background: rgba(59,130,246,.08);
+            color: #1d4ed8;
+        }
+
+            .badge.low .b-dot {
+                background: var(--info);
+            }
+
+        .badge.warn {
+            border-color: rgba(245,158,11,.35);
+            background: rgba(245,158,11,.10);
+            color: #92400e;
+        }
+
+            .badge.warn .b-dot {
+                background: var(--warn);
+            }
+
+        .badge.ok {
+            border-color: rgba(22,163,74,.32);
+            background: rgba(22,163,74,.10);
+            color: #166534;
+        }
+
+            .badge.ok .b-dot {
+                background: var(--ok);
+            }
+
+    /* Message collapse */
+    .msg {
+        white-space: normal;
+        line-height: 1.35;
+        color: #0f172a;
+    }
+
+        .msg.small {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+    .msg-actions {
+        margin-top: 6px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .link {
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        color: #2563eb;
+        user-select: none;
+    }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+    .copy {
+        font-size: 12px;
+        cursor: pointer;
+        color: #334155;
+        user-select: none;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.75);
+    }
+
+        .copy:hover {
+            box-shadow: 0 10px 18px rgba(9,22,48,.08);
+            transform: translateY(-1px);
+        }
+
+    /* Loading / Error */
+    .state {
+        margin-top: 12px;
+        text-align: center;
+        padding: 22px 14px;
+        color: var(--mut);
+    }
+
+    .spinner {
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        border: 3px solid rgba(148,163,184,.35);
+        border-top-color: rgba(245,130,32,.9);
+        display: inline-block;
+        animation: spin .8s linear infinite;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Responsive */
+    @@media (max-width: 980px) {
+        .filter-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .searchbox input {
+            min-width: 220px;
+        }
+
+        .col-msg {
+            width: 360px;
+        }
+    }
+</style>
+
+<div class="alarm-wrap">
+
+    <div class="alarm-hero">
+        <div class="alarm-title">
+            <div class="alarm-icon">🚨</div>
+            <div>
+                <h2>Alarm Records</h2>
+                <div class="alarm-sub">Theo dõi lịch sử cảnh báo theo thiết bị & thời gian (Triggered/Cleared).</div>
+            </div>
+        </div>
+
+        <div class="alarm-right">
+            <div class="pill"><span class="dot bad"></span> Above/Upper</div>
+            <div class="pill"><span class="dot warn"></span> Warning</div>
+            <div class="pill"><span class="dot ok"></span> Cleared</div>
+        </div>
+    </div>
+
+    <div class="alarm-card">
+        <div class="filter-grid">
+            <div class="field">
+                <label>Device GUID</label>
+                <input id="deviceGuid" placeholder="902275..." autocomplete="off" />
+            </div>
+
+            <div class="field">
+                <label>Sub UID</label>
+                <input id="subUid" type="number" value="0" />
+            </div>
+
+            <div class="field">
+                <label>From</label>
+                <input id="fromTime" type="datetime-local" />
+            </div>
+
+            <div class="field">
+                <label>To</label>
+                <input id="toTime" type="datetime-local" />
+            </div>
+        </div>
+
+        <div class="filter-actions">
+            <div class="quick">
+                <div class="qbtn active" data-range="24">Last 24h</div>
+                <div class="qbtn" data-range="168">7 days</div>
+                <div class="qbtn" data-range="720">30 days</div>
+                <div class="qbtn" data-range="custom">Custom</div>
+            </div>
+
+            <div class="buttons">
+                <button class="btn btn-ghost" onclick="resetAlarmUI()">Reset</button>
+                <button class="btn btn-primary" id="btnLoad" onclick="loadAlarms()">Load</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="topbar">
+        <div class="chips">
+            <div class="chip active" data-filter="all">All</div>
+            <div class="chip" data-filter="triggered">Triggered</div>
+            <div class="chip" data-filter="cleared">Cleared</div>
+        </div>
+
+        <div class="searchbox">
+            <input id="searchText" placeholder="Search alarm name / message..." oninput="applyClientFilters()" />
+            <div class="pill" id="statBox"><span class="dot"></span><span id="statText">No data</span></div>
+        </div>
+    </div>
+
+    <div id="loadingState" class="state" style="display:none">
+        <span class="spinner"></span> Loading alarm records...
+    </div>
+
+    <div id="errorState" class="state" style="display:none; color:#b91c1c">
+        Error
+    </div>
+
+    <div id="emptyState" class="state" style="display:none">
+        No alarm records found.
+    </div>
+
+    <div class="table-wrap" id="tableWrap" style="display:none">
+        <table id="alarmTable">
+            <thead>
+                <tr>
+                    <th class="col-time">Time</th>
+                    <th class="col-device">Device</th>
+                    <th class="col-type">Alarm</th>
+                    <th class="col-msg">Message</th>
+                    <th class="col-metric">Probe 1</th>
+                    <th class="col-metric">Probe 2</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+
+<script>
+
+        // =========================
+    // SignalR Alarm Hub Client
+    // =========================
+    let _hub = null;
+    let _joinedDevice = null;
+
+    async function ensureAlarmHub() {
+        if (_hub) return _hub;
+
+        _hub = new signalR.HubConnectionBuilder()
+            .withUrl("/hubs/alarm")
+            .withAutomaticReconnect()
+            .build();
+
+        // ✅ ĐÂY CHÍNH LÀ CHỖ _hub.on("alarm.new", ...)
+        _hub.on("alarm.new", (items) => {
+            if (!items || !items.length) return;
+
+            // dedupe key
+            const key = x =>
+                `${x.deviceGuid || ""}|${x.subUid ?? 0}|${x.alarmTimeStamp || 0}|${x.alarmName || ""}`;
+
+            const seen = new Set((_allRows || []).map(key));
+
+            const incoming = items.map(x => {
+                const cleared = isCleared(x.alarmName, x.alarmMessage);
+                const badge = severityBadge(x.alarmName, x.alarmMessage);
+                return { ...x, _isCleared: cleared, _badge: badge };
+            });
+
+            const newOnes = [];
+            for (const x of incoming) {
+                const k = key(x);
+                if (!seen.has(k)) {
+                    newOnes.push(x);
+                    seen.add(k);
+                }
+            }
+
+            if (!newOnes.length) return;
+
+            // prepend + sort
+            _allRows = [...newOnes, ...(_allRows || [])];
+            _allRows.sort((a, b) =>
+                (b.alarmTimeStamp || 0) - (a.alarmTimeStamp || 0));
+
+            applyClientFilters();
+
+            setStat(`+${newOnes.length} new • total ${_allRows.length}`, "ok");
+            setTimeout(() => {
+                setStat(`${_allRows.length} record(s)`, "ok");
+            }, 1500);
+        });
+
+        await _hub.start();
+        return _hub;
+    }
+
+    async function alarmHubJoin(deviceGuid) {
+        if (!deviceGuid) return;
+
+        const hub = await ensureAlarmHub();
+
+        // nếu đổi device thì leave device cũ
+        if (_joinedDevice && _joinedDevice !== deviceGuid) {
+            try { await hub.invoke("LeaveDevice", _joinedDevice); } catch { }
+        }
+
+        _joinedDevice = deviceGuid;
+        try {
+            await hub.invoke("JoinDevice", deviceGuid);
+        } catch { }
+    }
+
+    // =========================
+    // Helpers
+    // =========================
+    function pad(n) { return n.toString().padStart(2, '0'); }
+    function toIsoLocal(date) {
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function setRangeHours(hours) {
+        const now = new Date();
+        document.getElementById('toTime').value = toIsoLocal(now);
+        document.getElementById('fromTime').value = toIsoLocal(new Date(now.getTime() - hours * 3600 * 1000));
+    }
+
+    function pickProbeText(msg, label) {
+        if (!msg) return "-";
+        // "Probe 1：25.5℃(...),Probe 2：61.4%RH(...)"
+        const re = new RegExp(label + "\\s*[：:]\\s*([^,]+)", "i");
+        const m = msg.match(re);
+        return m ? m[1].trim() : "-";
+    }
+
+    function isCleared(alarmName, msg) {
+        const s = ((alarmName || "") + " " + (msg || "")).toLowerCase();
+        return s.includes("cleared") || s.includes("released") || s.includes("release");
+    }
+
+    function severityBadge(alarmName, msg) {
+        const s = ((alarmName || "") + " " + (msg || "")).toLowerCase();
+
+        if (isCleared(alarmName, msg)) return { cls: "ok", label: "Cleared" };
+
+        // upper / above -> high
+        if (s.includes("above") || s.includes("upper")) return { cls: "high", label: "Above Upper" };
+
+        // below / lower -> low
+        if (s.includes("below") || s.includes("lower")) return { cls: "low", label: "Below Lower" };
+
+        return { cls: "warn", label: "Warning" };
+    }
+
+    function fmtTime(ts) {
+        if (!ts) return "-";
+        return new Date(ts * 1000).toLocaleString();
+    }
+
+    async function copyText(text) {
+        try {
+            await navigator.clipboard.writeText(text || "");
+        } catch {
+            // fallback
+            const ta = document.createElement('textarea');
+            ta.value = text || "";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        }
+    }
+
+    // =========================
+    // State
+    // =========================
+    let _allRows = [];
+    let _activeTypeFilter = "all"; // all | triggered | cleared
+
+    function setState({ loading = false, error = "", empty = false, hasTable = false }) {
+        document.getElementById("loadingState").style.display = loading ? "block" : "none";
+
+        const err = document.getElementById("errorState");
+        if (error) {
+            err.style.display = "block";
+            err.textContent = error;
+        } else {
+            err.style.display = "none";
+        }
+
+        document.getElementById("emptyState").style.display = empty ? "block" : "none";
+        document.getElementById("tableWrap").style.display = hasTable ? "block" : "none";
+    }
+
+    function setStat(text, tone) {
+        const dot = document.querySelector("#statBox .dot");
+        const label = document.getElementById("statText");
+        label.textContent = text;
+
+        dot.className = "dot";
+        if (tone === "ok") dot.classList.add("ok");
+        else if (tone === "warn") dot.classList.add("warn");
+        else if (tone === "bad") dot.classList.add("bad");
+    }
+
+       async function resetAlarmUI() {
+        document.getElementById("deviceGuid").value = "";
+        document.getElementById("subUid").value = 0;
+        document.getElementById("searchText").value = "";
+
+        document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+        document.querySelector('.chip[data-filter="all"]').classList.add("active");
+        _activeTypeFilter = "all";
+
+        document.querySelectorAll(".qbtn").forEach(x => x.classList.remove("active"));
+        document.querySelector('.qbtn[data-range="24"]').classList.add("active");
+        setRangeHours(24);
+
+        _allRows = [];
+        document.querySelector("#alarmTable tbody").innerHTML = "";
+
+        // leave current device group (nếu đã join)
+        try {
+            if (_hub && _joinedDevice) {
+                await _hub.invoke("LeaveDevice", _joinedDevice);
+            }
+        } catch { }
+        _joinedDevice = null;
+
+        setState({ loading: false, error: "", empty: false, hasTable: false });
+        setStat("No data");
+    }
+
+
+    // =========================
+    // Client filters
+    // =========================
+    function applyClientFilters() {
+        const q = (document.getElementById("searchText").value || "").trim().toLowerCase();
+
+        let rows = _allRows.slice();
+
+        // type filter
+        if (_activeTypeFilter === "triggered") {
+            rows = rows.filter(x => !x._isCleared);
+        } else if (_activeTypeFilter === "cleared") {
+            rows = rows.filter(x => x._isCleared);
+        }
+
+        // search filter
+        if (q) {
+            rows = rows.filter(x =>
+                (x.alarmName || "").toLowerCase().includes(q) ||
+                (x.alarmMessage || "").toLowerCase().includes(q) ||
+                (x.deviceName || "").toLowerCase().includes(q)
+            );
+        }
+
+        renderRows(rows);
+        if (rows.length === 0) {
+            setState({ loading: false, error: "", empty: true, hasTable: false });
+            setStat("0 record", "warn");
+        } else {
+            setState({ loading: false, error: "", empty: false, hasTable: true });
+            setStat(`${rows.length} record(s)`, "ok");
+        }
+    }
+
+    // =========================
+    // Render
+    // =========================
+    function renderRows(rows) {
+        const tbody = document.querySelector("#alarmTable tbody");
+        tbody.innerHTML = "";
+
+        rows.forEach((x, idx) => {
+            const b = x._badge;
+            const probe1 = pickProbeText(x.alarmMessage, "Probe 1");
+            const probe2 = pickProbeText(x.alarmMessage, "Probe 2");
+
+            const tr = document.createElement("tr");
+
+            const msgId = `msg_${idx}_${(x.alarmTimeStamp || 0)}`;
+            const msgSafe = (x.alarmMessage || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            tr.innerHTML = `
+                <td class="col-time">
+                    ${fmtTime(x.alarmTimeStamp)}
+                    <div class="subline">type: ${x.type ?? "-"}</div>
+                </td>
+                <td class="col-device">
+                    <div style="font-weight:900;color:#0f172a">${x.deviceName || "—"}</div>
+                    <div class="subline">${x.deviceGuid || ""} • subUid ${x.subUid ?? 0}</div>
+                </td>
+                <td class="col-type">
+                    <span class="badge ${b.cls}">
+                        <span class="b-dot"></span>
+                        <span style="font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:190px;display:inline-block;vertical-align:bottom">
+                            ${x.alarmName || ("Alarm " + (x.type ?? ""))}
+                        </span>
+                    </span>
+                    <div class="subline">${b.label}</div>
+                </td>
+                <td class="col-msg">
+                    <div id="${msgId}" class="msg small">${msgSafe || "—"}</div>
+                    <div class="msg-actions">
+                        <span class="link" onclick="toggleMsg('${msgId}', this)">Show more</span>
+                        <span class="copy" onclick="copyAndToast('${(x.alarmMessage || "").replace(/'/g, "\\'")}')">Copy</span>
+                    </div>
+                </td>
+                <td class="col-metric">
+                    <div style="font-weight:900">${probe1}</div>
+                    <div class="subline">Probe 1</div>
+                </td>
+                <td class="col-metric">
+                    <div style="font-weight:900">${probe2}</div>
+                    <div class="subline">Probe 2</div>
+                </td>
+            `;
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    function toggleMsg(id, el) {
+        const box = document.getElementById(id);
+        if (!box) return;
+
+        const isSmall = box.classList.contains("small");
+        if (isSmall) {
+            box.classList.remove("small");
+            el.textContent = "Show less";
+        } else {
+            box.classList.add("small");
+            el.textContent = "Show more";
+        }
+    }
+
+    async function copyAndToast(text) {
+        await copyText(text);
+        setStat("Copied to clipboard", "ok");
+        setTimeout(() => {
+            if (_allRows.length) setStat(`${_allRows.length} record(s)`, "ok");
+            else setStat("No data");
+        }, 1200);
+    }
+
+    // =========================
+    // Load
+    // =========================
+    async function loadAlarms() {
+        const btn = document.getElementById("btnLoad");
+        const deviceGuid = document.getElementById('deviceGuid').value.trim();
+        if (!deviceGuid) { alert("Device GUID is required"); return; }
+
+        const subUid = document.getElementById('subUid').value || 0;
+        const from = document.getElementById('fromTime').value;
+        const to = document.getElementById('toTime').value;
+
+        const url = `/api/elitech/alarm-record?deviceGuid=${encodeURIComponent(deviceGuid)}&subUid=${subUid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
+
+        setState({ loading: true, error: "", empty: false, hasTable: false });
+        setStat("Loading...", "warn");
+        btn.disabled = true;
+        btn.textContent = "Loading...";
+
+        try {
+            const res = await fetch(url);
+            if (!res.ok) {
+                const t = await res.text();
+                throw new Error(`HTTP ${res.status}: ${t}`);
+            }
+
+            const json = await res.json();
+
+            if (!json || !json.data || json.data.length === 0) {
+                _allRows = [];
+                setState({ loading: false, error: "", empty: true, hasTable: false });
+                setStat("0 record", "warn");
+                return;
+            }
+
+            // normalize rows
+            _allRows = json.data.map(x => {
+                const cleared = isCleared(x.alarmName, x.alarmMessage);
+                const badge = severityBadge(x.alarmName, x.alarmMessage);
+                return { ...x, _isCleared: cleared, _badge: badge };
+            });
+
+            // default sort by time desc
+            _allRows.sort((a, b) => (b.alarmTimeStamp || 0) - (a.alarmTimeStamp || 0));
+
+            setState({ loading: false, error: "", empty: false, hasTable: true });
+            setStat(`${_allRows.length} record(s)`, "ok");
+            applyClientFilters();
+
+            await alarmHubJoin(deviceGuid);
+        }
+        catch (err) {
+            _allRows = [];
+            setState({ loading: false, error: (err && err.message) ? err.message : "Load failed", empty: false, hasTable: false });
+            setStat("Error", "bad");
+        }
+        finally {
+            btn.disabled = false;
+            btn.textContent = "Load";
+        }
+    }
+
+    // =========================
+    // Init
+    // =========================
+    (function init() {
+        setRangeHours(24);
+        setStat("No data");
+
+        // quick range
+        document.querySelectorAll(".qbtn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".qbtn").forEach(x => x.classList.remove("active"));
+                btn.classList.add("active");
+
+                const r = btn.getAttribute("data-range");
+                if (r === "custom") return;
+
+                const hrs = parseInt(r, 10);
+                if (!isNaN(hrs)) setRangeHours(hrs);
+            });
+        });
+
+        // filter chips
+        document.querySelectorAll(".chip").forEach(chip => {
+            chip.addEventListener("click", () => {
+                document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+                chip.classList.add("active");
+                _activeTypeFilter = chip.getAttribute("data-filter") || "all";
+                applyClientFilters();
+            });
+        });
+    })();
+</script>

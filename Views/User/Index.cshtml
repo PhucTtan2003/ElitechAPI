@@ -1,0 +1,332 @@
+﻿@using System.Text.Json
+@{
+    ViewData["Title"] = "Thiết bị của tôi";
+    Layout = "_Layout";
+
+    // ViewBag.Devices: danh sách thiết bị admin đã gán cho user (từ Controller)
+    var assignedDevices = ViewBag.Devices ?? new List<object>();
+
+    // meta cơ bản (nếu muốn dùng trong React)
+    var userMeta = new
+    {
+        name = User?.Identity?.Name ?? "",
+        role = User?.Claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value ?? "",
+        userId = User?.Claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? ""
+    };
+}
+
+<style>
+    /* ===== User Devices Page ===== */
+    .ud-wrap {
+        padding: 10px 14px 20px;
+    }
+
+    .ud-hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .ud-hero-left {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+    }
+
+    .ud-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg,#3b82f6,#2563eb);
+        color: #fff;
+        font-size: 26px;
+        box-shadow: 0 14px 32px rgba(37,99,235,.45);
+        position: relative;
+        overflow: hidden;
+    }
+        /* subtle shine */
+        .ud-icon:after {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+            transform: rotate(25deg);
+            animation: udShine 2.6s linear infinite;
+        }
+
+    @@keyframes udShine {
+        0% {
+            transform: translateX(-40%) rotate(25deg);
+        }
+
+        100% {
+            transform: translateX(40%) rotate(25deg);
+        }
+    }
+
+    .ud-hero h1 {
+        margin: 0;
+        font-weight: 900;
+        font-size: 1.25rem;
+    }
+
+    .ud-hero p {
+        margin: 2px 0 0;
+        color: var(--elx-muted);
+        font-weight: 700;
+        font-size: .9rem;
+    }
+
+    .ud-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: .35rem .75rem;
+        border-radius: 999px;
+        font-size: .75rem;
+        font-weight: 900;
+        border: 1px solid var(--elx-border);
+        background: #fff;
+        box-shadow: 0 10px 24px rgba(15,23,42,.08);
+        margin-left: 6px;
+        white-space: nowrap;
+    }
+
+    .ud-card {
+        background: rgba(255,255,255,.95);
+        border: 1px solid var(--elx-border);
+        border-radius: 18px;
+        box-shadow: 0 14px 34px rgba(15,23,42,.12);
+        overflow: hidden;
+    }
+
+    .ud-card-hd {
+        padding: 14px 16px;
+        border-bottom: 1px dashed rgba(231,235,243,.9);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+        .ud-card-hd b {
+            font-weight: 900;
+        }
+
+    .ud-sub {
+        font-size: .85rem;
+        font-weight: 700;
+        color: var(--elx-muted);
+    }
+
+    .ud-body {
+        padding: 14px 16px 16px;
+    }
+
+    /* Empty hint */
+    .ud-hint {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        border-radius: 16px;
+        padding: 14px;
+        background: linear-gradient(180deg,#f8fafc,#fff);
+        border: 1px dashed rgba(59,130,246,.45);
+        margin-bottom: 14px;
+    }
+
+        .ud-hint .ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: #fff;
+            border: 1px solid var(--elx-border);
+            color: #2563eb;
+            box-shadow: 0 10px 24px rgba(15,23,42,.12);
+            flex: 0 0 auto;
+            font-size: 20px;
+        }
+
+        .ud-hint b {
+            display: block;
+            font-weight: 900;
+            margin-bottom: 2px;
+        }
+
+        .ud-hint span {
+            color: #334155;
+            font-weight: 700;
+            font-size: .85rem;
+            line-height: 1.3rem;
+        }
+
+    /* React mount frame (Dashboard) */
+    #react-root-user {
+        min-height: 320px;
+        border-radius: 16px;
+        background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(59,130,246,.45), rgba(14,165,233,.45)) border-box;
+        border: 2px solid transparent;
+        box-shadow: inset 0 0 0 1px rgba(226,232,240,.9), 0 12px 30px rgba(15,23,42,.12);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* pre-render loading shimmer (will be hidden by React after mount) */
+    .ud-preload {
+        position: absolute;
+        inset: 0;
+        padding: 14px;
+        display: grid;
+        gap: 12px;
+        grid-template-columns: 1fr;
+    }
+
+        .ud-preload .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+    .ud-skel {
+        border-radius: 16px;
+        height: 64px;
+        background: linear-gradient(90deg, rgba(226,232,240,.75), rgba(248,250,252,.95), rgba(226,232,240,.75));
+        background-size: 200% 100%;
+        animation: udSk 1.1s infinite linear;
+        border: 1px solid rgba(231,235,243,.95);
+    }
+
+        .ud-skel.big {
+            height: 210px;
+        }
+
+    @@keyframes udSk {
+        0% {
+            background-position: 0% 0
+        }
+
+        100% {
+            background-position: -200% 0
+        }
+    }
+
+    .ud-footer {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        font-size: .8rem;
+        font-weight: 800;
+        color: var(--elx-muted);
+    }
+
+    @@media (max-width: 576px) {
+        .ud-wrap {
+            padding: 8px 10px 18px;
+        }
+
+        .ud-hero {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+
+<div class="ud-wrap">
+
+    <!-- ===== HERO ===== -->
+    <div class="ud-hero">
+        <div class="ud-hero-left">
+            <div class="ud-icon">
+                <i class="bi bi-cpu"></i>
+            </div>
+            <div>
+                <h1>Thiết bị của tôi</h1>
+                <p>Danh sách thiết bị đã được Admin gán cho tài khoản của bạn</p>
+            </div>
+        </div>
+
+        <div>
+            <span class="ud-pill">
+                <i class="bi bi-person-check"></i> User
+            </span>
+            <span class="ud-pill">
+                <i class="bi bi-cloud-check"></i> Elitech Cloud
+            </span>
+        </div>
+    </div>
+
+    <!-- ===== CARD ===== -->
+    <div class="ud-card">
+        <div class="ud-card-hd">
+            <div>
+                <b>Dashboard thiết bị</b>
+                <div class="ud-sub">
+                    Chọn thiết bị để xem realtime & lịch sử (KPI + biểu đồ)
+                </div>
+            </div>
+
+            <div class="ud-sub">
+                Local: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")
+            </div>
+        </div>
+
+        <div class="ud-body">
+
+            <!-- Hint -->
+            <div class="ud-hint">
+                <div class="ico"><i class="bi bi-lightbulb"></i></div>
+                <div>
+                    <b>Hướng dẫn nhanh</b>
+                    <span>
+                        • Chỉ hiển thị <b>thiết bị đã được gán</b> cho bạn<br />
+                        • Chọn thiết bị để xem <b>biểu đồ nhiệt độ / độ ẩm</b><br />
+                        • Dữ liệu realtime cập nhật tự động
+                    </span>
+                </div>
+            </div>
+
+            <!-- React mount -->
+            <div id="react-root-user">
+                <!-- Preload skeleton while JS loads -->
+                <div class="ud-preload" id="ud-preload">
+                    <div class="row">
+                        <div class="ud-skel"></div>
+                        <div class="ud-skel"></div>
+                        <div class="ud-skel"></div>
+                    </div>
+                    <div class="row">
+                        <div class="ud-skel"></div>
+                        <div class="ud-skel"></div>
+                        <div class="ud-skel"></div>
+                    </div>
+                    <div class="ud-skel big"></div>
+                </div>
+            </div>
+
+            <div class="ud-footer">
+                <span><i class="bi bi-info-circle"></i> Không thấy thiết bị? Liên hệ Admin để được gán quyền.</span>
+                <span><i class="bi bi-shield-lock"></i> Dữ liệu hiển thị theo quyền user.</span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Preload danh sách thiết bị đã gán (server -> client)
+    // React sẽ đọc window.__USER_DEVICES__ để render list device
+    window.__USER_DEVICES__ = @Html.Raw(JsonSerializer.Serialize(assignedDevices));
+
+    // Meta user (optional)
+    window.__USER_META__ = @Html.Raw(JsonSerializer.Serialize(userMeta));
+</script>
+
+<script type="module" src="/app/entry-user.js"></script>

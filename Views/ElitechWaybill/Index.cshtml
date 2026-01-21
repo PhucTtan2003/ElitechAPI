@@ -1,0 +1,625 @@
+﻿@{
+    ViewData["Title"] = "Batch Waybill";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        /* ===== Light Elitech Admin (indigo/teal, clean) ===== */
+        --bg: #f5f7fb;
+        --bg2: #eef2ff;
+        --card: #ffffff;
+        --card2: rgba(255,255,255,.78);
+        --stroke: rgba(15,23,42,.10);
+        --stroke2: rgba(15,23,42,.08);
+        --ink: #0f172a;
+        --mut: #64748b;
+        --brand: #4f46e5; /* indigo */
+        --brand2: #7c3aed; /* violet */
+        --accent: #14b8a6; /* teal */
+
+        --ok: #16a34a;
+        --err: #ef4444;
+        --warn: #f59e0b;
+        --shadow: 0 18px 45px rgba(2,8,23,.08);
+        --shadow2: 0 10px 22px rgba(2,8,23,.06);
+        --radius: 18px;
+        --radius2: 14px;
+    }
+
+    body {
+        color: var(--ink);
+        background: radial-gradient(1200px 680px at 100% -20%, rgba(79,70,229,.14), transparent 55%), radial-gradient(900px 520px at 0% 0%, rgba(20,184,166,.12), transparent 55%), linear-gradient(180deg, #ffffff 0%, var(--bg) 60%, #ffffff 100%);
+        min-height: 100vh;
+    }
+
+    .bw-wrap {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 18px 14px 28px;
+    }
+
+    .bw-shell {
+        border-radius: 22px;
+        border: 1px solid var(--stroke2);
+        background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.82));
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    .bw-top {
+        padding: 18px 18px 14px;
+        border-bottom: 1px solid var(--stroke2);
+        background: radial-gradient(980px 260px at 25% 0%, rgba(79,70,229,.16), transparent 55%), radial-gradient(860px 240px at 85% 0%, rgba(20,184,166,.12), transparent 55%), rgba(255,255,255,.82);
+        backdrop-filter: blur(10px);
+    }
+
+    .bw-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+
+    /* ===== Back button (override Bootstrap reboot) ===== */
+    .bw-shell a.bw-back,
+    .bw-shell a.bw-back:visited,
+    .bw-shell a.bw-back:hover,
+    .bw-shell a.bw-back:active {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 10px 14px !important;
+        border-radius: 14px !important;
+        font-weight: 950 !important;
+        text-decoration: none !important;
+        color: rgba(15,23,42,.78) !important;
+        border: 1px solid rgba(15,23,42,.12) !important;
+        background: rgba(255,255,255,.92) !important;
+        box-shadow: 0 10px 18px rgba(2,8,23,.06) !important;
+        transition: transform .12s ease, filter .12s ease !important;
+    }
+
+        .bw-shell a.bw-back:hover {
+            filter: brightness(1.03) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .bw-shell a.bw-back:active {
+            transform: translateY(0) !important;
+            filter: brightness(.98) !important;
+        }
+
+    .bw-title {
+        margin: 0;
+        font-weight: 950;
+        letter-spacing: .2px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bw-badge {
+        font-size: 11px;
+        font-weight: 900;
+        padding: 5px 10px;
+        border-radius: 999px;
+        color: #1f2a44;
+        border: 1px solid rgba(79,70,229,.18);
+        background: rgba(79,70,229,.08);
+        white-space: nowrap;
+    }
+
+    .bw-sub {
+        margin-top: 8px;
+        color: var(--mut);
+        font-size: 13px;
+        line-height: 1.45;
+    }
+
+    .bw-body {
+        padding: 16px 18px 18px;
+    }
+
+    .bw-row {
+        display: grid;
+        grid-template-columns: 1.35fr .95fr;
+        gap: 14px;
+        align-items: start;
+    }
+
+    .bw-field {
+        border: 1px solid var(--stroke2);
+        background: var(--card2);
+        border-radius: var(--radius);
+        padding: 12px;
+        box-shadow: var(--shadow2);
+    }
+
+    .bw-fieldhead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 900;
+        color: rgba(15,23,42,.80);
+        letter-spacing: .2px;
+        margin: 0;
+    }
+
+    .bw-help {
+        font-size: 12px;
+        color: var(--mut);
+        white-space: nowrap;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 200px;
+        resize: vertical;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(15,23,42,.12);
+        font-size: 13px;
+        outline: none;
+        background: #fff;
+        color: var(--ink);
+        box-shadow: inset 0 1px 0 rgba(2,8,23,.04);
+    }
+
+        textarea::placeholder {
+            color: rgba(100,116,139,.75);
+        }
+
+        textarea:focus {
+            border-color: rgba(79,70,229,.55);
+            box-shadow: 0 0 0 4px rgba(79,70,229,.14);
+        }
+
+    input[type="datetime-local"] {
+        width: 100%;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(15,23,42,.12);
+        background: #fff;
+        color: var(--ink);
+        font-size: 14px;
+        outline: none;
+        box-shadow: inset 0 1px 0 rgba(2,8,23,.04);
+    }
+
+        input[type="datetime-local"]:focus {
+            border-color: rgba(20,184,166,.55);
+            box-shadow: 0 0 0 4px rgba(20,184,166,.14);
+        }
+
+    .bw-meta {
+        margin-top: 10px;
+        color: var(--mut);
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 0 2px;
+    }
+
+    .bw-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(255,255,255,.9);
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-weight: 900;
+        color: rgba(15,23,42,.78);
+    }
+
+        .bw-chip b {
+            color: rgba(15,23,42,.95);
+        }
+
+    .bw-right {
+        display: grid;
+        gap: 12px;
+    }
+
+    .bw-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 4px;
+        flex-wrap: wrap;
+    }
+
+    .bw-btn {
+        border: none;
+        border-radius: 14px;
+        padding: 11px 16px;
+        font-weight: 950;
+        color: #fff;
+        background: radial-gradient(140px 60px at 20% 10%, rgba(255,255,255,.30), transparent 60%), linear-gradient(180deg, rgba(79,70,229,1), rgba(124,58,237,1));
+        box-shadow: 0 14px 28px rgba(79,70,229,.22);
+        cursor: pointer;
+        transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .bw-btn:hover {
+            filter: brightness(1.03);
+            transform: translateY(-1px);
+        }
+
+        .bw-btn:active {
+            transform: translateY(0);
+            filter: brightness(.98);
+        }
+
+        .bw-btn:disabled {
+            opacity: .6;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+    .bw-status {
+        font-size: 12px;
+        font-weight: 950;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(15,23,42,.12);
+        background: rgba(255,255,255,.92);
+        color: rgba(15,23,42,.68);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .bw-status.ok {
+            color: var(--ok);
+            border-color: rgba(22,163,74,.20);
+            background: rgba(22,163,74,.08);
+        }
+
+        .bw-status.err {
+            color: var(--err);
+            border-color: rgba(239,68,68,.20);
+            background: rgba(239,68,68,.08);
+        }
+
+        .bw-status.warn {
+            color: var(--warn);
+            border-color: rgba(245,158,11,.24);
+            background: rgba(245,158,11,.10);
+        }
+
+    .bw-out {
+        margin-top: 14px;
+        border-radius: var(--radius);
+        border: 1px solid rgba(15,23,42,.10);
+        background: #ffffff;
+        overflow: hidden;
+        box-shadow: var(--shadow2);
+    }
+
+    .bw-outhead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(15,23,42,.08);
+        color: rgba(15,23,42,.72);
+        font-size: 12px;
+        font-weight: 950;
+        background: radial-gradient(700px 220px at 20% 0%, rgba(20,184,166,.10), transparent 55%), rgba(255,255,255,.92);
+    }
+
+    .bw-copy {
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(255,255,255,.95);
+        color: rgba(15,23,42,.78);
+        border-radius: 10px;
+        padding: 6px 10px;
+        cursor: pointer;
+        font-weight: 950;
+        font-size: 12px;
+    }
+
+        .bw-copy:hover {
+            filter: brightness(1.03);
+        }
+
+    pre {
+        margin: 0;
+        padding: 12px;
+        color: #0b1220;
+        font-size: 12px;
+        overflow: auto;
+        min-height: 84px;
+        line-height: 1.45;
+        background: #fbfdff;
+    }
+
+    .ico {
+        width: 16px;
+        height: 16px;
+        opacity: .9;
+        flex: 0 0 auto;
+    }
+
+    @@media (max-width: 900px) {
+        .bw-row {
+            grid-template-columns: 1fr;
+        }
+
+        textarea {
+            min-height: 180px;
+        }
+    }
+
+    @@media (max-width: 520px) {
+        .bw-wrap {
+            padding: 14px 12px 22px;
+        }
+
+        .bw-top {
+            padding: 16px 14px 12px;
+        }
+
+        .bw-body {
+            padding: 14px;
+        }
+
+        .bw-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 13px 16px;
+        }
+
+        .bw-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .bw-status {
+            justify-content: center;
+        }
+
+        .bw-topbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .bw-badge {
+            align-self: flex-end;
+        }
+    }
+</style>
+
+<div class="bw-wrap">
+    <div class="bw-shell">
+        <div class="bw-top">
+            <div class="bw-topbar">
+                <a asp-controller="Admin"
+                   asp-action="Index"
+                   class="bw-back">
+                    ← Về Admin
+                </a>
+                <span class="bw-badge">Admin Tool</span>
+            </div>
+
+            <h1 class="bw-title">
+                <svg class="ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6.5C4 5.12 5.12 4 6.5 4h11C19.88 4 21 5.12 21 6.5v11c0 1.38-1.12 2.5-2.5 2.5h-11C5.12 20 4 18.88 4 17.5v-11Z" stroke="currentColor" stroke-width="1.6" />
+                    <path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+                Elitech API #6 — Batch Set Waybill
+                <span class="bw-badge">Admin Tool</span>
+            </h1>
+
+            <div class="bw-sub">
+                Dán list <b>Device GUIDs</b> (dấu phẩy hoặc xuống dòng), chọn <b>Start</b>/<b>Stop</b>, rồi Submit.
+                Tự lọc trùng, giới hạn <b>200 devices</b>.
+            </div>
+        </div>
+
+        <div class="bw-body">
+            <div class="bw-row">
+                <!-- LEFT -->
+                <div class="bw-field">
+                    <div class="bw-fieldhead">
+                        <label>
+                            <svg class="ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 7h10M7 12h10M7 17h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                <path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6" />
+                            </svg>
+                            Device GUIDs
+                        </label>
+                        <div class="bw-help">Comma / New line</div>
+                    </div>
+
+                    <textarea id="raw" placeholder="9031...
+9032...
+9033..."></textarea>
+
+                    <div class="bw-meta">
+                        <div class="bw-chip">Devices: <b id="count">0</b> <span style="opacity:.7;">(max 200)</span></div>
+                        <div id="dupinfo" class="bw-chip" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- RIGHT -->
+                <div class="bw-right">
+                    <div class="bw-field">
+                        <div class="bw-fieldhead">
+                            <label>
+                                <svg class="ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="1.6" />
+                                    <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Start (datetime-local)
+                            </label>
+                            <span class="bw-help">Optional</span>
+                        </div>
+                        <input id="start" type="datetime-local" />
+                    </div>
+
+                    <div class="bw-field">
+                        <div class="bw-fieldhead">
+                            <label>
+                                <svg class="ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 4v3M17 4v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                    <path d="M4 9h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                    <path d="M6.5 6.5h11A2.5 2.5 0 0 1 20 9v10.5A2.5 2.5 0 0 1 17.5 22h-11A2.5 2.5 0 0 1 4 19.5V9a2.5 2.5 0 0 1 2.5-2.5Z" stroke="currentColor" stroke-width="1.6" />
+                                    <path d="M8 12h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                </svg>
+                                Stop (datetime-local)
+                            </label>
+                            <span class="bw-help">Optional</span>
+                        </div>
+                        <input id="stop" type="datetime-local" />
+                    </div>
+
+                    <div class="bw-actions">
+                        <button class="bw-btn" id="btn" type="button">
+                            <svg class="ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2l3 7h7l-5.7 4.1L18 21l-6-4-6 4 1.7-7.9L2 9h7l3-7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                            </svg>
+                            Submit
+                        </button>
+                        <span id="status" class="bw-status">Chưa chạy</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bw-out">
+                <div class="bw-outhead">
+                    <span>Response</span>
+                    <button type="button" class="bw-copy" id="copyBtn">Copy</button>
+                </div>
+                <pre id="out">{}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const $ = (id) => document.getElementById(id);
+
+    function setStatus(text, kind) {
+        const s = $("status");
+        s.textContent = text || "";
+        s.className = "bw-status" + (kind ? (" " + kind) : "");
+    }
+
+    function parseGuids(raw) {
+        const arr = (raw || "")
+            .split(/[\s,]+/g)
+            .map(s => s.trim())
+            .filter(Boolean);
+
+        const seen = new Set();
+        const out = [];
+        let dup = 0;
+
+        for (const x of arr) {
+            const k = x.toLowerCase();
+            if (seen.has(k)) { dup++; continue; }
+            seen.add(k);
+            out.push(x);
+        }
+
+        return { out, dup };
+    }
+
+    function toUnixSeconds(dt) {
+        if (!dt) return null;
+        const d = new Date(dt);
+        const ms = d.getTime();
+        if (!Number.isFinite(ms)) return null;
+        return Math.floor(ms / 1000);
+    }
+
+    function refreshCount() {
+        const { out, dup } = parseGuids($("raw").value);
+        $("count").textContent = String(out.length);
+
+        const dupEl = $("dupinfo");
+        if (dup > 0) {
+            dupEl.style.display = "inline-flex";
+            dupEl.textContent = "Đã bỏ trùng: " + dup;
+        } else {
+            dupEl.style.display = "none";
+            dupEl.textContent = "";
+        }
+    }
+
+    $("raw").addEventListener("input", refreshCount);
+    refreshCount();
+
+    $("copyBtn").addEventListener("click", async () => {
+        const text = $("out").textContent || "";
+        try {
+            await navigator.clipboard.writeText(text);
+            setStatus("Đã copy response", "ok");
+            setTimeout(() => setStatus("Chưa chạy", ""), 1200);
+        } catch {
+            setStatus("Copy thất bại", "err");
+            setTimeout(() => setStatus("Chưa chạy", ""), 1200);
+        }
+    });
+
+    $("btn").addEventListener("click", async () => {
+        const { out: deviceGuids } = parseGuids($("raw").value);
+
+        if (deviceGuids.length === 0) { setStatus("Thiếu deviceGuids", "err"); return; }
+        if (deviceGuids.length > 200) { setStatus("Quá 200 devices", "err"); return; }
+
+        const start = toUnixSeconds($("start").value);
+        const stop = toUnixSeconds($("stop").value);
+
+        if (start === null && stop === null) { setStatus("Cần Start hoặc Stop", "err"); return; }
+
+        $("btn").disabled = true;
+        setStatus("Đang gửi...", "warn");
+        $("out").textContent = "{}";
+
+        const payload = { deviceGuids, waybillStartTime: start, waybillStopTime: stop };
+
+        try {
+            const r = await fetch("/api/elitech/batch-waybill", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(payload)
+            });
+
+            const j = await r.json().catch(() => ({}));
+            $("out").textContent = JSON.stringify(j, null, 2);
+
+            if (r.ok && j && typeof j === "object" && "code" in j && j.code === 0)
+                setStatus("OK", "ok");
+            else
+                setStatus(r.ok ? "Upstream lỗi (code != 0)" : ("HTTP " + r.status), "err");
+        } catch (e) {
+            $("out").textContent = JSON.stringify({ error: String(e) }, null, 2);
+            setStatus("Error", "err");
+        } finally {
+            $("btn").disabled = false;
+        }
+    });
+</script>

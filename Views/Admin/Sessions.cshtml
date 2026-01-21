@@ -1,0 +1,383 @@
+﻿@model List<Elitech.Models.LoginSession>
+
+@{
+    ViewData["Title"] = "Login Sessions";
+    Layout = "_Layout";
+
+    // map AccountId -> info (controller đã ViewBag.AccountMap)
+    var map = ViewBag.AccountMap as Dictionary<string, Elitech.Controllers.AdminController.AccountInfoVm>;
+    var qVal = (ViewBag.Q as string) ?? Context.Request.Query["q"].ToString();
+}
+
+<style>
+    /* (GIỮ NGUYÊN CSS BẠN ĐANG CÓ) */
+    .sx-wrap {
+        padding: 6px 10px;
+    }
+
+    .sx-hero {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 10px 0 14px;
+    }
+
+        .sx-hero h1 {
+            margin: 0;
+            font-weight: 900;
+            font-size: 1.25rem;
+        }
+
+        .sx-hero p {
+            margin: 4px 0 0;
+            color: var(--elx-muted);
+            font-weight: 600;
+            font-size: .9rem;
+        }
+
+    .sx-card {
+        background: rgba(255,255,255,.92);
+        border: 1px solid var(--elx-border);
+        border-radius: 18px;
+        box-shadow: 0 10px 26px rgba(15,23,42,.10);
+        overflow: hidden;
+    }
+
+    .sx-card-hd {
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px dashed rgba(231,235,243,.9);
+    }
+
+    .sx-title {
+        font-weight: 900;
+    }
+
+    .sx-sub {
+        color: var(--elx-muted);
+        font-weight: 700;
+        font-size: .85rem;
+    }
+
+    .sx-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .sx-input {
+        border: 1px solid var(--elx-border);
+        border-radius: 12px;
+        padding: 9px 12px;
+        min-width: 260px;
+        font-weight: 800;
+        outline: none;
+        background: #fff;
+    }
+
+    .sx-btn {
+        border: 1px solid var(--elx-border);
+        background: #fff;
+        border-radius: 12px;
+        padding: 9px 12px;
+        font-weight: 900;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 10px 26px rgba(15,23,42,.08);
+        transition: transform .12s ease;
+    }
+
+        .sx-btn:active {
+            transform: scale(.98);
+        }
+
+        .sx-btn.primary {
+            border: 0;
+            background: linear-gradient(180deg, var(--elx-orange), var(--elx-orange-600));
+            color: #111827;
+        }
+
+    .sx-table-wrap {
+        overflow: auto;
+        max-height: 560px;
+    }
+
+    .sx-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: .9rem;
+    }
+
+        .sx-table th, .sx-table td {
+            padding: 10px 10px;
+            border-bottom: 1px solid rgba(231,235,243,.9);
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .sx-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: rgba(248,250,252,.92);
+            color: #64748b;
+            font-weight: 900;
+        }
+
+        .sx-table tr:hover td {
+            background: #fff7ef;
+        }
+
+    .sx-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: .2rem .6rem;
+        border-radius: 999px;
+        font-size: .75rem;
+        font-weight: 900;
+        border: 1px solid transparent;
+    }
+
+    .sx-ok {
+        background: #e8fff1;
+        color: #059669;
+        border-color: #bbf7d0;
+    }
+
+    .sx-warn {
+        background: #fff4e5;
+        color: #d97706;
+        border-color: #fed7aa;
+    }
+
+    .sx-crit {
+        background: #fee2e2;
+        color: #b91c1c;
+        border-color: #fecaca;
+    }
+
+    .sx-info {
+        background: #e0edff;
+        color: #1d4ed8;
+        border-color: #bfdbfe;
+    }
+
+    .sx-mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-weight: 800;
+        font-size: .82rem;
+        color: #0f172a;
+    }
+
+    .sx-muted {
+        color: var(--elx-muted);
+        font-weight: 700;
+        font-size: .84rem;
+        white-space: normal;
+    }
+
+    .sx-kv {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 10px 12px;
+        border-top: 1px dashed rgba(231,235,243,.9);
+        background: rgba(248,250,252,.7);
+        font-size: .85rem;
+        color: #334155;
+        font-weight: 800;
+    }
+    /* ===== Back to Admin button ===== */
+    .sx-btn.back-admin {
+        border: 1px solid rgba(30, 136, 229, .35);
+        background: linear-gradient(180deg, #e0edff, #f8fbff);
+        color: #1e40af;
+        font-weight: 900;
+        box-shadow: 0 10px 26px rgba(30,136,229,.18);
+    }
+
+        .sx-btn.back-admin i {
+            font-size: 1rem;
+        }
+
+        .sx-btn.back-admin:hover {
+            background: linear-gradient(180deg, #dbeafe, #eef6ff);
+            transform: translateY(-1px);
+        }
+
+        .sx-btn.back-admin:active {
+            transform: scale(.97);
+        }
+
+</style>
+
+<div class="sx-wrap">
+
+    <div class="sx-hero">
+        <div>
+            <h1><i class="bi bi-shield-check me-1"></i> Login Sessions</h1>
+            <p>Tổng hợp phiên đăng nhập (Mongo: <span class="sx-mono">LoginSessions</span>)</p>
+        </div>
+
+        <div class="sx-actions">
+            <input id="q" class="sx-input"
+                   placeholder="Search account / session / ip / ua…"
+                   value="@qVal" />
+            <button id="btnSearch" class="sx-btn primary"><i class="bi bi-search"></i> Tìm</button>
+            <button id="btnRefresh" class="sx-btn"><i class="bi bi-arrow-repeat"></i> Refresh</button>
+            <form asp-controller="Admin" asp-action="Index" method="get" style="display:inline;">
+                <button type="submit" class="sx-btn back-admin">
+                    <i class="bi bi-arrow-left"></i> Về Admin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @{
+        int activeCount = 0, revokedCount = 0, logoutCount = 0, idleCount = 0;
+        foreach (var s in Model)
+        {
+            if (s.RevokedAtUtc != null) revokedCount++;
+            else if (s.LogoutAtUtc != null) logoutCount++;
+            else if (s.IsActive) activeCount++;
+            else idleCount++;
+        }
+    }
+
+    <div class="sx-card">
+        <div class="sx-card-hd">
+            <div>
+                <div class="sx-title">Danh sách phiên</div>
+                <div class="sx-sub">
+                    Tổng: <b>@Model.Count</b> • Local: <b>@DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")</b>
+                </div>
+            </div>
+            <div class="sx-sub">Tip: rê chuột vào UA để xem đầy đủ</div>
+        </div>
+
+        <div class="sx-kv">
+            <span class="sx-badge sx-ok"><i class="bi bi-check2-circle"></i> ACTIVE: @activeCount</span>
+            <span class="sx-badge sx-crit"><i class="bi bi-slash-circle"></i> REVOKED: @revokedCount</span>
+            <span class="sx-badge sx-info"><i class="bi bi-box-arrow-right"></i> LOGOUT: @logoutCount</span>
+            <span class="sx-badge sx-warn"><i class="bi bi-hourglass-split"></i> IDLE: @idleCount</span>
+        </div>
+
+        <div class="sx-table-wrap">
+            <table class="sx-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tài khoản</th>
+                        <th>Mã phiên đăng nhập</th>
+                        <th>IP</th>
+                        <th>LoginAt</th>
+                        <th>LastActivity</th>
+                        <th>Status</th>
+                        <th>LogoutAt</th>
+                        <th>RevokedAt</th>
+                        <th>RevokedReason</th>
+                        <th>RevokedBy</th>
+                        <th>UserAgent</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="12" class="sx-muted">Không có session nào.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        var i = 0;
+                        foreach (var s in Model)
+                        {
+                            i++;
+
+                            // status badge
+                            string badgeClass, badgeText;
+                            if (s.RevokedAtUtc != null) { badgeClass = "sx-crit"; badgeText = "REVOKED"; }
+                            else if (s.LogoutAtUtc != null) { badgeClass = "sx-info"; badgeText = "LOGOUT"; }
+                            else if (s.IsActive) { badgeClass = "sx-ok"; badgeText = "ACTIVE"; }
+                            else { badgeClass = "sx-warn"; badgeText = "IDLE"; }
+
+                            // account info
+                            Elitech.Controllers.AdminController.AccountInfoVm? acc = null;
+                            if (map != null && !string.IsNullOrWhiteSpace(s.AccountId))
+                            {
+                                map.TryGetValue(s.AccountId, out acc);
+                            }
+
+                            // revokedBy text
+                            var revokedBy = "";
+                            if (!string.IsNullOrWhiteSpace(s.RevokedBySessionId)) revokedBy += $"sid:{s.RevokedBySessionId} ";
+                            if (!string.IsNullOrWhiteSpace(s.RevokedByIp)) revokedBy += $"ip:{s.RevokedByIp} ";
+
+                            <tr>
+                                <td>@i</td>
+
+                                <td>
+                                    <div class="sx-mono">@((acc?.Username) ?? "(unknown)")</div>
+
+                                </td>
+
+                                <td class="sx-mono">@s.SessionId</td>
+                                <td class="sx-mono">@(!string.IsNullOrWhiteSpace(s.Ip) ? s.Ip : "-")</td>
+
+                                <td class="sx-mono">@s.LoginAtUtc.ToLocalTime().ToString("HH:mm:ss dd/MM")</td>
+                                <td class="sx-mono">@s.LastActivityAtUtc.ToLocalTime().ToString("HH:mm:ss dd/MM")</td>
+
+                                <td><span class="sx-badge @badgeClass">@badgeText</span></td>
+
+                                <td class="sx-mono">@((s.LogoutAtUtc?.ToLocalTime().ToString("HH:mm:ss dd/MM")) ?? "-")</td>
+                                <td class="sx-mono">@((s.RevokedAtUtc?.ToLocalTime().ToString("HH:mm:ss dd/MM")) ?? "-")</td>
+
+                                <td class="sx-muted">@(!string.IsNullOrWhiteSpace(s.RevokedReason) ? s.RevokedReason : "-")</td>
+                                <td class="sx-muted">@(!string.IsNullOrWhiteSpace(revokedBy) ? revokedBy : "-")</td>
+
+                                <td class="sx-muted" title="@s.UserAgent">
+                                    @((s.UserAgent?.Length ?? 0) > 44 ? s.UserAgent!.Substring(0, 44) + "…" : (s.UserAgent ?? "-"))
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function(){
+          const $q = document.getElementById('q');
+          const $btnSearch = document.getElementById('btnSearch');
+          const $btnRefresh = document.getElementById('btnRefresh');
+
+          function go(){
+            const q = ($q.value || '').trim();
+            const url = q ? `/Admin/Sessions?q=${encodeURIComponent(q)}` : `/Admin/Sessions`;
+            location.href = url;
+          }
+
+          $btnSearch?.addEventListener('click', go);
+          $q?.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+          $btnRefresh?.addEventListener('click', () => location.reload());
+
+          // ✅ Auto refresh CHỈ khi không search (tránh đang search mà bị reload)
+          const hasQ = ($q.value || '').trim().length > 0;
+          if (!hasQ) setInterval(() => location.reload(), 10 * 60 * 1000);
+        })();
+    </script>
+}

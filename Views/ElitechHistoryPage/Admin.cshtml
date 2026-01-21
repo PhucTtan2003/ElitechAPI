@@ -1,0 +1,751 @@
+﻿@using System.Security.Claims
+@{
+    ViewData["Title"] = "Elitech - Lịch sử thiết bị";
+    // ✅ Layout tuyệt đối KHÔNG được trỏ lại chính view này
+    Layout = "_Layout"; // hoặc "_LayoutAdmin" / "_LayoutUser" (đều nằm trong Views/Shared)
+    var isAdmin = User.IsInRole("Admin");
+}
+
+<style>
+    :root {
+        --bg: #0b1220;
+        --panel: rgba(255,255,255,.06);
+        --panel2: rgba(255,255,255,.08);
+        --stroke: rgba(255,255,255,.10);
+        --text: rgba(255,255,255,.92);
+        --muted: rgba(255,255,255,.65);
+        --pri: #4f46e5; /* indigo */
+        --pri2: #06b6d4; /* cyan/teal */
+        --good: #22c55e;
+        --warn: #f59e0b;
+        --bad: #ef4444;
+        --radius: 18px;
+        --shadow: 0 18px 45px rgba(0,0,0,.35);
+    }
+
+    body {
+        color: var(--text);
+        background: radial-gradient(900px 380px at 85% -10%, rgba(79,70,229,.30), transparent 55%), radial-gradient(900px 420px at 15% 0%, rgba(6,182,212,.22), transparent 55%), linear-gradient(180deg, #070b14 0%, var(--bg) 100%);
+    }
+
+    .fx {
+        border: 1px solid var(--stroke);
+        background: linear-gradient(180deg, var(--panel2), var(--panel));
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+    }
+
+    .fx-inner {
+        padding: 16px;
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .page-title .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 99px;
+            background: linear-gradient(135deg, var(--pri), var(--pri2));
+            box-shadow: 0 0 0 6px rgba(79,70,229,.12);
+        }
+
+    .badge-soft {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(79,70,229,.12);
+        border: 1px solid rgba(79,70,229,.22);
+        color: rgba(255,255,255,.9);
+        font-weight: 700;
+        font-size: .9rem;
+    }
+
+    .subtle {
+        color: var(--muted);
+    }
+
+    .form-compact .form-control,
+    .form-compact .form-select {
+        height: 44px;
+        background: rgba(255,255,255,.06);
+        border: 1px solid rgba(255,255,255,.14);
+        color: rgba(255,255,255,.92);
+        border-radius: 12px;
+    }
+
+        .form-compact .form-control::placeholder {
+            color: rgba(255,255,255,.45);
+        }
+
+        .form-compact .form-select option {
+            color: #0b1220;
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--pri), var(--pri2));
+        border: 0;
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(79,70,229,.25);
+        font-weight: 800;
+    }
+
+    .btn-outline-primary {
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,.18);
+        color: rgba(255,255,255,.9);
+        background: rgba(255,255,255,.04);
+    }
+
+        .btn-outline-primary:hover {
+            background: rgba(255,255,255,.08);
+            color: #fff;
+        }
+
+    .loading {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255,255,255,.85);
+        font-weight: 700;
+    }
+
+    /* ✅ Chart cố định chiều cao */
+    .chart-wrap {
+        height: 340px;
+        position: relative;
+    }
+
+    #chartTemp {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+    }
+
+    .stat {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.12);
+        background: rgba(255,255,255,.05);
+    }
+
+        .stat i {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            background: rgba(6,182,212,.12);
+            border: 1px solid rgba(6,182,212,.22);
+            color: rgba(255,255,255,.92);
+        }
+
+        .stat .num {
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+    .table-sticky thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: rgba(10,16,30,.92);
+        color: rgba(255,255,255,.9);
+        border-bottom: 1px solid rgba(255,255,255,.12) !important;
+    }
+
+    .table {
+        color: rgba(255,255,255,.88);
+        border-color: rgba(255,255,255,.12);
+    }
+
+    #tbl tbody tr:hover {
+        background: rgba(255,255,255,.04);
+    }
+
+    .skeleton-row td {
+        height: 32px;
+        background: linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(255,255,255,.09) 37%, rgba(255,255,255,.05) 63%);
+        background-size: 400% 100%;
+        animation: shimmer 1.2s infinite;
+        border: none !important;
+    }
+
+    @@keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .toasty {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 1055;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .toast-item {
+        background: rgba(10,16,30,.92);
+        color: #fff;
+        padding: .7rem .9rem;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.12);
+        box-shadow: 0 16px 40px rgba(0,0,0,.35);
+        opacity: 0;
+        transform: translateY(6px);
+        animation: toastIn .18s ease forwards;
+    }
+
+    @@keyframes toastIn {
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+</style>
+
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="page-title">
+            <span class="dot"></span>
+            <h3 class="mb-0">Elitech – Lịch sử thiết bị</h3>
+            <span class="badge-soft">UTC+7</span>
+            @if (isAdmin)
+            {
+                <span class="badge-soft" style="background:rgba(34,197,94,.10);border-color:rgba(34,197,94,.22)">Admin</span>
+            }
+            else
+            {
+                <span class="badge-soft" style="background:rgba(6,182,212,.10);border-color:rgba(6,182,212,.22)">User</span>
+            }
+        </div>
+        <div class="text-end">
+            <small class="subtle d-block">Cập nhật: <span id="nowText"></span></small>
+            <div class="mt-1 small" id="status"></div>
+        </div>
+    </div>
+
+    <!-- Query -->
+    <div class="fx mb-3">
+        <div class="fx-inner">
+            <form id="qForm" class="row g-3 form-compact">
+                <div class="col-lg-4">
+                    <label class="form-label">Device GUID</label>
+                    <!-- ✅ dùng input để admin có thể dán GUID trực tiếp -->
+                    <input class="form-control" id="deviceGuid" placeholder="Nhập hoặc chọn từ danh sách…" />
+                    <div class="mt-2">
+                        <select class="form-select" id="devicePick">
+                            <option value="">— Danh sách thiết bị (@(isAdmin ? "all-devices" : "my-devices")) —</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Từ (local)</label>
+                    <input type="datetime-local" class="form-control" id="from" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Đến (local)</label>
+                    <input type="datetime-local" class="form-control" id="to" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Khoảng nhanh</label>
+                    <select id="quick" class="form-select">
+                        <option value="1">1 giờ</option>
+                        <option value="6">6 giờ</option>
+                        <option value="24" selected>24 giờ</option>
+                        <option value="72">3 ngày</option>
+                        <option value="240">10 ngày</option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex flex-wrap gap-2 align-items-center">
+                    <button class="btn btn-primary" id="btnFetch" type="submit">
+                        <i class="bi bi-cloud-download me-1"></i> Lấy dữ liệu
+                    </button>
+                    <button class="btn btn-outline-primary" type="button" id="btnClear">
+                        <i class="bi bi-eraser me-1"></i> Xoá
+                    </button>
+
+                    <div class="vr mx-1 d-none d-md-block"></div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="form-check form-switch m-0">
+                            <input class="form-check-input" type="checkbox" id="autoToggle">
+                            <label class="form-check-label" for="autoToggle">Tự động cập nhật</label>
+                        </div>
+                        <select id="autoInterval" class="form-select" style="width:140px">
+                            <option value="0">Tắt</option>
+                            <option value="30">30 giây</option>
+                            <option value="60" selected>1 phút</option>
+                            <option value="300">5 phút</option>
+                        </select>
+                        <span class="badge-soft" id="autoCountdown">—</span>
+                    </div>
+
+                    <div class="loading ms-auto" id="loading">
+                        <span class="spinner-border spinner-border-sm"></span> Đang tải…
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="fx h-100">
+                <div class="fx-inner">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>Biểu đồ</strong>
+                        <div class="d-flex gap-2">
+                            <span class="badge-soft" id="pointCount">0 điểm</span>
+                            <span class="badge-soft" id="rangeText">—</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-wrap">
+                        <canvas id="chartTemp"></canvas>
+                    </div>
+
+                    <div class="mt-2 subtle small">* Nhiệt độ từ <code>tmp1</code>, độ ẩm từ <code>hum1</code>.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="fx h-100">
+                <div class="fx-inner">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <strong>Thống kê nhanh</strong>
+                        <span class="badge-soft" id="deviceText">—</span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <div class="stat"><i class="bi bi-thermometer-half"></i><div><div class="subtle">Trung bình</div><div class="num" id="avgTemp">—</div></div></div>
+                        <div class="stat"><i class="bi bi-thermometer-high"></i><div><div class="subtle">Cao nhất</div><div class="num" id="maxTemp">—</div></div></div>
+                        <div class="stat"><i class="bi bi-thermometer-low"></i><div><div class="subtle">Thấp nhất</div><div class="num" id="minTemp">—</div></div></div>
+                        <div class="stat"><i class="bi bi-droplet-half"></i><div><div class="subtle">Độ ẩm gần nhất</div><div class="num" id="lastHum">—</div></div></div>
+                    </div>
+
+                    <div class="mt-2 small subtle">* Time hiển thị theo UTC+7.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="fx">
+                <div class="fx-inner">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>Bảng dữ liệu</strong>
+                        <button class="btn btn-sm btn-outline-primary" id="btnExport">
+                            <i class="bi bi-file-earmark-arrow-down"></i> Xuất CSV
+                        </button>
+                    </div>
+
+                    <div class="table-responsive table-sticky" style="max-height:420px;">
+                        <table class="table table-bordered align-middle mb-0" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th>Time (UTC+7)</th>
+                                    <th>tmp1</th>
+                                    <th>hum1</th>
+                                    <th>signal</th>
+                                    <th>power</th>
+                                    <th>address</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="subtle small mt-2" id="apiMsg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toasty" id="toasty"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    (() => {
+      const isAdmin = @((User.IsInRole("Admin")) ? "true" : "false");
+      const baseUrl = '@Url.Content("~/")';
+
+      const nowText = document.getElementById('nowText');
+      const statusEl = document.getElementById('status');
+      const deviceGuidEl = document.getElementById('deviceGuid');
+      const devicePickEl = document.getElementById('devicePick');
+      const fromEl = document.getElementById('from');
+      const toEl = document.getElementById('to');
+      const quickEl = document.getElementById('quick');
+      const tbody = document.getElementById('tbody');
+      const apiMsg = document.getElementById('apiMsg');
+      const loading = document.getElementById('loading');
+      const pointCount = document.getElementById('pointCount');
+      const rangeText = document.getElementById('rangeText');
+      const deviceText = document.getElementById('deviceText');
+      const avgTemp = document.getElementById('avgTemp');
+      const maxTemp = document.getElementById('maxTemp');
+      const minTemp = document.getElementById('minTemp');
+      const lastHum = document.getElementById('lastHum');
+      const btnFetch = document.getElementById('btnFetch');
+
+      const autoToggle = document.getElementById('autoToggle');
+      const autoInterval = document.getElementById('autoInterval');
+      const autoCountdownEl = document.getElementById('autoCountdown');
+      const toasty = document.getElementById('toasty');
+
+      let inflightAbort = null;
+      let latestQueryKey = null;
+      let autoTimer = null;
+      let autoTicker = null;
+      let chart = null;
+
+      // ===== Utils =====
+      function tickNow(){ nowText.textContent = new Date().toLocaleString('vi-VN',{hour12:false}); }
+      tickNow(); setInterval(tickNow,1000);
+
+      function setStatus(msg){ statusEl.textContent = msg || ''; }
+      function showLoading(b){ loading.style.display = b ? 'inline-flex' : 'none'; btnFetch.disabled = !!b; }
+      function esc(v){ return (v ?? '').toString().replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+      function toLocalInputValue(d){
+        const pad=n=>n.toString().padStart(2,'0');
+        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      }
+      function parseLocalInputValue(s){ return s ? new Date(s) : null; }
+      function setDefaultRange(){
+        const end = new Date();
+        const start = new Date(end.getTime() - 24*3600*1000);
+        fromEl.value = toLocalInputValue(start);
+        toEl.value = toLocalInputValue(end);
+      }
+      function skeletonRows(n){
+        return Array.from({length:n}).map(()=>`<tr class="skeleton-row"><td colspan="6"></td></tr>`).join('');
+      }
+      function num(v){
+        const x = (typeof v === 'number') ? v : parseFloat(String(v ?? '').replace(',','.'));
+        return Number.isFinite(x) ? x : null;
+      }
+      function unixToLocalString(v){
+        if(v == null) return '';
+        const ms = (v > 1e12) ? v : v*1000;
+        return new Date(ms).toLocaleString('vi-VN',{hour12:false});
+      }
+
+      function toast(msg, type='ok'){
+        const el = document.createElement('div');
+        el.className = 'toast-item';
+        if(type==='err') el.style.borderColor = 'rgba(239,68,68,.35)';
+        if(type==='warn') el.style.borderColor = 'rgba(245,158,11,.35)';
+        el.textContent = msg;
+        toasty.appendChild(el);
+        setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; }, 2600);
+        setTimeout(()=>{ el.remove(); }, 3200);
+      }
+
+      // ===== Chart =====
+          function ensureChart(labels, temps, hums, silent)
+    {
+        const canvas = document.getElementById('chartTemp');
+        if(chart) chart.destroy();
+
+        const ctx = canvas.getContext('2d');
+        const g1 = ctx.createLinearGradient(0,0,0,320);
+        g1.addColorStop(0,'rgba(79,70,229,.28)');
+        g1.addColorStop(1,'rgba(79,70,229,.02)');
+
+        chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: 'tmp1 (°C)',
+                data: temps,
+                tension: .35,
+                pointRadius: 0,
+                borderWidth: 2,
+                borderColor: 'rgba(79,70,229,1)',
+                backgroundColor: g1,
+                fill: true,
+                yAxisID: 'yTemp'
+              },
+              {
+                label: 'hum1 (%RH)',
+                data: hums,
+                tension: .35,
+                pointRadius: 0,
+                borderWidth: 2,
+                borderColor: 'rgba(6,182,212,1)',
+                borderDash: [6,4],
+                fill: false,
+                yAxisID: 'yHum'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode:'index', intersect:false },
+            plugins: {
+              legend: { labels: { color: 'rgba(255,255,255,.85)' } },
+              tooltip: { enabled: true }
+            },
+            scales: {
+              x: {
+                grid: { display:false },
+                ticks: { color:'rgba(255,255,255,.65)', maxRotation:0, autoSkip:true }
+              },
+              yTemp: {
+                position: 'left',
+                grid: { color:'rgba(255,255,255,.08)' },
+                ticks: { color:'rgba(255,255,255,.65)' }
+              },
+              yHum: {
+                position: 'right',
+                grid: { drawOnChartArea:false },
+                ticks: { color:'rgba(255,255,255,.65)' }
+              }
+            }
+          }
+        });
+      }
+
+      function updateStats(temps, hums, labels, guid, from, to){
+        deviceText.textContent = guid || '—';
+        pointCount.textContent = (labels?.length || 0) + ' điểm';
+        rangeText.textContent = `${from.toLocaleString('vi-VN',{hour12:false})} → ${to.toLocaleString('vi-VN',{hour12:false})}`;
+
+        const t = temps.filter(v => typeof v === 'number' && Number.isFinite(v));
+        if(t.length){
+          const avg = t.reduce((a,b)=>a+b,0)/t.length;
+          avgTemp.textContent = avg.toFixed(2) + ' °C';
+          maxTemp.textContent = Math.max(...t).toFixed(2) + ' °C';
+          minTemp.textContent = Math.min(...t).toFixed(2) + ' °C';
+        } else {
+          avgTemp.textContent = maxTemp.textContent = minTemp.textContent = '—';
+        }
+
+        const lastH = [...hums].reverse().find(v => typeof v === 'number' && Number.isFinite(v));
+        lastHum.textContent = (lastH != null) ? lastH.toFixed(1) + ' %RH' : '—';
+      }
+
+      // ===== Data =====
+      async function loadDeviceList(){
+        try{
+          const ep = isAdmin ? 'api/elitech/all-devices' : 'api/elitech/my-devices';
+          const res = await fetch(baseUrl + ep, { credentials:'include' });
+          if(!res.ok) throw new Error('HTTP ' + res.status);
+
+          const j = await res.json();
+          const items = Array.isArray(j.data) ? j.data : [];
+
+          devicePickEl.innerHTML = '';
+          devicePickEl.appendChild(new Option(`— ${isAdmin ? 'All devices' : 'My devices'} (${items.length}) —`, ''));
+
+          for(const it of items){
+            const label = (it.deviceName ? `${it.deviceName} — ` : '') + it.deviceGuid;
+            devicePickEl.appendChild(new Option(label, it.deviceGuid));
+          }
+
+          // ưu tiên querystring ?deviceGuid=...
+          const qGuid = (new URLSearchParams(location.search).get('deviceGuid') || '').trim();
+          if(qGuid){
+            deviceGuidEl.value = qGuid;
+            devicePickEl.value = qGuid;
+          } else if(items.length){
+            deviceGuidEl.value = items[0].deviceGuid;
+            devicePickEl.value = items[0].deviceGuid;
+          }
+        }catch(err){
+          console.error(err);
+          setStatus('❌ Lỗi load danh sách thiết bị: ' + (err?.message||err));
+          toast('Không load được danh sách thiết bị', 'err');
+        }
+      }
+
+      async function fetchData(opts){
+        const silent = !!opts?.silent;
+
+        const guid = (deviceGuidEl.value || '').trim();
+        if(!guid){ toast('Nhập Device GUID trước!', 'warn'); return; }
+
+        const f = parseLocalInputValue(fromEl.value);
+        const t = parseLocalInputValue(toEl.value);
+        const qh = parseInt(quickEl.value || '24', 10);
+        const quickHours = Number.isFinite(qh) ? qh : 24;
+
+        let url = baseUrl + 'api/elitech/history?deviceGuid=' + encodeURIComponent(guid);
+        if(f && t) url += `&from=${encodeURIComponent(f.toISOString())}&to=${encodeURIComponent(t.toISOString())}`;
+        else url += `&lastHours=${quickHours}`;
+
+        const key = url;
+        if(latestQueryKey === key && inflightAbort && !silent) return;
+        latestQueryKey = key;
+
+        if(inflightAbort){ inflightAbort.abort(); inflightAbort = null; }
+        inflightAbort = new AbortController();
+
+        if(!silent){
+          tbody.innerHTML = skeletonRows(8);
+          apiMsg.textContent = '';
+        }
+        showLoading(true);
+
+        try{
+          const res = await fetch(url, { credentials:'include', signal: inflightAbort.signal });
+          if(!res.ok){
+            const text = await res.text();
+            throw new Error(`HTTP ${res.status}: ${text}`);
+          }
+          const j = await res.json();
+          if(j.code !== 0){
+            apiMsg.textContent = `API code=${j.code} message=${j.message||j.msg||j.error||'error'}`;
+            ensureChart([],[],[]);
+            updateStats([],[],[],guid, f||new Date(Date.now()-quickHours*3600*1000), t||new Date());
+            return;
+          }
+
+          const items = Array.isArray(j.data) ? j.data : [];
+          items.sort((a,b)=>(a.monitorTime||0)-(b.monitorTime||0));
+
+          const labels=[], temps=[], hums=[];
+          tbody.innerHTML = '';
+
+          for(const it of items){
+            const timeStr = unixToLocalString(it.monitorTime);
+            const tt = num(it.tmp1);
+            const hh = num(it.hum1);
+
+            labels.push(timeStr);
+            temps.push(tt);
+            hums.push(hh);
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${esc(timeStr)}</td><td>${esc(it.tmp1)}</td><td>${esc(it.hum1)}</td><td>${esc(it.signal)}</td><td>${esc(it.power)}</td><td>${esc(it.address)}</td>`;
+            tbody.appendChild(tr);
+          }
+
+          ensureChart(labels, temps, hums);
+          updateStats(temps, hums, labels, guid, f||new Date(Date.now()-quickHours*3600*1000), t||new Date());
+          apiMsg.textContent = `Nhận ${items.length} mẫu.`;
+          if(!silent) toast('Đã cập nhật dữ liệu');
+        }catch(err){
+          if(err?.name === 'AbortError') return;
+          console.error(err);
+          apiMsg.textContent = 'Lỗi: ' + (err?.message || err);
+          ensureChart([],[],[]);
+          updateStats([],[],[],guid, new Date(), new Date());
+          toast('Lỗi tải dữ liệu', 'err');
+        }finally{
+          showLoading(false);
+          inflightAbort = null;
+        }
+      }
+
+      // ===== Auto refresh =====
+      function stopAuto(){
+        if(autoTimer) clearInterval(autoTimer);
+        if(autoTicker) clearInterval(autoTicker);
+        autoTimer = null; autoTicker = null;
+        autoCountdownEl.textContent = '—';
+        autoToggle.checked = false;
+      }
+
+      function startAuto(){
+        const s = parseInt(autoInterval.value||'0',10);
+        if(!Number.isFinite(s) || s<=0){ stopAuto(); return; }
+
+        autoToggle.checked = true;
+        if(autoTimer) clearInterval(autoTimer);
+        if(autoTicker) clearInterval(autoTicker);
+
+        let left = s;
+        autoCountdownEl.textContent = left + 's';
+
+        autoTicker = setInterval(()=>{
+          left--;
+          if(left<=0) left = s;
+          autoCountdownEl.textContent = left + 's';
+        },1000);
+
+        autoTimer = setInterval(()=>{
+          fetchData({ silent:true });
+        }, s*1000);
+
+        toast('Đã bật tự động cập nhật');
+      }
+
+      // ===== Events =====
+      document.getElementById('qForm').addEventListener('submit', (e)=>{ e.preventDefault(); fetchData({silent:false}); });
+
+      devicePickEl.addEventListener('change', ()=>{
+        const v = devicePickEl.value;
+        if(v){
+          deviceGuidEl.value = v;
+          fetchData({silent:false});
+        }
+      });
+
+      deviceGuidEl.addEventListener('change', ()=>{
+        const v = (deviceGuidEl.value||'').trim();
+        if(v) devicePickEl.value = v;
+      });
+
+      quickEl.addEventListener('change', ()=>{ fromEl.value=''; toEl.value=''; });
+
+      document.getElementById('btnClear').addEventListener('click', ()=>{
+        if(inflightAbort){ inflightAbort.abort(); inflightAbort=null; }
+        stopAuto(); setStatus('');
+        deviceGuidEl.value=''; devicePickEl.value='';
+        setDefaultRange(); quickEl.value='24';
+        tbody.innerHTML=''; ensureChart([],[],[]);
+        updateStats([],[],[],'',new Date(),new Date());
+        apiMsg.textContent='';
+      });
+
+      autoToggle.addEventListener('change', (e)=> e.target.checked ? startAuto() : stopAuto() );
+      autoInterval.addEventListener('change', ()=>{ if(autoToggle.checked) startAuto(); });
+
+      document.getElementById('btnExport').addEventListener('click', ()=>{
+        const rows=[['Time(UTC+7)','tmp1','hum1','signal','power','address']];
+        for(const tr of tbody.querySelectorAll('tr')){
+          const tds=[...tr.children].map(td=>`"${(td.textContent||'').replace(/"/g,'""')}"`);
+          rows.push(tds);
+        }
+        const csv=rows.map(r=>r.join(',')).join('\r\n');
+        const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download=`elitech_history_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+        a.click();
+      });
+
+      // ===== Init =====
+      setDefaultRange();
+      ensureChart([],[],[]);
+      loadDeviceList().then(()=>{
+        // nếu có guid sẵn thì auto load
+        if((deviceGuidEl.value||'').trim()) fetchData({silent:true});
+      });
+    })();
+</script>

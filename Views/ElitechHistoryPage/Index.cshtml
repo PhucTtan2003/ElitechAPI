@@ -1,0 +1,236 @@
+﻿@{
+    ViewData["Title"] = "Elitech - Lịch sử thiết bị";
+    Layout = "_Layout";
+    var isAdmin = (bool)(ViewBag.IsAdmin ?? false);
+    var theme = isAdmin ? "dark" : "light";
+}
+
+<script>
+    document.documentElement.setAttribute("data-elitech-theme", "@theme");
+</script>
+
+<link rel="stylesheet" href="~/css/elitech-history.css" asp-append-version="true" />
+
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="elx-title">
+            <span class="elx-dot"></span>
+            <h3 class="mb-0">Elitech – Lịch sử thiết bị</h3>
+            <span class="elx-badge">UTC+7</span>
+            @if (isAdmin)
+            {
+                <span class="elx-badge elx-badge-ok">Admin</span>
+            }
+            else
+            {
+                <span class="elx-badge elx-badge-info">User</span>
+            }
+        </div>
+        <div class="text-end">
+            <small class="elx-subtle d-block">Cập nhật: <span id="nowText"></span></small>
+            <div class="mt-1 small" id="status"></div>
+        </div>
+    </div>
+
+    <div class="elx-card mb-3">
+        <div class="elx-card-inner">
+            <form id="qForm" class="row g-3 elx-form">
+                <div class="col-lg-4">
+                    <label class="form-label">Thiết bị</label>
+
+                    <input class="form-control" id="deviceGuid" placeholder="Nhập hoặc chọn từ danh sách…"
+                           @(isAdmin ? "" : "readonly") />
+
+                    <div class="mt-2">
+                        <select class="form-select" id="devicePick">
+                            <option value="">— Đang tải danh sách thiết bị… —</option>
+                        </select>
+                    </div>
+
+                    <div class="elx-subtle small mt-1">
+                        @(isAdmin ? "Admin có thể dán GUID trực tiếp." : "User chỉ chọn thiết bị được gán.")
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Từ (local)</label>
+                    <input type="datetime-local" class="form-control" id="from" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Đến (local)</label>
+                    <input type="datetime-local" class="form-control" id="to" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Khoảng nhanh</label>
+                    <select id="quick" class="form-select">
+                        <option value="1">1 giờ</option>
+                        <option value="6">6 giờ</option>
+                        <option value="24" selected>24 giờ</option>
+                        <option value="72">3 ngày</option>
+                        <option value="240">10 ngày</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Kênh nhiệt (tmp)</label>
+                    <select id="tempChan" class="form-select">
+                        <option value="1" selected>tmp1</option>
+                        <option value="2">tmp2</option>
+                        <option value="3">tmp3</option>
+                        <option value="4">tmp4</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Kênh ẩm (hum)</label>
+                    <select id="humChan" class="form-select">
+                        <option value="1" selected>hum1</option>
+                        <option value="2">hum2</option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex flex-wrap gap-2 align-items-center">
+                    <button class="btn btn-primary" id="btnFetch" type="submit">
+                        <i class="bi bi-cloud-download me-1"></i> Lấy dữ liệu
+                    </button>
+                    <button class="btn btn-outline-primary" type="button" id="btnClear">
+                        <i class="bi bi-eraser me-1"></i> Xoá
+                    </button>
+
+                    <div class="vr mx-1 d-none d-md-block"></div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="form-check form-switch m-0">
+                            <input class="form-check-input" type="checkbox" id="autoToggle">
+                            <label class="form-check-label" for="autoToggle">Tự động cập nhật</label>
+                        </div>
+                        <select id="autoInterval" class="form-select" style="width:140px">
+                            <option value="0">Tắt</option>
+                            <option value="30">30 giây</option>
+                            <option value="60" selected>1 phút</option>
+                            <option value="300">5 phút</option>
+                        </select>
+                        <span class="elx-badge" id="autoCountdown">—</span>
+                    </div>
+
+                    @if (!isAdmin)
+                    {
+                        <div class="vr mx-1 d-none d-md-block"></div>
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" id="zoomTempToggle" checked>
+                                <label class="form-check-label small" for="zoomTempToggle">Zoom °C</label>
+                            </div>
+                            <span class="elx-badge" id="zoomTempBadge">°C —</span>
+
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" id="zoomRhToggle" checked>
+                                <label class="form-check-label small" for="zoomRhToggle">Zoom %RH</label>
+                            </div>
+                            <span class="elx-badge" id="zoomRhBadge">%RH —</span>
+                        </div>
+                    }
+
+                    <div class="elx-loading ms-auto" id="loading">
+                        <span class="spinner-border spinner-border-sm"></span> Đang tải…
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="elx-card h-100">
+                <div class="elx-card-inner">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>Biểu đồ</strong>
+                        <div class="d-flex gap-2">
+                            <span class="elx-badge" id="pointCount">0 điểm</span>
+                            <span class="elx-badge" id="rangeText">—</span>
+                        </div>
+                    </div>
+
+                    <div class="elx-chart-wrap">
+                        <canvas id="chartTemp"></canvas>
+                    </div>
+
+                    <div class="mt-2 elx-subtle small">
+                        * Trục thời gian tự chia mốc (không đè chữ).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="elx-card h-100">
+                <div class="elx-card-inner">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <strong>Thống kê nhanh</strong>
+                        <span class="elx-badge" id="deviceText">—</span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <div class="elx-stat"><i class="bi bi-thermometer-half"></i><div><div class="elx-subtle">Trung bình</div><div class="elx-num" id="avgTemp">—</div></div></div>
+                        <div class="elx-stat"><i class="bi bi-thermometer-high"></i><div><div class="elx-subtle">Cao nhất</div><div class="elx-num" id="maxTemp">—</div></div></div>
+                        <div class="elx-stat"><i class="bi bi-thermometer-low"></i><div><div class="elx-subtle">Thấp nhất</div><div class="elx-num" id="minTemp">—</div></div></div>
+                        <div class="elx-stat"><i class="bi bi-droplet-half"></i><div><div class="elx-subtle">Độ ẩm gần nhất</div><div class="elx-num" id="lastHum">—</div></div></div>
+                    </div>
+
+                    <div class="mt-2 small elx-subtle">* Time hiển thị theo UTC+7.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="elx-card">
+                <div class="elx-card-inner">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>Bảng dữ liệu</strong>
+                        <button class="btn btn-sm btn-outline-primary" id="btnExport">
+                            <i class="bi bi-file-earmark-arrow-down"></i> Xuất CSV
+                        </button>
+                    </div>
+
+                    <div class="table-responsive elx-table-sticky" style="max-height:420px;">
+                        <table class="table table-bordered align-middle mb-0" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th>Time (UTC+7)</th>
+                                    <th>tmp1</th>
+                                    <th>tmp2</th>
+                                    <th>tmp3</th>
+                                    <th>tmp4</th>
+                                    <th>hum1</th>
+                                    <th>hum2</th>
+                                    <th>signal</th>
+                                    <th>power</th>
+                                    <th>address</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="elx-subtle small mt-2" id="apiMsg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="elx-toasty" id="toasty"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<!-- ✅ adapter for time scale -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+
+<script>
+    window.__ELITECH_HISTORY__ = {
+        isAdmin: @((isAdmin) ? "true" : "false"),
+        baseUrl: '@Url.Content("~/")'
+    };
+</script>
+<script src="~/js/elitech-history.js" asp-append-version="true"></script>

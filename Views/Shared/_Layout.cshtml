@@ -1,0 +1,1062 @@
+﻿@* Views/Shared/_Layout.cshtml *@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@(string.IsNullOrWhiteSpace(ViewData["Title"]?.ToString()) ? "Elitech" : $"{ViewData["Title"]} - Elitech")</title>
+
+    <link rel="icon" type="image/png" href="~/Pictures/logoelitech.png" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Elitech.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/app/asset-admin.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --elx-orange: #F58220;
+            --elx-orange-600: #e36f15;
+            --elx-navy: #0D47A1;
+            --elx-navy-700: #12326f;
+            --elx-navy-800: #0F2E6E;
+            --elx-navy-900: #0A1322;
+            --elx-bg: #F3F6FB;
+            --elx-text: #0e1320;
+            --elx-muted: #6b7280;
+            --elx-card: rgba(255,255,255,0.86);
+            --elx-border: rgba(226,232,240,0.90);
+            --elx-radius: 14px;
+            --elx-shadow-soft: 0 18px 45px rgba(15,35,78,0.18);
+            --elx-stroke-soft: rgba(255,255,255,0.14);
+            --elx-muted-footer: #9aa6bf;
+            --elx-stroke: rgba(255,255,255,.08);
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+            color: var(--elx-text);
+            background: radial-gradient(1200px 600px at 100% -20%, rgba(245,130,32,.12), transparent 55%), radial-gradient(900px 500px at -10% -10%, rgba(13,71,161,.14), transparent 60%), #e9effb;
+            background-attachment: fixed;
+        }
+
+        /* ===== Shell ===== */
+        .elx-shell {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== Glass Topbar ===== */
+        .elx-topbar-wrap {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        .elx-topbar-blur {
+            backdrop-filter: blur(14px) saturate(160%);
+            background: radial-gradient(900px 420px at 0% 0%, rgba(255,255,255,.22), transparent 60%), linear-gradient(180deg, rgba(10,27,69,.96), rgba(10,25,61,.88));
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            box-shadow: 0 12px 30px rgba(9,20,48,.38);
+        }
+
+        .elx-topbar {
+            padding-block: 9px;
+        }
+
+        .elx-brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: .02em;
+            text-decoration: none;
+        }
+
+        .elx-brand-logo {
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            background: conic-gradient(from 140deg, #1E88E5, #0D47A1, #F58220, #ffd38d, #1E88E5);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 18px rgba(0,0,0,.35);
+        }
+
+            .elx-brand-logo::after {
+                content: "";
+                position: absolute;
+                inset: 1px;
+                border-radius: inherit;
+                background: radial-gradient(circle at 0 0, rgba(255,255,255,.72), transparent 55%), linear-gradient(145deg, rgba(0,0,0,.18), transparent 55%);
+                mix-blend-mode: screen;
+                opacity: .9;
+            }
+
+        .elx-brand-text-main {
+            font-size: 1.05rem;
+        }
+
+        .elx-brand-text-sub {
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+            color: rgba(226,232,255,.8);
+        }
+
+        /* Nav pills (desktop) */
+        .elx-nav {
+            display: flex;
+            align-items: center;
+            gap: .25rem;
+            border-radius: 999px;
+            padding: 3px;
+            background: radial-gradient(140% 240% at 0 0, rgba(255,255,255,.12), transparent 70%);
+        }
+
+        .elx-nav-link {
+            border-radius: 999px !important;
+            padding: 6px 12px !important;
+            font-size: .85rem;
+            font-weight: 600;
+            color: rgba(226,232,255,.85) !important;
+            position: relative;
+            text-decoration: none;
+        }
+
+            .elx-nav-link.active {
+                background: radial-gradient(140% 240% at 0 0, rgba(255,255,255,.92), transparent 80%);
+                color: #111827 !important;
+                box-shadow: 0 10px 25px rgba(15,35,78,.55);
+            }
+
+            .elx-nav-link i {
+                font-size: .9rem;
+            }
+
+        /* Search */
+        .elx-search-wrap {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            max-width: 260px;
+            flex: 1 1 auto;
+        }
+
+        .elx-search {
+            background: rgba(9,24,63,.92);
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,210,.55);
+            padding: 4px 9px 4px 10px;
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+            color: #e5edff;
+        }
+
+            .elx-search input {
+                border: 0;
+                outline: none;
+                background: transparent;
+                color: inherit;
+                font-size: .8rem;
+                width: 100%;
+            }
+
+                .elx-search input::placeholder {
+                    color: #94a3c7;
+                }
+
+        /* Right user */
+        .elx-user {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .elx-pill-status {
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            padding: 4px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(52,211,153,.4);
+            background: radial-gradient(circle at 0 0, rgba(16,185,129,.35), transparent 70%);
+            color: #bbf7d0;
+            font-size: .72rem;
+            font-weight: 600;
+        }
+
+        .elx-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 0 rgba(34,197,94,.7);
+            animation: elx-dot-pulse 1.6s infinite;
+        }
+
+        @@keyframes elx-dot-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34,197,94,.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(34,197,94,0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(34,197,94,0);
+            }
+        }
+
+        .elx-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 0 0, #f97316, #0ea5e9);
+            display: grid;
+            place-items: center;
+            color: #f9fafb;
+            font-size: .9rem;
+            font-weight: 700;
+            border: 1px solid rgba(248,250,252,.4);
+            box-shadow: 0 10px 22px rgba(15,23,42,.7);
+        }
+
+        /* Main */
+        .elx-main {
+            flex: 1 0 auto;
+            padding: 18px 0 24px;
+            min-height: calc(100vh - 160px);
+        }
+
+        /* Fix dropdown clarity + clean background (glass dropdown) */
+        .elx-topbar-wrap, .elx-topbar-blur, .elx-topbar, .dropdown, .dropdown-menu {
+            position: relative;
+            z-index: 9999 !important;
+        }
+
+        .dropdown-menu {
+            backdrop-filter: blur(22px) saturate(180%);
+            background: rgba(248, 250, 252, 0.82) !important;
+            border: 1px solid rgba(255, 255, 255, 0.55) !important;
+            box-shadow: 0 18px 35px rgba(0,0,0,0.28);
+            border-radius: 16px !important;
+            padding: 10px 0 !important;
+            margin-top: 10px !important;
+            z-index: 20000 !important;
+        }
+
+        .dropdown-item {
+            font-weight: 600;
+            font-size: .9rem;
+            padding: 10px 18px !important;
+            color: #0f172a !important;
+        }
+
+            .dropdown-item:hover {
+                background: rgba(255,255,255,0.55) !important;
+                backdrop-filter: blur(25px);
+                border-radius: 10px;
+            }
+
+        /* ========= Mobile topbar / hamburger ========= */
+        .elx-menu-toggle {
+            display: none;
+            align-items: center;
+            gap: .35rem;
+            padding: 4px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,210,.7);
+            background: rgba(15,23,42,.5);
+            color: #e5edff;
+            font-size: .85rem;
+            font-weight: 600;
+        }
+
+            .elx-menu-toggle i {
+                font-size: 1rem;
+            }
+
+        @@media (max-width: 991.98px) {
+            .elx-nav {
+                display: none;
+            }
+
+            .elx-menu-toggle {
+                display: inline-flex;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            body {
+                background: radial-gradient(600px 320px at 100% -20%, rgba(245,130,32,.12), transparent 55%), radial-gradient(600px 320px at -10% -10%, rgba(13,71,161,.12), transparent 60%), #e9effb;
+                background-attachment: scroll;
+            }
+        }
+
+        @@media (prefers-reduced-motion: reduce) {
+            body {
+                background-attachment: scroll;
+            }
+        }
+
+        /* ===== Footer (dark) ===== */
+        .elx-footer-dark {
+            background: radial-gradient(900px 380px at 85% -15%, rgba(39,195,243,.08), transparent 45%), radial-gradient(800px 380px at 5% 0%, rgba(245,130,32,.08), transparent 55%), var(--elx-navy-900);
+            color: #eaf0ff;
+            border-top: 1px solid var(--elx-stroke);
+            position: relative;
+            margin-top: 8px;
+        }
+
+            .elx-footer-dark::before,
+            .elx-footer-dark::after {
+                content: "";
+                position: absolute;
+                pointer-events: none;
+                opacity: .22;
+                background: radial-gradient(2px 2px at 10% 30%, #7cc6ff 60%, transparent 61%), radial-gradient(2px 2px at 25% 70%, #7cc6ff 60%, transparent 61%), radial-gradient(2px 2px at 60% 20%, #7cc6ff 60%, transparent 61%), radial-gradient(2px 2px at 85% 45%, #7cc6ff 60%, transparent 61%), radial-gradient(2px 2px at 70% 80%, #7cc6ff 60%, transparent 61%);
+            }
+
+            .elx-footer-dark::before {
+                inset: 0 0 60% 0;
+            }
+
+            .elx-footer-dark::after {
+                inset: 40% 0 0 0;
+            }
+
+            .elx-footer-dark h6 {
+                font-weight: 800;
+                color: #fff;
+                margin-bottom: .5rem;
+            }
+
+            .elx-footer-dark p, .elx-footer-dark span, .elx-footer-dark li, .elx-footer-dark a {
+                color: #cbd5e1;
+                font-size: .86rem;
+            }
+
+                .elx-footer-dark a:hover {
+                    color: #fff;
+                    text-decoration: underline;
+                }
+
+        .elx-footer-logo {
+            width: 66px;
+            height: 66px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,.08);
+            background: radial-gradient(circle at 0 0, rgba(255,255,255,.12), transparent 60%);
+            display: grid;
+            place-items: center;
+        }
+
+            .elx-footer-logo img {
+                border-radius: 12px;
+                box-shadow: 0 10px 28px rgba(0,0,0,.55);
+                transition: transform .2s ease, box-shadow .2s ease;
+            }
+
+                .elx-footer-logo img:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 6px 18px rgba(0,0,0,.5);
+                }
+
+        .elx-footer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(15,23,42,.9);
+            color: #bfdbfe;
+            border: 1px solid rgba(148,163,184,.6);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: .9rem;
+        }
+
+        .elx-footer-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+            .elx-footer-list li {
+                margin: .35rem 0;
+                display: flex;
+                gap: .6rem;
+                align-items: flex-start;
+            }
+
+            .elx-footer-list i {
+                width: 22px;
+                height: 22px;
+                display: grid;
+                place-items: center;
+                border-radius: 7px;
+                background: rgba(15,23,42,.9);
+                color: #cbd5f5;
+                font-size: .8rem;
+                border: 1px solid rgba(148,163,184,.55);
+            }
+
+        .elx-footer-partners {
+            background: rgba(15,23,42,.88);
+            border-radius: 16px;
+            padding: 10px;
+            border: 1px solid rgba(148,163,184,.55);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .elx-partner-pill {
+            background: rgba(15,23,42,.96);
+            border-radius: 999px;
+            padding: 7px 11px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(148,163,184,.6);
+        }
+
+            .elx-partner-pill img {
+                width: 22px;
+                height: 22px;
+                border-radius: 999px;
+                object-fit: cover;
+                background: #020617;
+            }
+
+            .elx-partner-pill span {
+                color: #e5e7eb;
+                font-weight: 600;
+                font-size: .8rem;
+            }
+
+        .elx-footer-bottom {
+            background: #020617;
+            border-top: 1px solid rgba(15,23,42,1);
+            color: #9ca3af;
+            font-size: .82rem;
+        }
+
+            .elx-footer-bottom a {
+                color: #93c5fd;
+                text-decoration: none;
+                font-weight: 700;
+            }
+
+                .elx-footer-bottom a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+
+<body>
+    <div class="elx-shell">
+
+        <!-- ===== Topbar ===== -->
+        <div class="elx-topbar-wrap">
+            <div class="elx-topbar-blur">
+                <div class="container-xl">
+                    <div class="elx-topbar d-flex align-items-center justify-content-between gap-3">
+
+                        @* BRAND TITLE + ROLE *@
+                        @{
+                            string brandTitle = "Elitech System";
+                            bool isAdmin = false;
+
+                            if (User?.Identity?.IsAuthenticated == true)
+                            {
+                                isAdmin = User.IsInRole("Admin");
+                                brandTitle = isAdmin ? "Elitech Admin" : "Elitech User";
+                            }
+                        }
+
+                        @* BRAND LINK: giữ đúng logic route như bạn muốn *@
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            if (isAdmin)
+                            {
+                                <a class="elx-brand-link" asp-controller="Admin" asp-action="Index">
+                                    <span class="elx-brand-logo"></span>
+                                    <span class="d-flex flex-column">
+                                        <span class="elx-brand-text-main">@brandTitle</span>
+                                        <span class="elx-brand-text-sub">Device • Monitoring • Suite</span>
+                                    </span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="elx-brand-link" asp-controller="User" asp-action="Index">
+                                    <span class="elx-brand-logo"></span>
+                                    <span class="d-flex flex-column">
+                                        <span class="elx-brand-text-main">@brandTitle</span>
+                                        <span class="elx-brand-text-sub">Device • Monitoring • Suite</span>
+                                    </span>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a class="elx-brand-link" asp-controller="Home" asp-action="Index">
+                                <span class="elx-brand-logo"></span>
+                                <span class="d-flex flex-column">
+                                    <span class="elx-brand-text-main">@brandTitle</span>
+                                    <span class="elx-brand-text-sub">Device • Monitoring • Suite</span>
+                                </span>
+                            </a>
+                        }
+
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            <!-- Nút menu mobile -->
+                            <button class="elx-menu-toggle d-md-none ms-auto"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#elxNavMobile"
+                                    aria-controls="elxNavMobile"
+                                    aria-expanded="false"
+                                    aria-label="Toggle navigation">
+                                <i class="bi bi-list"></i> Menu
+                            </button>
+
+                            <!-- Nav center (desktop) -->
+                            <nav class="elx-nav d-none d-md-flex ms-3">
+
+                                @* ===== MENU (Admin vs User) giữ như đoạn 1 ===== *@
+                                @if (isAdmin)
+                                {
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="Admin"?"active":"")"
+                                       asp-controller="Admin" asp-action="Index">
+                                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                                    </a>
+
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechHistoryPage"?"active":"")"
+                                       asp-controller="ElitechHistoryPage" asp-action="Index">
+                                        <i class="bi bi-cpu me-1"></i>Devices
+                                    </a>
+
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechRealtime"?"active":"")"
+                                       asp-controller="ElitechRealtime" asp-action="Index">
+                                        <i class="bi bi-bell me-1"></i>Realtime
+                                    </a>
+
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="Admin" && ViewContext.RouteData.Values["action"]?.ToString()=="AssignDevices"?"active":"")"
+                                       asp-controller="Admin" asp-action="AssignDevices">
+                                        <i class="bi bi-graph-up me-1"></i>AssignDevices
+                                    </a>
+
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechHistoryPage"?"active":"")"
+                                       asp-controller="ElitechHistoryPage" asp-action="Index">
+                                        <i class="bi bi-activity me-1"></i>History Chart
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="User"?"active":"")"
+                                       asp-controller="User" asp-action="Index">
+                                        <i class="bi bi-house-door me-1"></i>Dashboard
+                                    </a>
+
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechHistoryPage"?"active":"")"
+                                       asp-controller="ElitechHistoryPage" asp-action="Index">
+                                        <i class="bi bi-activity me-1"></i>Biểu đồ
+                                    </a>
+
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["action"]?.ToString()=="MyDevices"?"active":"")"
+                                       asp-controller="User" asp-action="MyDevices">
+                                        <i class="bi bi-cpu me-1"></i>Thiết bị của tôi
+                                    </a>
+                                }
+                            </nav>
+
+                            <!-- SEARCH + USER DROPDOWN -->
+                            <div class="d-flex align-items-center gap-3 ms-auto">
+
+                                <div class="elx-search-wrap d-none d-sm-flex">
+                                    <div class="elx-search w-100">
+                                        <i class="bi bi-search"></i>
+                                        <input type="search" placeholder="Search devices…" />
+                                        <span class="small text-uppercase" style="font-size:.65rem;opacity:.7;">Ctrl+K</span>
+                                    </div>
+                                </div>
+
+                                <ul class="navbar-nav ms-auto flex-row align-items-center">
+                                    <li class="nav-item me-2">
+                                        <a class="nav-link text-light" href="#"><i class="bi bi-bell-fill"></i></a>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <button class="btn btn-sm btn-outline-light border-0 d-flex align-items-center gap-2 px-2 py-1"
+                                                type="button" data-bs-toggle="dropdown">
+                                            <span class="elx-avatar"><i class="bi bi-person-fill"></i></span>
+                                            <span class="d-none d-sm-flex flex-column align-items-start">
+                                                <span style="font-size:.8rem;font-weight:600;">@User.Identity?.Name</span>
+                                                <span class="text-muted" style="font-size:.7rem;">
+                                                    @(isAdmin ? "Elitech Admin" : "Elitech User")
+                                                </span>
+                                            </span>
+                                            <i class="bi bi-chevron-down small"></i>
+                                        </button>
+
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                                    <i class="bi bi-person me-2"></i> Profile
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="Account" asp-action="Settings">
+                                                    <i class="bi bi-gear me-2"></i> Settings
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider" /></li>
+                                            <li>
+                                                <form asp-controller="Login" asp-action="Logout" method="post" class="m-0">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- CHƯA ĐĂNG NHẬP -->
+                            <div class="ms-auto">
+                                <a asp-controller="Login" asp-action="Index"
+                                   class="btn btn-sm btn-light fw-bold px-3 py-1 rounded-pill">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập
+                                </a>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Mobile nav -->
+                    <div class="collapse pb-2" id="elxNavMobile">
+                        <nav class="nav flex-column gap-1">
+                            @if (User?.Identity?.IsAuthenticated == true)
+                            {
+                                if (User.IsInRole("Admin"))
+                                {
+                                    <a class="nav-link text-light @(ViewContext.RouteData.Values["controller"]?.ToString()=="Admin"?"fw-bold":"")"
+                                       asp-controller="Admin" asp-action="Index"><i class="bi bi-speedometer2 me-1"></i> Dashboard</a>
+
+                                    <a class="nav-link text-light @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechHistoryPage"?"fw-bold":"")"
+                                       asp-controller="ElitechHistoryPage" asp-action="Index"><i class="bi bi-hdd-rack me-1"></i> History</a>
+
+                                    <a class="nav-link text-light @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechRealtime"?"fw-bold":"")"
+                                       asp-controller="ElitechRealtime" asp-action="Index"><i class="bi bi-bell me-1"></i> Realtime</a>
+
+                                    <a class="nav-link text-light @(ViewContext.RouteData.Values["action"]?.ToString()=="AssignDevices"?"fw-bold":"")"
+                                       asp-controller="Admin" asp-action="AssignDevices"><i class="bi bi-graph-up me-1"></i> AssignDevices</a>
+                                }
+                                else
+                                {
+                                    <a class="nav-link text-light @(ViewContext.RouteData.Values["controller"]?.ToString()=="User"?"fw-bold":"")"
+                                       asp-controller="User" asp-action="Index"><i class="bi bi-house-door me-1"></i> Dashboard</a>
+
+                                    <a class="nav-link text-light @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechHistoryPage"?"fw-bold":"")"
+                                       asp-controller="ElitechHistoryPage" asp-action="Index"><i class="bi bi-activity me-1"></i> Biểu đồ</a>
+
+                                    <a class="nav-link text-light @(ViewContext.RouteData.Values["action"]?.ToString()=="MyDevices"?"fw-bold":"")"
+                                       asp-controller="User" asp-action="MyDevices"><i class="bi bi-cpu me-1"></i> Thiết bị của tôi</a>
+                                }
+                            }
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Main ===== -->
+        <main class="elx-main">
+            <div class="container-xl">
+                @RenderBody()
+            </div>
+        </main>
+
+        <!-- ===== Footer ===== -->
+        <footer class="elx-footer-dark pt-5 mt-auto">
+            <div class="container-xl position-relative">
+                <div class="row g-4 align-items-start">
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="elx-footer-logo">
+                                <img src="~/Pictures/logo.png" class="img-fluid" alt="SmartTech logo" />
+                            </div>
+                            <span class="elx-footer-badge"><i class="bi bi-cpu"></i> SmartTech • AI Lab</span>
+                        </div>
+                        <h6>GIỚI THIỆU</h6>
+                        <p><strong>SMARTTECH</strong> – cung cấp giải pháp công nghệ thông minh cho doanh nghiệp.</p>
+                        <ul class="elx-footer-list">
+                            <li><i class="bi bi-geo-alt"></i><span>200/1 Phan Đăng Lưu, Q.Phú Nhuận, HCMC</span></li>
+                            <li><i class="bi bi-telephone"></i><span>028-7300-3603 • 1900-633-603</span></li>
+                            <li><i class="bi bi-envelope"></i><span>sales@smarttechco.com.vn</span></li>
+                            <li><i class="bi bi-check2-all"></i><span>Giải pháp cảm biến • kho lạnh • chuẩn audit</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <h6>SMARTTECH VIETNAM</h6>
+                        <div class="ratio ratio-16x9 mb-2">
+                            @* FIX: iframe phải dùng /embed/ *@
+                            <iframe src="https://www.youtube.com/embed/Jm8bJoOCHlM"
+                                    title="SmartTech Video"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                        </div>
+                        <div>Hotline: <strong>0903.444.073</strong> • <strong>0988.527.375</strong></div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-2">
+                        <h6>LIÊN KẾT NHANH</h6>
+                        <ul class="elx-footer-list">
+                            <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                            <li><a href="#">Về SmartTech</a></li>
+                            <li><a href="#">Sản phẩm</a></li>
+                            <li><a href="#">Liên hệ</a></li>
+                            <li><a asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-8 col-lg-2">
+                        <h6>ĐỐI TÁC CHIẾN LƯỢC</h6>
+                        <div class="elx-footer-partners">
+                            <div class="elx-partner-pill">
+                                <img src="https://via.placeholder.com/26" alt="LogTag" /><span>LogTag Online</span>
+                            </div>
+                            <div class="elx-partner-pill">
+                                <img src="https://via.placeholder.com/26" alt="SmartTech" /><span>SmartTech</span>
+                            </div>
+                            <div class="elx-partner-pill">
+                                <img src="https://via.placeholder.com/26" alt="LogTag Cloud" /><span>LogTag Cloud</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="elx-footer-bottom py-3 mt-4">
+                <div class="container-xl d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div>© @DateTime.UtcNow.Year SmartTech • All rights reserved</div>
+                    <div class="d-flex gap-3">
+                        <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a href="https://www.elitechus.com/" target="_blank" rel="noopener">Elitech Website</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div id="elitechToastHost" style="position:fixed;right:18px;top:18px;z-index:4000;max-width:420px"></div>
+        <script>
+
+            (function(){
+
+              const host = document.getElementById('elitechToastHost');
+
+              if(!host) return;
+
+
+
+              // =========================
+
+              // (A) Persist "seen" across page reloads / navigation
+
+              // =========================
+
+              const LS_KEY = 'elitech\_seen\_alert\_ids\_v1';
+
+
+
+              function loadSeen(){
+
+                try{
+
+                  const raw = localStorage.getItem(LS_KEY);
+
+                  const arr = raw ? JSON.parse(raw) : [];
+
+                  // chỉ nhận mảng string
+
+                  return new Set(Array.isArray(arr) ? arr.filter(x => typeof x === 'string') : []);
+
+                }catch{
+
+                  return new Set();
+
+                }
+
+              }
+
+
+
+              function saveSeen(set){
+
+                try{
+
+                  // giới hạn 300 ids gần nhất để khỏi phình localStorage
+
+                  const arr = Array.from(set);
+
+                  const trimmed = arr.length > 300 ? arr.slice(arr.length - 300) : arr;
+
+                  localStorage.setItem(LS_KEY, JSON.stringify(trimmed));
+
+                }catch{}
+
+              }
+
+
+
+              const seen = loadSeen();
+
+
+
+              // =========================
+
+              // Audio unlock
+
+              // =========================
+
+              let audioUnlocked = false;
+
+
+
+              function playBeep(volume=0.2, durationMs=180, freq=880){
+
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+
+                const ctx = new AudioCtx();
+
+                const o = ctx.createOscillator();
+
+                const g = ctx.createGain();
+
+                o.type = 'sine';
+
+                o.frequency.value = freq;
+
+                g.gain.value = volume;
+
+                o.connect(g);
+
+                g.connect(ctx.destination);
+
+                o.start();
+
+                setTimeout(() => { o.stop(); ctx.close(); }, durationMs);
+
+              }
+
+
+
+              function unlockAudio(){
+
+                if(audioUnlocked) return;
+
+                audioUnlocked = true;
+
+                try { playBeep(0.05, 120, 880); } catch {}
+
+                window.removeEventListener('click', unlockAudio);
+
+                window.removeEventListener('keydown', unlockAudio);
+
+              }
+
+              window.addEventListener('click', unlockAudio, { once: true });
+
+              window.addEventListener('keydown', unlockAudio, { once: true });
+
+
+
+              // =========================
+
+              // Helper: stable id key
+
+              // (chỉ để phục vụ nguyên nhân A: persist seen)
+
+              // =========================
+
+              function stableKey(a){
+
+                // ưu tiên id string (nếu có)
+
+                const raw = a?.id ?? a?._id ?? a?.Id ?? a?.ID;
+
+                if(typeof raw === 'string' && raw.trim()) return raw.trim();
+
+
+
+                // fallback nếu không có id: deviceGuid + occurredAtUtc
+
+                const dg = (a?.deviceGuid ?? a?.DeviceGuid ?? '').toString().trim();
+
+                const ts = (a?.occurredAtUtc ?? a?.OccurredAtUtc ?? '').toString().trim();
+
+                return (dg && ts) ? (dg + '|' + ts) : (dg || ts || JSON.stringify(a));
+
+              }
+
+
+
+              function toastAlert(a){
+
+                const key = stableKey(a);
+
+
+
+                // ✅ chống spam khi reload/chuyển trang
+
+                if(seen.has(key)) return;
+
+                seen.add(key);
+
+                saveSeen(seen);
+
+
+
+                const dev = (a?.deviceName ?? a?.DeviceName ?? 'Device').toString();
+
+                const reasons = (a?.reasons ?? a?.Reasons ?? '').toString();
+
+                const whenRaw = a?.occurredAtUtc ?? a?.OccurredAtUtc;
+
+                const when = whenRaw ? new Date(whenRaw).toLocaleString() : '';
+
+
+
+                const el = document.createElement('div');
+
+                el.style.cssText = `
+
+                  background:#111827;color:#fff;border-radius:14px;padding:12px 14px;margin-bottom:10px;
+
+                  box-shadow:0 18px 40px rgba(0,0,0,.18);cursor:pointer;border:1px solid rgba(255,255,255,.1)
+
+                `;
+
+                el.innerHTML = `
+
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+
+                    <div style="font-weight:900">⚠️ ${dev}</div>
+
+                    <div style="opacity:.75;font-size:12px">${when}</div>
+
+                  </div>
+
+                  <div style="opacity:.9;margin-top:6px;font-size:13px">${reasons || 'ALARM'}</div>
+
+                  <div style="opacity:.75;margin-top:6px;font-size:12px">Bấm để xem chi tiết</div>
+
+                `;
+
+
+
+                el.addEventListener('click', async () => {
+
+                  // ✅ giữ nguyên behavior: chỉ mark-read khi click
+
+                  try{
+
+                    const oid = a?.id ?? a?._id ?? a?.Id ?? a?.ID;
+
+                    if(typeof oid === 'string' && oid.trim()){
+
+                      await fetch('/api/elitech/alerts/mark-read?id=' + encodeURIComponent(oid.trim()), { method:'POST' });
+
+                    }
+
+                  }catch{}
+
+
+
+                  window.location.href = '/ElitechRealtimePage';
+
+                  // hoặc:
+
+                  // const dg = a?.deviceGuid ?? a?.DeviceGuid ?? '';
+
+                  // window.location.href = '/ElitechRealtime?deviceGuids=' + encodeURIComponent(dg);
+
+                });
+
+
+
+                host.appendChild(el);
+
+
+
+                if(audioUnlocked){
+
+                  try { playBeep(0.25, 220, 880); } catch {}
+
+                }
+
+
+
+                setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .25s'; }, 9000);
+
+                setTimeout(()=>{ el.remove(); }, 9400);
+
+              }
+
+
+
+              async function pollUnread(){
+
+                try{
+
+                  const res = await fetch('/api/elitech/alerts/unread?take=5', { cache: 'no-store' });
+
+                  if(!res.ok) return;
+
+                  const json = await res.json();
+
+                  const list = json?.data ?? [];
+
+                  list.reverse().forEach(toastAlert);
+
+                }catch{}
+
+              }
+
+
+
+              pollUnread();
+
+              setInterval(pollUnread, 15000);
+
+            })();
+
+        </script>
+
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

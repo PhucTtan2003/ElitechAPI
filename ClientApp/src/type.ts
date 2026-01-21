@@ -1,0 +1,1 @@
+export type MeInfo = { name: string | null; role: string | null }
