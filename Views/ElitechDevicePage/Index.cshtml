@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "🔧 Elitech Device Info";
+    var deviceGuids = (ViewBag.DeviceGuids as string) ?? "";
+}
+<div class="container py-3">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h3 class="mb-0">🔧 Elitech Device Info</h3>
+        <small class="text-muted">Device GUIDs: <code id="guidShow">@deviceGuids</code></small>
+    </div>
+
+    <form method="get" class="d-flex gap-2 flex-wrap mb-3">
+        <input name="deviceGuids" class="form-control" placeholder="GUID1,GUID2" value="@deviceGuids" />
+        <button class="btn btn-primary">Load</button>
+        <button type="button" id="btnFetch" class="btn btn-outline-secondary">Fetch via API</button>
+    </form>
+
+    <div id="err" class="alert alert-warning d-none"></div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-striped align-middle" id="tbl">
+            <thead>
+                <tr>
+                    <th>Tên thiết bị</th>
+                    <th>GUID</th>
+                    <th>Loại thiết bị</th>
+                    <th>Scene</th>
+                    <th>SubUID</th>
+                    <th>SMS</th>
+                    <th>Voice</th>
+                    <th>Hết hạn</th>
+                    <th>Lần cuối</th>
+                </tr>
+            </thead>
+            <tbody id="body"><tr><td colspan="10" class="text-muted">No data</td></tr></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const qs = new URLSearchParams(window.location.search);
+    const deviceGuids = (qs.get('deviceGuids') || '@deviceGuids').trim();
+    const body = document.getElementById('body');
+    const err = document.getElementById('err');
+
+    function showErr(m){ err.textContent = m; err.classList.remove('d-none'); }
+    function hideErr(){ err.classList.add('d-none'); err.textContent = ''; }
+    function fmtTime(sec){ if(!sec) return ""; return new Date(sec*1000).toLocaleString(); }
+    function c(x){ return x==null?"":String(x); }
+
+    async function fetchInfo(){
+      if(!deviceGuids){ showErr("Hãy nhập deviceGuids"); return; }
+      hideErr();
+      const url = `/api/elitech/device-info?deviceGuids=${encodeURIComponent(deviceGuids)}`;
+      const res = await fetch(url, { cache:"no-store" });
+      if(!res.ok){
+        let text = await res.text().catch(()=> "");
+        try { text = (JSON.parse(text).message || text); } catch {}
+        showErr(`API lỗi: ${res.status} — ${text}`);
+        return;
+      }
+      const json = await res.json();
+      const rows = json?.data ?? [];
+      if(rows.length===0){
+        body.innerHTML = `<tr><td colspan="10" class="text-muted">Không có dữ liệu</td></tr>`;
+        return;
+      }
+    body.innerHTML = rows.map(x => `
+      <tr>
+        <td>${x.deviceName || "-"}</td>
+        <td><code>${x.deviceGuid}</code></td>
+        <td>${x.deviceTypeName || "-"}</td>
+        <td>${x.sceneName || "-"}</td>
+        <td>${x.subUid ?? "-"}</td>
+        <td>${x.smsCount ?? 0}</td>
+        <td>${x.voiceCount ?? 0}</td>
+        <td>${x.expiredTime ? new Date(x.expiredTime*1000).toLocaleString() : "-"}</td>
+        <td>${x.lastTimeStr || (x.lastTime ? new Date(x.lastTime*1000).toLocaleString() : "-")}</td>
+      </tr>
+    `).join("");
+    }
+
+    document.getElementById('btnFetch').addEventListener('click', fetchInfo);
+    if (deviceGuids) fetchInfo(); // tự fetch nếu đã có query
+</script>

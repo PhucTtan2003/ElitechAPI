@@ -1,0 +1,648 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Elitech</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Elitech.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/app/asset-admin.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --elx-orange: #F58220;
+            --elx-orange-600: #e36f15;
+            --elx-navy: #0D47A1;
+            --elx-navy-800: #0F2E6E;
+            --elx-bg: #F3F6FB;
+            --elx-text: #0e1320;
+            --elx-muted: #6b7280;
+            --elx-card: #fff;
+            --elx-border: #e6e8ef;
+            --elx-radius: 14px;
+            --elx-shadow: 0 8px 24px rgba(13,25,55,.08);
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--elx-text);
+            background: radial-gradient(1200px 600px at 100% -20%, rgba(245,130,32,.08), transparent 50%), var(--elx-bg);
+        }
+
+        /* ===== Header ===== */
+        .elx-topbar {
+            background: var(--elx-navy-800);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .elx-brand {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+        }
+
+            .elx-brand .logo {
+                width: 28px;
+                height: 28px;
+                border-radius: 8px;
+                background: linear-gradient(135deg, var(--elx-navy), #1E88E5);
+            }
+
+        .elx-nav .nav-link {
+            color: rgba(255,255,255,.9) !important;
+            font-weight: 600;
+        }
+
+            .elx-nav .nav-link:hover,
+            .elx-nav .nav-link.active {
+                color: #fff !important;
+                text-decoration: underline;
+            }
+
+        .elx-search {
+            background: #0f2b64;
+            border: 1px solid rgba(255,255,255,.18);
+            color: #fff;
+            border-radius: 10px;
+            padding: .35rem .6rem;
+        }
+
+            .elx-search::placeholder {
+                color: #c5d0ee;
+            }
+
+        /* ===== Main ===== */
+        .elx-main {
+            min-height: calc(100vh - 160px);
+        }
+
+        /* ===== Footer (dark) ===== */
+        :root {
+            --elx-navy-900: #0A1322;
+            --elx-muted-footer: #9aa6bf;
+            --elx-stroke: rgba(255,255,255,.08);
+        }
+
+        .elx-footer-dark {
+            background: radial-gradient(900px 380px at 85% -15%, rgba(39,195,243,.08), transparent 45%), radial-gradient(800px 380px at 5% 0%, rgba(245,130,32,.08), transparent 55%), var(--elx-navy-900);
+            color: #eaf0ff;
+            border-top: 1px solid var(--elx-stroke);
+            position: relative;
+        }
+
+            .elx-footer-dark::before,
+            .elx-footer-dark::after {
+                content: "";
+                position: absolute;
+                pointer-events: none;
+                opacity: .25;
+                background: radial-gradient(2px 2px at 10% 30%, #7cc6ff 60%, transparent 61%), radial-gradient(2px 2px at 25% 70%, #7cc6ff 60%, transparent 61%), radial-gradient(2px 2px at 60% 20%, #7cc6ff 60%, transparent 61%), radial-gradient(2px 2px at 85% 45%, #7cc6ff 60%, transparent 61%), radial-gradient(2px 2px at 70% 80%, #7cc6ff 60%, transparent 61%);
+            }
+
+            .elx-footer-dark::before {
+                inset: 0 0 60% 0;
+            }
+
+            .elx-footer-dark::after {
+                inset: 40% 0 0 0;
+            }
+
+            .elx-footer-dark h6 {
+                font-weight: 800;
+                color: #fff;
+                margin-bottom: .5rem;
+            }
+
+            .elx-footer-dark p, .elx-footer-dark span, .elx-footer-dark li, .elx-footer-dark a {
+                color: #cbd5e1;
+            }
+
+                .elx-footer-dark a:hover {
+                    color: #fff;
+                    text-decoration: underline;
+                }
+
+        .elx-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0b2744;
+            color: #bfeaff;
+            border: 1px solid var(--elx-stroke);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: .9rem;
+        }
+
+        .elx-footer-dark .logo {
+            width: 66px;
+            height: 66px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--elx-stroke);
+        }
+
+        .elx-footer-dark .info-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+            .elx-footer-dark .info-list li {
+                margin: .4rem 0;
+                display: flex;
+                gap: .6rem;
+                align-items: flex-start;
+            }
+
+            .elx-footer-dark .info-list i {
+                width: 24px;
+                height: 24px;
+                display: grid;
+                place-items: center;
+                border-radius: 8px;
+                background: #0b2744;
+                color: #cde6ff;
+                border: 1px solid var(--elx-stroke);
+                font-size: .9rem;
+            }
+
+        .elx-footer-dark .partners {
+            background: rgba(255,255,255,.05);
+            border: 1px solid var(--elx-stroke);
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .partner-pill {
+            background: #101e36;
+            border: 1px solid var(--elx-stroke);
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .partner-pill img {
+                width: 26px;
+                height: 26px;
+                border-radius: 6px;
+                object-fit: cover;
+                background: #09152a;
+            }
+
+            .partner-pill span {
+                color: #cfe0ff;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+
+        .elx-copyright {
+            background: #0b1425;
+            border-top: 1px solid var(--elx-stroke);
+            color: #b8c6e3;
+        }
+
+            .elx-copyright a {
+                color: #8ecbff;
+                text-decoration: none;
+                font-weight: 700;
+            }
+
+                .elx-copyright a:hover {
+                    text-decoration: underline;
+                }
+
+        .elx-footer-dark .logo img {
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.08);
+            box-shadow: 0 4px 14px rgba(0,0,0,.3);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+            .elx-footer-dark .logo img:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 18px rgba(0,0,0,.5);
+            }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg elx-topbar navbar-dark">
+            <div class="container-xl">
+
+                @* ===== BRAND (Admin vs User) ===== *@
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="elx-brand" asp-controller="Admin" asp-action="Index">
+                        <span class="logo"></span><span>Elitech Admin</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="elx-brand" asp-controller="User" asp-action="Index">
+                        <span class="logo"></span><span>Elitech User</span>
+                    </a>
+                }
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#elxNav"
+                        aria-controls="elxNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div id="elxNav" class="collapse navbar-collapse">
+
+                    @* ===== MENU (Admin vs User) ===== *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 elx-nav">
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "active" : "")"
+                                   asp-controller="Admin" asp-action="Index">
+                                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Devices" ? "active" : "")"
+                                   asp-controller="ElitechHistoryPage" asp-action="Index">
+                                    <i class="bi bi-cpu me-1"></i>Devices
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Alerts" ? "active" : "")"
+                                   asp-controller="ElitechRealtimePage" asp-action="Index">
+                                    <i class="bi bi-bell me-1"></i>Realtime
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "")"
+                                   asp-controller="Admin" asp-action="AssignDevices">
+                                    <i class="bi bi-graph-up me-1"></i>AssignDevices
+                                </a>
+                            </li>
+
+                            @* Trang biểu đồ (Admin view) *@
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "ElitechHistoryPage" ? "active" : "")"
+                                   asp-controller="ElitechHistoryPage" asp-action="Index">
+                                    <i class="bi bi-activity me-1"></i>History Chart
+                                </a>
+                            </li>
+                        </ul>
+
+                        <form class="d-flex align-items-center gap-2 mb-2 mb-lg-0" role="search">
+                            <input class="form-control form-control-sm elx-search" type="search"
+                                   placeholder="Search devices…" aria-label="Search">
+                            <button class="btn btn-sm btn-light" type="submit"><i class="bi bi-search"></i></button>
+                        </form>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 elx-nav">
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")"
+                                   asp-controller="User" asp-action="Index">
+                                    <i class="bi bi-house-door me-1"></i>Dashboard
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "ElitechHistoryPage" ? "active" : "")"
+                                   asp-controller="ElitechHistoryPage" asp-action="Index">
+                                    <i class="bi bi-activity me-1"></i>Biểu đồ
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="ElitechDevicePage" asp-action="Index">
+                                    <i class="bi bi-cpu me-1"></i>Thiết bị của tôi
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(Context.Request.Path.StartsWithSegments("/alerts") ? "active" : "")"
+                                   href="/alerts">
+                                    <i class="bi bi-bell me-1"></i>Cảnh báo
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(Context.Request.Path.StartsWithSegments("/alert-events") ? "active" : "")"
+                                   href="/alert-events">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>Alert Events
+                                </a>
+                            </li>
+                        </ul>
+                    }
+
+                    @* ===== RIGHT SIDE (common) ===== *@
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="#"><i class="bi bi-bell-fill"></i></a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                               role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i> @User.Identity?.Name
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                        <i class="bi bi-person"></i> Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Settings">
+                                        <i class="bi bi-gear"></i> Settings
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form asp-controller="Login" asp-action="Logout" method="post" class="m-0">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="elx-main py-3">
+        <div class="container-xl">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer class="elx-footer-dark pt-5">
+        <div class="container-xl">
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <div class="logo">
+                            <img src="~/Pictures/logo.png" class="img-fluid" alt="SmartTech logo">
+                        </div>
+                        <span class="elx-badge"><i class="bi bi-cpu"></i> SmartTech • AI Lab</span>
+                    </div>
+                    <h6>GIỚI THIỆU</h6>
+                    <p><strong>SMARTTECH</strong> – cung cấp giải pháp công nghệ thông minh cho doanh nghiệp.</p>
+                    <ul class="info-list">
+                        <li><i class="bi bi-geo-alt"></i><span>200/1 Phan Đăng Lưu, Q.Phú Nhuận, HCMC</span></li>
+                        <li><i class="bi bi-telephone"></i><span>028-7300-3603 • 1900-633-603</span></li>
+                        <li><i class="bi bi-envelope"></i><span>sales@smarttechco.com.vn</span></li>
+                        <li><i class="bi bi-check2-all"></i><span>Giải pháp cảm biến • kho lạnh • chuẩn audit</span></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h6>SMARTTECH VIETNAM</h6>
+                    <div class="ratio ratio-16x9 mb-2">
+                        <iframe src="https://www.youtube.com/embed/Jm8bJoOCHlM"
+                                title="SmartTech Video"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div>Hotline: <strong>0903.444.073</strong> • <strong>0988.527.375</strong></div>
+                </div>
+
+                <div class="col-md-4 col-lg-2">
+                    <h6>LIÊN KẾT NHANH</h6>
+                    <ul class="info-list">
+                        <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                        <li><a href="#">Về SmartTech</a></li>
+                        <li><a href="#">Sản phẩm</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-8 col-lg-2">
+                    <h6>ĐỐI TÁC CHIẾN LƯỢC</h6>
+                    <div class="partners">
+                        <div class="partner-pill"><img src="https://via.placeholder.com/26" alt="LogTag"><span>LogTag Online</span></div>
+                        <div class="partner-pill"><img src="https://via.placeholder.com/26" alt="SmartTech"><span>SmartTech</span></div>
+                        <div class="partner-pill"><img src="https://via.placeholder.com/26" alt="LogTag Cloud"><span>LogTag Cloud</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="elx-copyright py-3 mt-4">
+            <div class="container-xl d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div>© @DateTime.UtcNow.Year SmartTech • All rights reserved</div>
+                <div class="d-flex gap-3">
+                    <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    <a href="https://www.elitechus.com/" target="_blank">Elitech Website</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== Elitech Alerts Toast Host (global) ===== -->
+    <div id="elitechToastHost" style="position:fixed;right:18px;top:18px;z-index:4000;max-width:420px"></div>
+
+    <script>
+        (function(){
+          const host = document.getElementById('elitechToastHost');
+          if(!host) return;
+
+          // =========================
+          // (A) Persist "seen" across page reloads / navigation
+          // =========================
+          const LS_KEY = 'elitech_seen_alert_ids_v1';
+
+          function loadSeen(){
+            try{
+              const raw = localStorage.getItem(LS_KEY);
+              const arr = raw ? JSON.parse(raw) : [];
+              // chỉ nhận mảng string
+              return new Set(Array.isArray(arr) ? arr.filter(x => typeof x === 'string') : []);
+            }catch{
+              return new Set();
+            }
+          }
+
+          function saveSeen(set){
+            try{
+              // giới hạn 300 ids gần nhất để khỏi phình localStorage
+              const arr = Array.from(set);
+              const trimmed = arr.length > 300 ? arr.slice(arr.length - 300) : arr;
+              localStorage.setItem(LS_KEY, JSON.stringify(trimmed));
+            }catch{}
+          }
+
+          const seen = loadSeen();
+
+          // =========================
+          // Audio unlock
+          // =========================
+          let audioUnlocked = false;
+
+          function playBeep(volume=0.2, durationMs=180, freq=880){
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            const ctx = new AudioCtx();
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.type = 'sine';
+            o.frequency.value = freq;
+            g.gain.value = volume;
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.start();
+            setTimeout(() => { o.stop(); ctx.close(); }, durationMs);
+          }
+
+        // =========================
+        // Audio unlock
+        // =========================
+        let audioUnlocked = false;
+        const AUDIO_KEY = 'elitech_audio_unlocked_v1';
+
+        function playBeep(volume=0.2, durationMs=180, freq=880){
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          const ctx = new AudioCtx();
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = 'sine';
+          o.frequency.value = freq;
+          g.gain.value = volume;
+          o.connect(g);
+          g.connect(ctx.destination);
+          o.start();
+          setTimeout(() => { o.stop(); ctx.close(); }, durationMs);
+        }
+
+        // nếu đã từng unlock trước đó (ở page trước), coi như unlocked luôn
+        try {
+          if (localStorage.getItem(AUDIO_KEY) === '1') audioUnlocked = true;
+        } catch {}
+
+        function unlockAudio(){
+          if(audioUnlocked) return;
+
+          audioUnlocked = true;
+          try { localStorage.setItem(AUDIO_KEY, '1'); } catch {}
+
+          // ❌ bỏ beep lúc unlock để khỏi "tít" mỗi lần bấm điều hướng
+          // (beep chỉ nên phát khi có alert thật)
+          window.removeEventListener('click', unlockAudio);
+          window.removeEventListener('keydown', unlockAudio);
+        }
+
+        window.addEventListener('click', unlockAudio, { once: true });
+        window.addEventListener('keydown', unlockAudio, { once: true });
+
+          // =========================
+          // Helper: stable id key
+          // (chỉ để phục vụ nguyên nhân A: persist seen)
+          // =========================
+          function stableKey(a){
+            // ưu tiên id string (nếu có)
+            const raw = a?.id ?? a?._id ?? a?.Id ?? a?.ID;
+            if(typeof raw === 'string' && raw.trim()) return raw.trim();
+
+            // fallback nếu không có id: deviceGuid + occurredAtUtc
+            const dg = (a?.deviceGuid ?? a?.DeviceGuid ?? '').toString().trim();
+            const ts = (a?.occurredAtUtc ?? a?.OccurredAtUtc ?? '').toString().trim();
+            return (dg && ts) ? (dg + '|' + ts) : (dg || ts || JSON.stringify(a));
+          }
+
+          function toastAlert(a){
+            const key = stableKey(a);
+
+            // ✅ chống spam khi reload/chuyển trang
+            if(seen.has(key)) return;
+            seen.add(key);
+            saveSeen(seen);
+
+            const dev = (a?.deviceName ?? a?.DeviceName ?? 'Device').toString();
+            const reasons = (a?.reasons ?? a?.Reasons ?? '').toString();
+            const whenRaw = a?.occurredAtUtc ?? a?.OccurredAtUtc;
+            const when = whenRaw ? new Date(whenRaw).toLocaleString() : '';
+
+            const el = document.createElement('div');
+            el.style.cssText = `
+              background:#111827;color:#fff;border-radius:14px;padding:12px 14px;margin-bottom:10px;
+              box-shadow:0 18px 40px rgba(0,0,0,.18);cursor:pointer;border:1px solid rgba(255,255,255,.1)
+            `;
+            el.innerHTML = `
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                <div style="font-weight:900">⚠️ ${dev}</div>
+                <div style="opacity:.75;font-size:12px">${when}</div>
+              </div>
+              <div style="opacity:.9;margin-top:6px;font-size:13px">${reasons || 'ALARM'}</div>
+              <div style="opacity:.75;margin-top:6px;font-size:12px">Bấm để xem chi tiết</div>
+            `;
+
+            el.addEventListener('click', async () => {
+              // ✅ giữ nguyên behavior: chỉ mark-read khi click
+              try{
+                const oid = a?.id ?? a?._id ?? a?.Id ?? a?.ID;
+                if(typeof oid === 'string' && oid.trim()){
+                  await fetch('/api/elitech/alerts/mark-read?id=' + encodeURIComponent(oid.trim()), { method:'POST' });
+                }
+              }catch{}
+
+              window.location.href = '/realtime';
+            });
+
+            host.appendChild(el);
+
+            if(audioUnlocked){
+              try { playBeep(0.25, 220, 880); } catch {}
+            }
+
+            setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .25s'; }, 9000);
+            setTimeout(()=>{ el.remove(); }, 9400);
+          }
+
+          async function pollUnread(){
+            try{
+              const res = await fetch('/api/elitech/alerts/unread?take=5', { cache: 'no-store' });
+              if(!res.ok) return;
+              const json = await res.json();
+              const list = json?.data ?? [];
+              list.reverse().forEach(toastAlert);
+            }catch{}
+          }
+
+          pollUnread();
+          setInterval(pollUnread, 15000);
+        })();
+    </script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+﻿html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* ===== Login layout ===== */
+.login-wrap {
+    min-height: calc(100vh - 120px);
+}
+
+.login-card {
+    width: min(520px, 94vw);
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+    position: relative;
+}
+
+    /* Vạch viền gradient mỏng (cam → xanh) */
+    .login-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        padding: 1px;
+        background: linear-gradient(135deg, #ff7a00, #0ea5e9);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+
+/* Brand/Icon zone */
+.brand-badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(255, 122, 0, .08), rgba(14, 165, 233, .08));
+    padding: 28px 16px 16px;
+    position: relative;
+}
+
+    .brand-badge .brand-circle {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 32px;
+        color: #0f172a;
+        background: #fff;
+        border: 2px solid rgba(14, 165, 233, .35);
+        box-shadow: 0 8px 22px rgba(2, 132, 199, .12);
+    }
+
+    .brand-badge img {
+        max-height: 74px;
+    }
+
+/* Subtitle nhỏ */
+.tiny-muted {
+    color: #6b7280;
+    font-size: 0.925rem;
+}
+
+/* Form area */
+.login-fields {
+    background: #fff;
+}
+
+/* Input group style Elitech */
+.elitech-input .input-group-text {
+    background: #fff;
+    border-right: 0;
+}
+
+.elitech-input .form-control {
+    border-left: 0;
+}
+
+    .elitech-input .form-control:focus,
+    .elitech-input .input-group-text:focus {
+        box-shadow: none;
+    }
+
+.elitech-input {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(2, 132, 199, .25);
+}
+
+    .elitech-input:focus-within {
+        border-color: rgba(255, 122, 0, .7);
+        box-shadow: 0 0 0 4px rgba(255, 122, 0, .12);
+    }
+
+/* Eye button */
+.btn-eye {
+    border-left: 0 !important;
+}
+
+/* CTA button */
+.btn-elitech {
+    --c1: #ff7a00; /* cam */
+    --c2: #0ea5e9; /* xanh */
+    border: none;
+    color: #fff;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    border-radius: 12px;
+    transition: transform .05s ease, filter .2s ease;
+}
+
+    .btn-elitech:hover {
+        filter: brightness(1.05);
+    }
+
+    .btn-elitech:active {
+        transform: translateY(1px);
+    }
+
+/* Small screen tune */
+@media (max-width: 480px) {
+    .brand-badge .brand-circle {
+        width: 64px;
+        height: 64px;
+        font-size: 28px;
+    }
+}

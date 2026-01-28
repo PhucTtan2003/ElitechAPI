@@ -1,0 +1,93 @@
+﻿@* Views/User/Index.cshtml *@
+@model Elitech.Models.ViewModels.UserDashboardVm
+
+@{
+    ViewData["Title"] = "User Dashboard";
+    Layout = "_Layout";
+
+    var selected = (Model.SelectedDeviceGuid ?? "").Trim();
+    var hasSelected = !string.IsNullOrWhiteSpace(selected);
+
+    var historyUrl = hasSelected ? $"/history?deviceGuid={Uri.EscapeDataString(selected)}" : "#";
+    var realtimeUrl = hasSelected ? $"/realtime?deviceGuid={Uri.EscapeDataString(selected)}" : "#"; // nếu có
+}
+
+<div class="container py-3">
+    <div class="d-flex flex-wrap gap-2 align-items-end justify-content-between">
+        <div>
+            <h3 class="mb-1">Thiết bị của tôi</h3>
+            <div class="text-muted">Chọn thiết bị đã được Admin gán để xem dữ liệu.</div>
+        </div>
+    </div>
+
+    <div class="mt-3 p-3 border rounded" style="max-width: 920px;">
+        <form method="get" class="d-flex flex-wrap gap-2 align-items-end">
+            <div style="min-width:320px; flex:1;">
+                <div style="font-weight:800; margin-bottom:6px;">Thiết bị được gán</div>
+
+                <select name="deviceGuid" class="form-select" style="border-radius:12px;">
+                    @if (Model.Devices.Count == 0)
+                    {
+                        <option value="">Chưa có thiết bị</option>
+                    }
+                    else
+                    {
+                        foreach (var d in Model.Devices)
+                        {
+                            var text = string.IsNullOrWhiteSpace(d.DeviceName)
+                            ? d.DeviceGuid
+                            : $"{d.DeviceName} — {d.DeviceGuid}";
+
+                            <option value="@d.DeviceGuid" selected="@(string.Equals(d.DeviceGuid, selected, StringComparison.OrdinalIgnoreCase))">
+                                @text
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-outline-primary" disabled="@(Model.Devices.Count == 0)">
+                🔄 Áp dụng
+            </button>
+
+            <a class="btn btn-primary @(hasSelected ? "" : "disabled")"
+               href="@(hasSelected? historyUrl : "javascript:void(0)")"
+               aria-disabled="@(!hasSelected)">
+                📈 Xem biểu đồ
+            </a>
+
+            <a class="btn btn-outline-secondary @(hasSelected ? "" : "disabled")"
+               href="@(hasSelected? realtimeUrl : "javascript:void(0)")"
+               aria-disabled="@(!hasSelected)">
+                ⚡ Realtime
+            </a>
+        </form>
+
+        <div class="text-muted mt-2">
+            * User chỉ xem được thiết bị đã được Admin gán.
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1" style="max-width: 920px;">
+        <div class="col-12 col-md-4">
+            <div class="p-3 border rounded h-100">
+                <div style="font-weight:800;">Trạng thái</div>
+                <div class="text-muted mt-2">
+                    @(hasSelected ? "Phase 1: placeholder" : "Vui lòng chọn thiết bị")
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="p-3 border rounded h-100">
+                <div style="font-weight:800;">Cảnh báo</div>
+                <div class="text-muted mt-2">Phase 1: placeholder</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="p-3 border rounded h-100">
+                <div style="font-weight:800;">Cập nhật gần nhất</div>
+                <div class="text-muted mt-2">Phase 1: placeholder</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,231 @@
+﻿@{
+    ViewData["Title"] = "Alert Events";
+    Layout = "_Layout";
+}
+
+<div class="container py-3" style="max-width: 1050px;">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-2">
+        <div>
+            <h3 class="mb-1">Alert Events</h3>
+            <div class="text-muted">Danh sách cảnh báo chưa đọc của tài khoản hiện tại (test page).</div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button id="btnReload" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-clockwise me-1"></i>Reload
+            </button>
+            <button id="btnMarkAll" class="btn btn-outline-danger">
+                <i class="bi bi-check2-all me-1"></i>Mark all read
+            </button>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex flex-wrap align-items-end gap-2">
+                <div style="min-width: 220px;">
+                    <label class="form-label mb-1">Take</label>
+                    <select id="take" class="form-select">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+
+                <div class="ms-auto text-muted" id="status" style="font-weight:700;"></div>
+            </div>
+
+            <hr class="my-3" />
+
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 170px;">Occurred</th>
+                            <th>Device</th>
+                            <th>Reasons</th>
+                            <th style="width: 110px;">Read</th>
+                            <th style="width: 140px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows">
+                        <tr>
+                            <td colspan="5" class="text-muted">Chưa có dữ liệu.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-muted mt-2" style="font-size: 12px;">
+                * Trang này gọi API: <code>/api/elitech/alerts/unread</code>, <code>/mark-read</code>, <code>/mark-all-read</code>.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+      const $rows = document.getElementById('rows');
+      const $status = document.getElementById('status');
+      const $take = document.getElementById('take');
+      const $btnReload = document.getElementById('btnReload');
+      const $btnMarkAll = document.getElementById('btnMarkAll');
+
+      function esc(s) {
+        return (s ?? "").toString()
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#039;');
+      }
+
+      function fmtTime(iso) {
+        try {
+          const d = new Date(iso);
+          if (isNaN(d.getTime())) return esc(iso);
+          return d.toLocaleString();
+        } catch {
+          return esc(iso);
+        }
+      }
+
+      function setStatus(text, kind) {
+        // kind: ok | err | info
+        $status.textContent = text || "";
+        $status.className = (kind === "err")
+          ? "text-danger"
+          : (kind === "ok")
+            ? "text-success"
+            : "text-muted";
+      }
+
+      async function loadUnread() {
+        const take = parseInt($take.value || "10", 10);
+        setStatus("Loading...", "info");
+
+        try {
+          const res = await fetch(`/api/elitech/alerts/unread?take=${encodeURIComponent(take)}`, {
+            credentials: "include",
+            cache: "no-store"
+          });
+
+          if (!res.ok) {
+            setStatus(`Load failed: ${res.status}`, "err");
+            return;
+          }
+
+          const json = await res.json();
+          const list = json?.data ?? [];
+
+          if (!Array.isArray(list) || list.length === 0) {
+            $rows.innerHTML = `<tr><td colspan="5" class="text-muted">Không có cảnh báo chưa đọc.</td></tr>`;
+            setStatus("0 unread", "ok");
+            return;
+          }
+
+          $rows.innerHTML = list.map(a => {
+            const id = a.id || a._id || a.Id || a.ID || "";
+            const deviceName = a.deviceName || a.DeviceName || "";
+            const deviceGuid = a.deviceGuid || a.DeviceGuid || "";
+            const reasons = a.reasons || a.Reasons || "";
+            const occurred = a.occurredAtUtc || a.OccurredAtUtc || "";
+            const isRead = a.isRead ?? a.IsRead;
+
+            return `
+              <tr data-id="${esc(id)}">
+                <td class="text-muted" style="white-space:nowrap;">${fmtTime(occurred)}</td>
+                <td>
+                  <div style="font-weight:800;">${esc(deviceName || "Device")}</div>
+                  <div class="text-muted" style="font-size:12px;">${esc(deviceGuid)}</div>
+                </td>
+                <td>${esc(reasons || "ALARM")}</td>
+                <td>
+                  <span class="badge ${isRead ? "bg-success" : "bg-warning text-dark"}">
+                    ${isRead ? "READ" : "UNREAD"}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-success btn-mark" data-id="${esc(id)}">
+                    <i class="bi bi-check2 me-1"></i>Mark read
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join("");
+
+          setStatus(`${list.length} unread`, "ok");
+        } catch (e) {
+          setStatus(`Error: ${e?.message || e}`, "err");
+        }
+      }
+
+      async function markRead(id) {
+        if (!id) return;
+        setStatus("Marking...", "info");
+
+        try {
+          const res = await fetch(`/api/elitech/alerts/mark-read?id=${encodeURIComponent(id)}`, {
+            method: "POST",
+            credentials: "include"
+          });
+
+          if (!res.ok) {
+            setStatus(`Mark-read failed: ${res.status}`, "err");
+            return;
+          }
+
+          const json = await res.json();
+          if (json?.ok) {
+            setStatus("Marked read", "ok");
+            // reload list
+            await loadUnread();
+          } else {
+            setStatus("No change (maybe already read)", "info");
+            await loadUnread();
+          }
+        } catch (e) {
+          setStatus(`Error: ${e?.message || e}`, "err");
+        }
+      }
+
+      async function markAllRead() {
+        if (!confirm("Mark ALL unread alerts as read?")) return;
+
+        setStatus("Marking all...", "info");
+        try {
+          const res = await fetch(`/api/elitech/alerts/mark-all-read`, {
+            method: "POST",
+            credentials: "include"
+          });
+
+          if (!res.ok) {
+            setStatus(`Mark-all-read failed: ${res.status}`, "err");
+            return;
+          }
+
+          const json = await res.json();
+          setStatus(`Done. Updated: ${json?.updated ?? 0}`, "ok");
+          await loadUnread();
+        } catch (e) {
+          setStatus(`Error: ${e?.message || e}`, "err");
+        }
+      }
+
+      // events
+      $btnReload.addEventListener("click", loadUnread);
+      $btnMarkAll.addEventListener("click", markAllRead);
+      $take.addEventListener("change", loadUnread);
+
+      document.addEventListener("click", (ev) => {
+        const btn = ev.target.closest(".btn-mark");
+        if (!btn) return;
+        const id = btn.getAttribute("data-id");
+        markRead(id);
+      });
+
+      // initial load
+      loadUnread();
+    })();
+</script>

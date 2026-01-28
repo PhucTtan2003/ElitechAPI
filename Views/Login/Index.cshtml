@@ -1,0 +1,99 @@
+﻿@model Elitech.Controllers.LoginController.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "_Layout";
+}
+
+<div class="login-wrap d-flex align-items-center justify-content-center">
+    <div class="login-card shadow-lg">
+        <!-- Vùng biểu tượng/logo -->
+        <div class="brand-badge">
+            <!-- Đặt logo bạn ở đây: -->
+            <!-- <img src="~/Pictures/logo.png" alt="Elitech" /> -->
+            <div class="brand-circle">
+                <i class="bi bi-shield-lock"></i>
+            </div>
+        </div>
+
+        <!-- Tiêu đề -->
+        <div class="text-center mb-3">
+            <h4 class="fw-bold mb-1">Đăng nhập Elitech</h4>
+            <div class="tiny-muted">Vận hành thông minh – nhanh – hiệu quả</div>
+        </div>
+
+        <!-- Khung form -->
+        <div class="login-fields p-3">
+            <form asp-action="Index" method="post" class="needs-validation" novalidate>
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Tài khoản</label>
+                    <div class="input-group input-group-lg elitech-input">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input asp-for="Username" class="form-control" placeholder="Nhập tên đăng nhập" required />
+                        <div class="invalid-feedback">Vui lòng nhập tài khoản</div>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label fw-semibold">Mật khẩu</label>
+                    <div class="input-group input-group-lg elitech-input">
+                        <span class="input-group-text"><i class="bi bi-key"></i></span>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" required />
+                        <button type="button" class="btn btn-outline-secondary btn-eye" onclick="togglePwd(this)">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <div class="invalid-feedback">Vui lòng nhập mật khẩu</div>
+                    </div>
+                </div>
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger mt-3">
+                        @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@e.ErrorMessage</div>
+                        }
+                    </div>
+                }
+
+                <button class="btn btn-elitech w-100 btn-lg mt-3" type="submit">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập
+                </button>
+
+                <div class="small text-center mt-3 text-muted">
+                    Tài khoản mẫu: <code>admin/Admin@123</code> · <code>user1/User@123</code>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Bootstrap client-side validate (nhẹ, không bắt buộc)
+        (() => {
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(f => {
+                f.addEventListener('submit', e => {
+                    if (!f.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+                    f.classList.add('was-validated');
+                }, false);
+            });
+        })();
+
+        function togglePwd(btn) {
+            const input = btn.parentElement.querySelector('input[type="password"], input[type="text"]');
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.add('bi-eye');
+                icon.classList.remove('bi-eye-slash');
+            }
+        }
+    </script>
+}

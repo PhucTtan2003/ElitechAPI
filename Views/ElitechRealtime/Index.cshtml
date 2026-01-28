@@ -1,0 +1,440 @@
+﻿@{
+    ViewData["Title"] = "📡 Elitech Realtime Monitor";
+    var deviceGuids = (ViewBag.DeviceGuids as string) ?? "";
+}
+
+<style>
+    :root {
+        --brand: #F58220;
+        --brand-600: #e36f15;
+        --brand-50: #fff6ec;
+        --ink: #1f2937;
+        --muted: #6b7280;
+        --bg: #fafafa;
+        --glass: rgba(255,255,255,.85);
+        --glass-stroke: rgba(31,41,55,.08);
+        --shadow: 0 14px 40px rgba(0,0,0,.06);
+        --ok: #10B981;
+        --warn: #F59E0B;
+        --crit: #EF4444;
+        --radius: 16px;
+    }
+
+    .realtime-root {
+        min-height: 100vh;
+        background: radial-gradient(900px 520px at -10% -10%, var(--brand-50) 0%, transparent 60%), radial-gradient(900px 520px at 110% 120%, #fef3c7 0%, transparent 60%), linear-gradient(180deg,#fff,var(--bg));
+        padding: 24px;
+        color: var(--ink);
+    }
+
+    .title {
+        font-weight: 900
+    }
+
+    .badge-live {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .glass-card {
+        backdrop-filter: blur(10px);
+        background: var(--glass);
+        border: 1px solid var(--glass-stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+    }
+
+    .toolbar .form-control {
+        height: 42px
+    }
+
+    .toolbar .btn {
+        height: 42px;
+        font-weight: 800
+    }
+
+    .muted {
+        color: var(--muted)
+    }
+
+    .mono {
+        font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Courier New",monospace
+    }
+
+    /* ===== Cards ===== */
+    .rt-cards {
+        display: grid;
+        grid-template-columns: repeat(12,1fr);
+        gap: 14px;
+    }
+
+    .rt-card {
+        grid-column: span 12;
+        background: #fff;
+        border: 1px solid #eef2f7;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    @@media(min - width:768px) {
+        .rt-card
+
+    {
+        grid-column: span 6
+    }
+
+    }
+    @@media(min - width:1200px) {
+        .rt-card
+
+    {
+        grid-column: span 4
+    }
+
+    }
+
+    .rt-card.ok .hd {
+        background: linear-gradient(180deg,#fff,#ecfdf5)
+    }
+
+    .rt-card.alarm .hd {
+        background: linear-gradient(180deg,#fff,#fee2e2)
+    }
+
+    .rt-card .hd {
+        padding: 12px 14px;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .rt-card .name {
+        font-weight: 900
+    }
+
+    .rt-card .guid {
+        font-size: 12px;
+        color: var(--muted);
+        word-break: break-all
+    }
+
+    .rt-status {
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: 12px;
+    }
+
+        .rt-status.ok {
+            background: #d1fae5;
+            color: #065f46
+        }
+
+        .rt-status.alarm {
+            background: #fee2e2;
+            color: #7f1d1d
+        }
+
+    .rt-body {
+        padding: 12px 14px 14px
+    }
+
+    .rt-metrics {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .metric {
+        border: 1px solid #eef2f7;
+        border-radius: 14px;
+        padding: 10px;
+    }
+
+        .metric .k {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 800;
+        }
+
+        .metric .v {
+            margin-top: 4px;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+    .v-good {
+        color: #065f46
+    }
+
+    .v-bad {
+        color: #b91c1c
+    }
+
+    .rt-meta {
+        font-size: 12px;
+        color: var(--muted);
+        display: grid;
+        gap: 6px;
+    }
+
+    /* ===== Power & Signal ===== */
+    .rt-stats {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+    }
+
+    .stat-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: 12px;
+        border: 1px solid transparent;
+        white-space: nowrap;
+    }
+
+        .stat-pill .icon {
+            font-size: 14px
+        }
+
+    .stat-ok {
+        background: #ecfdf5;
+        color: #065f46;
+        border-color: #a7f3d0;
+    }
+
+    .stat-warn {
+        background: #fffbeb;
+        color: #92400e;
+        border-color: #fde68a;
+    }
+
+    .stat-bad {
+        background: #fee2e2;
+        color: #7f1d1d;
+        border-color: #fecaca;
+    }
+
+    /* shimmer */
+    .rt-card.shimmer {
+        height: 220px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .rt-card.shimmer::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg,transparent 0%,#ffffff66 50%,transparent 100%);
+            animation: shine 1.2s linear infinite;
+        }
+    @@keyframes shine {
+        from
+
+    {
+        transform: translateX(-100%)
+    }
+
+    to {
+        transform: translateX(100%)
+    }
+
+    }
+</style>
+
+<div class="realtime-root">
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-3">
+            <h2 class="title mb-0">📡 Elitech Realtime Monitor</h2>
+            <span class="badge-live">Live</span>
+        </div>
+        <small class="muted mono">@deviceGuids</small>
+    </div>
+
+    <div class="glass-card p-3 mb-3 toolbar">
+        <form method="get" class="d-flex gap-2 flex-wrap">
+            <input name="deviceGuids" class="form-control"
+                   placeholder="GUID,GUID,GUID"
+                   value="@deviceGuids" />
+            <button class="btn btn-primary">Load</button>
+
+            <div class="ms-auto muted">
+                Update mỗi <span id="tickSec" class="mono">—</span> ·
+                Lần cuối <span id="lastUpdate" class="mono">—</span>
+            </div>
+        </form>
+    </div>
+
+    <div id="rtCards" class="rt-cards">
+        <div class="muted">Chưa có dữ liệu…</div>
+    </div>
+</div>
+
+<script>
+    const qs = new URLSearchParams(location.search);
+    const deviceGuids = (qs.get('deviceGuids') || '@deviceGuids').trim();
+    const rtCards = document.getElementById('rtCards');
+    const lastUpdate = document.getElementById('lastUpdate');
+
+    function c(v){return v==null?"":String(v)}
+    function asNumber(x){
+      if(!x) return null;
+      const m=String(x).match(/-?\d+(\.\d+)?/);
+      return m?parseFloat(m[0]):null;
+    }
+    function ts(sec){
+      if(!sec) return "-";
+      return new Date(sec*1000).toLocaleString();
+    }
+
+    // demo rule (sau này thay bằng rule DB)
+    function badTemp(v){return v<2||v>8}
+    function badHum(v){return v<30||v>70}
+
+    function classify(t,h){
+      return t.some(v=>v!=null&&badTemp(v)) || h.some(v=>v!=null&&badHum(v))
+        ? "alarm":"ok";
+    }
+
+    function metric(label,val,unit,badFn){
+      if(val==null) return `
+        <div class="metric">
+          <div class="k">${label}</div>
+          <div class="v">-</div>
+        </div>`;
+      const cls = badFn(val) ? "v-bad":"v-good";
+      return `
+        <div class="metric">
+          <div class="k">${label}</div>
+          <div class="v ${cls}">${val} <span style="font-size:12px;color:#6b7280;font-weight:800">${unit}</span></div>
+        </div>`;
+    }
+
+    // ===== Power/Signal classify (tùy data thực tế, chỉnh mapping ở đây) =====
+    function powerState(p){
+      if(!p) return {cls:'stat-bad', label:'No Power'};
+      const s = String(p).toLowerCase();
+      if(s.includes('ac') || s.includes('usb')) return {cls:'stat-ok', label:p};
+      if(s.includes('battery') || s.includes('bat')) return {cls:'stat-warn', label:p};
+      return {cls:'stat-warn', label:p};
+    }
+
+    function signalState(s){
+      if(s==null || s==="") return {cls:'stat-bad', label:'No Signal'};
+      const n = parseInt(s,10);
+      if(!isNaN(n)){
+        if(n >= 75) return {cls:'stat-ok', label:`${n}%`};
+        if(n >= 40) return {cls:'stat-warn', label:`${n}%`};
+        return {cls:'stat-bad', label:`${n}%`};
+      }
+      return {cls:'stat-warn', label:String(s)};
+    }
+
+    function render(rows){
+      if(!rows||rows.length===0){
+        rtCards.innerHTML=`<div class="muted">Không có dữ liệu.</div>`;
+        return;
+      }
+
+      rtCards.innerHTML = rows.map(x=>{
+        const t=[asNumber(x.tmp1),asNumber(x.tmp2),asNumber(x.tmp3),asNumber(x.tmp4)];
+        const h=[asNumber(x.hum1),asNumber(x.hum2)];
+        const cls=classify(t,h);
+
+        const p = powerState(x.power);
+        const s = signalState(x.signal);
+
+        const deviceName = c(x.deviceName) || "Device";
+        const guid = c(x.deviceGuid) || "-";
+
+        return `
+        <div class="rt-card ${cls}">
+          <div class="hd">
+            <div>
+              <div class="name">${deviceName}</div>
+              <div class="guid mono">${guid}</div>
+            </div>
+            <span class="rt-status ${cls}">${cls.toUpperCase()}</span>
+          </div>
+
+          <div class="rt-body">
+
+            <div class="rt-stats">
+              <div class="stat-pill ${p.cls}">
+                <span class="icon">🔌</span>
+                <span>Power: ${p.label}</span>
+              </div>
+              <div class="stat-pill ${s.cls}">
+                <span class="icon">📶</span>
+                <span>Signal: ${s.label}</span>
+              </div>
+            </div>
+
+            <div class="rt-metrics">
+              ${metric("Temp 1",t[0],"°C",badTemp)}
+              ${metric("Temp 2",t[1],"°C",badTemp)}
+              ${metric("Temp 3",t[2],"°C",badTemp)}
+              ${metric("Temp 4",t[3],"°C",badTemp)}
+              ${metric("Hum 1",h[0],"%RH",badHum)}
+              ${metric("Hum 2",h[1],"%RH",badHum)}
+            </div>
+
+            <div class="rt-meta">
+              <div>Address: <span class="mono">${c(x.address)||"-"}</span></div>
+              <div>Time: <span class="mono">${ts(x.lastSessionTime)}</span></div>
+            </div>
+
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    async function loadOnce(){
+      if(!deviceGuids){
+        rtCards.innerHTML=`<div class="muted">Nhập deviceGuids để bắt đầu</div>`;
+        return;
+      }
+
+      rtCards.innerHTML=`
+        <div class="rt-card shimmer"></div>
+        <div class="rt-card shimmer"></div>
+        <div class="rt-card shimmer"></div>
+      `;
+
+      try{
+        const url = `/api/elitech/realtime?deviceGuids=${encodeURIComponent(deviceGuids)}`;
+        const res=await fetch(url, { cache: 'no-store' });
+        if(!res.ok){
+          rtCards.innerHTML=`<div class="muted">API lỗi ${res.status}</div>`;
+          return;
+        }
+        const json=await res.json();
+        render(json?.data||[]);
+        lastUpdate.textContent=new Date().toLocaleTimeString();
+      }catch{
+        rtCards.innerHTML=`<div class="muted">Không thể tải dữ liệu</div>`;
+      }
+    }
+
+    loadOnce();
+
+    // NOTE: bạn đang để 180s (3 phút). Nếu muốn 5s thì đổi 5000.
+    const INTERVAL_MS = 180000;
+    document.getElementById('tickSec').textContent = (INTERVAL_MS/1000)+"s";
+    setInterval(loadOnce, INTERVAL_MS);
+</script>
