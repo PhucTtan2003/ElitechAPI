@@ -1,32 +1,50 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Elitech.Hubs
 {
+    [Authorize]
     public class ElitechAlarmHub : Hub
     {
-        // client gọi để join room theo deviceGuid (đỡ bắn cho tất cả)
-        public async Task JoinDevice(string deviceGuid)
-        {
-            if (string.IsNullOrWhiteSpace(deviceGuid)) return;
+        private static string DevGroup(string deviceGuid) => $"dev:{(deviceGuid ?? "").Trim()}";
+        private static string UserGroup(string userId) => $"user:{(userId ?? "").Trim()}";
+        private static string RoleGroup(string role) => $"role:{(role ?? "").Trim().ToLowerInvariant()}";
 
-            await Groups.AddToGroupAsync(
-                Context.ConnectionId,
-                $"dev:{deviceGuid.Trim()}");
+        public override async Task OnConnectedAsync()
+        {
+            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrWhiteSpace(userId))
+                await Groups.AddToGroupAsync(Context.ConnectionId, UserGroup(userId));
+
+            var roles = Context.User?.FindAll(ClaimTypes.Role)
+                .Select(x => x.Value)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x.Trim().ToLowerInvariant())
+                .Distinct()
+                ?? Enumerable.Empty<string>();
+
+            foreach (var role in roles)
+                await Groups.AddToGroupAsync(Context.ConnectionId, RoleGroup(role));
+
+            await base.OnConnectedAsync();
         }
 
-        public async Task LeaveDevice(string deviceGuid)
+        public Task JoinDevice(string deviceGuid)
         {
-            if (string.IsNullOrWhiteSpace(deviceGuid)) return;
-
-            await Groups.RemoveFromGroupAsync(
-                Context.ConnectionId,
-                $"dev:{deviceGuid.Trim()}");
+            deviceGuid = (deviceGuid ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(deviceGuid)) return Task.CompletedTask;
+            return Groups.AddToGroupAsync(Context.ConnectionId, DevGroup(deviceGuid));
         }
 
-        public override async Task OnDisconnectedAsync(Exception? exception)
+        public Task LeaveDevice(string deviceGuid)
         {
-            // nếu cần cleanup thì làm ở đây
-            await base.OnDisconnectedAsync(exception);
+            deviceGuid = (deviceGuid ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(deviceGuid)) return Task.CompletedTask;
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, DevGroup(deviceGuid));
         }
+
+        // optional: nếu muốn client gọi lại cũng được, nhưng OnConnectedAsync đã join rồi
+        public Task JoinMyRoles() => OnConnectedAsync();
     }
 }

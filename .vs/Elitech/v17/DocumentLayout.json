@@ -3,36 +3,136 @@
   "WorkspaceRootPath": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\infrastructure\\elitechalarmrealtimeworker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:infrastructure\\elitechalarmrealtimeworker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\views\\elitechalarmpage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:views\\elitechalarmpage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\hubs\\elitechalarmhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:hubs\\elitechalarmhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\controllers\\elitechalarmcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:controllers\\elitechalarmcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\services\\elitechalertengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:services\\elitechalertengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\controllers\\elitechalertsnotifycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:controllers\\elitechalertsnotifycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\models\\accountviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:models\\accountviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\controllers\\elitechalertrulescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:controllers\\elitechalertrulescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\services\\elitechalertruleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:services\\elitechalertruleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\controllers\\elitechalertrulespagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:controllers\\elitechalertrulespagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\admin\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:admin\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\controllers\\elitechalarmcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:controllers\\elitechalarmcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\models\\createuserviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:models\\createuserviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\models\\roleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:models\\roleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\views\\admin\\createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:views\\admin\\createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\admin\\controllers\\adminaccountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:admin\\controllers\\adminaccountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\hubs\\elitechalarmhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:hubs\\elitechalarmhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\views\\user\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:views\\user\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\views\\elitechalertrulespage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:views\\elitechalertrulespage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\models\\alertrule\\elitechalertruleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:models\\alertrule\\elitechalertruleviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\services\\elitechdeviceassignmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:services\\elitechdeviceassignmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\services\\workers\\elitechalertworker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:services\\workers\\elitechalertworker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\services\\elitechalerteventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:services\\elitechalerteventservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\services\\elitechrealtimecacheservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:services\\elitechrealtimecacheservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\infrastructure\\elitechalarmrealtimeworker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:infrastructure\\elitechalarmrealtimeworker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\controllers\\elitechsetparamcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:controllers\\elitechsetparamcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\controllers\\elitechalarmpagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:controllers\\elitechalarmpagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\models\\alarmrecorddtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:models\\alarmrecorddtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\user\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:user\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|c:\\users\\tam\\onedrive\\m\u00E1y t\u00EDnh\\elitech\\views\\elitechalarmpage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7A1BC47F-E295-4825-AAA6-C707EBD9D3B1}|Elitech.csproj|solutionrelative:views\\elitechalarmpage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +142,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -62,104 +162,413 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ElitechAlarmController.cs",
-              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlarmController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ElitechAlarmController.cs",
-              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlarmController.cs",
-              "RelativeToolTip": "Controllers\\ElitechAlarmController.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAYwCUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T08:50:30.386Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAIEAAAAAAAAAAAAtwIsAAAAEAAAAAAAAAA==",
+              "Title": "ElitechAlertsNotifyController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlertsNotifyController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ElitechAlertsNotifyController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlertsNotifyController.cs",
+              "RelativeToolTip": "Controllers\\ElitechAlertsNotifyController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAAwBoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T08:47:37.173Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ElitechAlarmRealtimeWorker.cs",
-              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Infrastructure\\ElitechAlarmRealtimeWorker.cs",
-              "RelativeDocumentMoniker": "Infrastructure\\ElitechAlarmRealtimeWorker.cs",
-              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Infrastructure\\ElitechAlarmRealtimeWorker.cs",
-              "RelativeToolTip": "Infrastructure\\ElitechAlarmRealtimeWorker.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBEAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T08:46:47.743Z",
+              "WhenOpened": "2026-01-29T02:34:09.255Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ElitechAlarmHub.cs",
-              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Hubs\\ElitechAlarmHub.cs",
-              "RelativeDocumentMoniker": "Hubs\\ElitechAlarmHub.cs",
-              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Hubs\\ElitechAlarmHub.cs",
-              "RelativeToolTip": "Hubs\\ElitechAlarmHub.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-19T08:46:06.663Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
               "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAABcAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-01-19T03:43:58.08Z"
+              "WhenOpened": "2026-01-19T03:43:58.08Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\ElitechAlarmPage\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\ElitechAlarmPage\\Index.cshtml",
-              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\ElitechAlarmPage\\Index.cshtml",
-              "RelativeToolTip": "Views\\ElitechAlarmPage\\Index.cshtml",
-              "ViewState": "AgIAAL4DAAAAAAAAAAAtwMYDAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-01-19T03:32:42.183Z"
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T08:47:37.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ElitechAlertEngine.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechAlertEngine.cs",
+              "RelativeDocumentMoniker": "Services\\ElitechAlertEngine.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechAlertEngine.cs",
+              "RelativeToolTip": "Services\\ElitechAlertEngine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T07:24:31.708Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AccountService.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\AccountService.cs",
+              "RelativeDocumentMoniker": "Services\\AccountService.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\AccountService.cs",
+              "RelativeToolTip": "Services\\AccountService.cs",
+              "ViewState": "AgIAAL8AAAAAAAAAAAAnwMoAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T02:34:41.929Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AccountViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\AccountViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\AccountViewModel.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\AccountViewModel.cs",
+              "RelativeToolTip": "Models\\AccountViewModel.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAuwBwAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T02:59:12.956Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ElitechAlertRulesController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlertRulesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ElitechAlertRulesController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlertRulesController.cs",
+              "RelativeToolTip": "Controllers\\ElitechAlertRulesController.cs",
+              "ViewState": "AgIAALMAAAAAAAAAAAAIwL0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T06:18:37.247Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ElitechAlertRuleService.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechAlertRuleService.cs",
+              "RelativeDocumentMoniker": "Services\\ElitechAlertRuleService.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechAlertRuleService.cs",
+              "RelativeToolTip": "Services\\ElitechAlertRuleService.cs",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAkwGoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T06:25:59.414Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
+              "Title": "ProfileController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ProfileController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProfileController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ProfileController.cs",
+              "RelativeToolTip": "Controllers\\ProfileController.cs",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAUwIEAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T03:13:32.569Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ElitechAlertRulesPageController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlertRulesPageController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ElitechAlertRulesPageController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlertRulesPageController.cs",
+              "RelativeToolTip": "Controllers\\ElitechAlertRulesPageController.cs",
+              "ViewState": "AgIAADQAAAAAAAAAAAAgwEUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T06:49:06.162Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\Admin\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Admin\\Index.cshtml",
               "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\Admin\\Index.cshtml",
               "RelativeToolTip": "Views\\Admin\\Index.cshtml",
-              "ViewState": "AgIAADcEAAAAAAAAAAAAAIAEAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAMUEAAAAAAAAAAAkwNcEAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-01-17T05:01:01.691Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAcDAAAAAAAAAAAuwBIDAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-01-17T04:48:56.4Z"
+              "DocumentIndex": 11,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Admin\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Admin\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Admin\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Admin\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAG4AAAAAAAAAAAArwHoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T02:38:45.079Z"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ElitechAlarmController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlarmController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ElitechAlarmController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlarmController.cs",
+              "RelativeToolTip": "Controllers\\ElitechAlarmController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T02:54:17.977Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\Profile\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Profile\\Index.cshtml",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\Profile\\Index.cshtml",
+              "RelativeToolTip": "Views\\Profile\\Index.cshtml",
+              "ViewState": "AgIAACsCAAAAAAAAAAAkwDUCAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-30T03:14:37.644Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CreateUserViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\CreateUserViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\CreateUserViewModel.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\CreateUserViewModel.cs",
+              "RelativeToolTip": "Models\\CreateUserViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T02:46:44.722Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "RoleViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\RoleViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\RoleViewModel.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\RoleViewModel.cs",
+              "RelativeToolTip": "Models\\RoleViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T02:45:09.446Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CreateUser.cshtml",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\Admin\\CreateUser.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\CreateUser.cshtml",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\Admin\\CreateUser.cshtml",
+              "RelativeToolTip": "Views\\Admin\\CreateUser.cshtml",
+              "ViewState": "AgIAAE0CAAAAAAAAAAAUwFYCAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-30T02:40:23.937Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "AdminAccountsController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Admin\\Controllers\\AdminAccountsController.cs",
+              "RelativeDocumentMoniker": "Admin\\Controllers\\AdminAccountsController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Admin\\Controllers\\AdminAccountsController.cs",
+              "RelativeToolTip": "Admin\\Controllers\\AdminAccountsController.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAYwDEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-30T02:38:53.226Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ElitechAlertRuleViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\AlertRule\\ElitechAlertRuleViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\AlertRule\\ElitechAlertRuleViewModel.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\AlertRule\\ElitechAlertRuleViewModel.cs",
+              "RelativeToolTip": "Models\\AlertRule\\ElitechAlertRuleViewModel.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAgwAgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T06:38:17.715Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\ElitechAlertRulesPage\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\ElitechAlertRulesPage\\Index.cshtml",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\ElitechAlertRulesPage\\Index.cshtml",
+              "RelativeToolTip": "Views\\ElitechAlertRulesPage\\Index.cshtml",
+              "ViewState": "AgIAANUBAAAAAAAAAAAkwOABAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-27T08:03:41.333Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ElitechDeviceAssignmentService.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechDeviceAssignmentService.cs",
+              "RelativeDocumentMoniker": "Services\\ElitechDeviceAssignmentService.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechDeviceAssignmentService.cs",
+              "RelativeToolTip": "Services\\ElitechDeviceAssignmentService.cs",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAgwGoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T02:25:08.386Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ElitechAlarmHub.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Hubs\\ElitechAlarmHub.cs",
+              "RelativeDocumentMoniker": "Hubs\\ElitechAlarmHub.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Hubs\\ElitechAlarmHub.cs",
+              "RelativeToolTip": "Hubs\\ElitechAlarmHub.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAYwDIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T08:46:06.663Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\User\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\User\\Index.cshtml",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\User\\Index.cshtml",
+              "RelativeToolTip": "Views\\User\\Index.cshtml",
+              "ViewState": "AgIAAIICAAAAAAAAAAAUwIwCAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-23T07:02:55.106Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "ElitechAlertWorker.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\Workers\\ElitechAlertWorker.cs",
+              "RelativeDocumentMoniker": "Services\\Workers\\ElitechAlertWorker.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\Workers\\ElitechAlertWorker.cs",
+              "RelativeToolTip": "Services\\Workers\\ElitechAlertWorker.cs",
+              "ViewState": "AgIAAN8AAAAAAAAAAAAgwAABAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-28T09:47:18.91Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "appsettings.Development.json",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\appsettings.Development.json",
+              "RelativeToolTip": "appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-29T02:45:45.095Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "ElitechAlertEventService.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechAlertEventService.cs",
+              "RelativeDocumentMoniker": "Services\\ElitechAlertEventService.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechAlertEventService.cs",
+              "RelativeToolTip": "Services\\ElitechAlertEventService.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAgwDMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T07:10:56.11Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "ElitechAlarmRealtimeWorker.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Infrastructure\\ElitechAlarmRealtimeWorker.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\ElitechAlarmRealtimeWorker.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Infrastructure\\ElitechAlarmRealtimeWorker.cs",
+              "RelativeToolTip": "Infrastructure\\ElitechAlarmRealtimeWorker.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAswBUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T02:25:26.674Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ElitechRealtimeCacheService.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechRealtimeCacheService.cs",
+              "RelativeDocumentMoniker": "Services\\ElitechRealtimeCacheService.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Services\\ElitechRealtimeCacheService.cs",
+              "RelativeToolTip": "Services\\ElitechRealtimeCacheService.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAkwBsAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-28T09:48:17.702Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "ElitechSetParamController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechSetParamController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ElitechSetParamController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechSetParamController.cs",
+              "RelativeToolTip": "Controllers\\ElitechSetParamController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAgwCQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T06:57:37.729Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "ElitechAlarmPageController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlarmPageController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ElitechAlarmPageController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Controllers\\ElitechAlarmPageController.cs",
+              "RelativeToolTip": "Controllers\\ElitechAlarmPageController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T06:18:35.118Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\User\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "User\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\User\\Controllers\\UserController.cs",
+              "RelativeToolTip": "User\\Controllers\\UserController.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAuwCMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-26T04:02:34.748Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "AlarmRecordDtos.cs",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\AlarmRecordDtos.cs",
+              "RelativeDocumentMoniker": "Models\\AlarmRecordDtos.cs",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Models\\AlarmRecordDtos.cs",
+              "RelativeToolTip": "Models\\AlarmRecordDtos.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAABEAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T02:44:22.383Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\ElitechAlarmPage\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\ElitechAlarmPage\\Index.cshtml",
+              "ToolTip": "C:\\Users\\TAM\\OneDrive\\M\u00E1y t\u00EDnh\\Elitech\\Views\\ElitechAlarmPage\\Index.cshtml",
+              "RelativeToolTip": "Views\\ElitechAlarmPage\\Index.cshtml",
+              "ViewState": "AgIAAGcCAAAAAAAAAAAYwHUCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-19T03:32:42.183Z"
             }
           ]
         }

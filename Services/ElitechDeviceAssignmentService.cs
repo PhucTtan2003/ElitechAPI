@@ -14,6 +14,10 @@ public class ElitechDeviceAssignmentService
         EnsureIndexes();
     }
 
+    // ✅ thống nhất chuẩn guid: TRIM + UPPER (đồng bộ với Controller/RuleService)
+    private static string NormalizeGuid(string? s)
+        => string.IsNullOrWhiteSpace(s) ? "" : s.Trim().ToUpperInvariant();
+
     private void EnsureIndexes()
     {
         var keys = Builders<ElitechDeviceAssignment>.IndexKeys
@@ -40,14 +44,16 @@ public class ElitechDeviceAssignmentService
 
     public Task<bool> IsAssignedAsync(string userId, string deviceGuid, CancellationToken ct = default)
     {
-        deviceGuid = (deviceGuid ?? "").Trim();
-        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(deviceGuid)) return Task.FromResult(false);
+        deviceGuid = NormalizeGuid(deviceGuid);
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(deviceGuid))
+            return Task.FromResult(false);
+
         return _col.Find(x => x.UserId == userId && x.DeviceGuid == deviceGuid).AnyAsync(ct);
     }
 
     public Task AssignAsync(string userId, string deviceGuid, string? deviceName, CancellationToken ct = default)
     {
-        deviceGuid = (deviceGuid ?? "").Trim();
+        deviceGuid = NormalizeGuid(deviceGuid);
         if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentException("userId required");
         if (string.IsNullOrWhiteSpace(deviceGuid)) throw new ArgumentException("deviceGuid required");
 
@@ -63,10 +69,11 @@ public class ElitechDeviceAssignmentService
 
     public async Task<bool> UnassignAsync(string userId, string deviceGuid, CancellationToken ct = default)
     {
-        deviceGuid = (deviceGuid ?? "").Trim();
+        deviceGuid = NormalizeGuid(deviceGuid);
         var res = await _col.DeleteOneAsync(x => x.UserId == userId && x.DeviceGuid == deviceGuid, ct);
         return res.DeletedCount > 0;
     }
+
     public Task<List<ElitechDeviceAssignment>> GetAllDevicesAsync(CancellationToken ct = default)
     {
         // Lấy tất cả assignment, group theo DeviceGuid để ra danh sách thiết bị unique
@@ -76,5 +83,24 @@ public class ElitechDeviceAssignmentService
             .ToListAsync(ct);
     }
 
+    // ✅ Alias để Controller khỏi lỗi CS1061
+    public Task<List<ElitechDeviceAssignment>> GetAssignedDevicesByUserAsync(string userId, CancellationToken ct = default)
+        => GetByUserAsync(userId, ct);
 
+    // ✅ Gọn cho UI: trả list device unique theo user (guid + name) - có normalize guid
+    public async Task<List<(string DeviceGuid, string? DeviceName)>> GetAssignedDeviceBriefByUserAsync(
+        string userId,
+        CancellationToken ct = default)
+    {
+        var list = await _col.Find(x => x.UserId == userId)
+            .SortBy(x => x.DeviceGuid)
+            .Project(x => new { x.DeviceGuid, x.DeviceName })
+            .ToListAsync(ct);
+
+        return (list ?? new())
+            .Select(x => (NormalizeGuid(x.DeviceGuid), x.DeviceName))
+            .Where(x => !string.IsNullOrWhiteSpace(x.Item1))
+            .DistinctBy(x => x.Item1)
+            .ToList();
+    }
 }

@@ -3,7 +3,7 @@
 using Elitech.Data;
 
 using Elitech.Models.Alerts;
-
+using Elitech.Services;
 using Microsoft.AspNetCore.Authorization;
 
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +27,13 @@ public class ElitechAlertsNotifyController : ControllerBase
 {
 
     private readonly IMongoCollection<ElitechAlertEvent> _events;
+    private readonly AccountService _accounts;
 
 
-
-    public ElitechAlertsNotifyController(MongoContext db)
+    public ElitechAlertsNotifyController(MongoContext db, AccountService accounts)
 
     {
-
+        _accounts = accounts;
         _events = db.Database.GetCollection<ElitechAlertEvent>("AlertEvents");
 
     }
@@ -156,6 +156,16 @@ public class ElitechAlertsNotifyController : ControllerBase
 
         return string.IsNullOrWhiteSpace(id) ? null : id;
 
+    }
+    [HttpGet("my-phone")]
+    public async Task<IActionResult> MyPhone(CancellationToken ct = default)
+    {
+        var userId = GetUserId();
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized(new { code = 401, message = "No userId claim" });
+
+        var phone = await _accounts.GetPhoneByUserIdAsync(userId);
+        return Ok(new { userId, phone });
     }
 
 }

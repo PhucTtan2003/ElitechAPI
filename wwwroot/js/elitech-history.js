@@ -232,7 +232,7 @@
                     x: {
                         type: 'time',
                         time: {
-                            tooltipFormat: 'dd/MM/yyyy HH:mm',
+                            tooltipFormat: 'MM/dd/yyyy HH:mm',
                             displayFormats: {
                                 minute: 'HH:mm',
                                 hour: 'HH:mm',

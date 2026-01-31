@@ -21,7 +21,8 @@ builder.Services.AddSingleton<MongoContext>();
 builder.Services.AddSingleton<ElitechAlertRuleService>();
 builder.Services.AddSingleton<ElitechAlertEngine>();
 builder.Services.AddSingleton<ElitechAlertEventService>();
-
+builder.Services.Configure<FptSmsOptions>(builder.Configuration.GetSection("FptSms"));
+builder.Services.AddHttpClient<FptSmsClient>();
 builder.Services.AddHostedService<Elitech.Workers.ElitechAlertWorker>();
 
 // =========================

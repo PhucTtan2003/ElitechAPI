@@ -90,13 +90,35 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Elitech.Controllers.UserController",
-    "Method": "Index",
-    "RelativePath": "api/elitech",
-    "HttpMethod": "",
+    "ContainingType": "Elitech.Controllers.ElitechDebugController",
+    "Method": "PushToast",
+    "RelativePath": "api/debug/toast",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "level",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Elitech.Controllers.ElitechDebugController",
+    "Method": "PushToastToRole",
+    "RelativePath": "api/debug/toast-role",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "level",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -182,7 +204,7 @@
       {
         "Name": "input",
         "Type": "Elitech.Models.AlertRule.ElitechAlertRuleViewModel",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

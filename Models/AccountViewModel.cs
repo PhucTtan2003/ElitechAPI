@@ -6,6 +6,7 @@ namespace Elitech.Models
 {
     public class AccountViewModel
     {
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; } = default!;
@@ -24,5 +25,18 @@ namespace Elitech.Models
 
         [BsonElement("createdAtUtc")]
         public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+
+        // ===== PROFILE =====
+        [BsonElement("fullName")]
+        public string? FullName { get; set; }
+
+        [BsonElement("email")]
+        public string? Email { get; set; }
+
+        [BsonElement("phone")]
+        public string? Phone { get; set; }
+
+        //[BsonElement("avatarUrl")]
+        //public string? AvatarUrl { get; set; }
     }
 }

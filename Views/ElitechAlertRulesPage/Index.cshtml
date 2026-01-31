@@ -1,729 +1,487 @@
 ﻿@using Elitech.Models
-
 @{
-
     ViewData["Title"] = "⚠️ Alert Thresholds";
-
     var devices = ViewBag.Devices as List<Elitech.Models.ElitechDeviceAssignment> ?? new();
-
 }
 
-
-
 <style>
-
-    :root{
-
-        --brand:#F58220; --brand-600:#e36f15; --brand-50:#fff6ec;
-
-        --ink:#1f2937; --muted:#6b7280; --bg:#fafafa;
-
-        --glass:rgba(255,255,255,.85); --stroke:rgba(31,41,55,.08);
-
-        --shadow:0 14px 40px rgba(0,0,0,.06); --radius:16px;
-
-        --ok:#10B981; --warn:#F59E0B; --crit:#EF4444;
-
+    :root {
+        --brand: #F58220;
+        --brand-600: #e36f15;
+        --brand-50: #fff6ec;
+        --ink: #1f2937;
+        --muted: #6b7280;
+        --bg: #fafafa;
+        --glass: rgba(255,255,255,.85);
+        --stroke: rgba(31,41,55,.08);
+        --shadow: 0 14px 40px rgba(0,0,0,.06);
+        --radius: 16px;
+        --ok: #10B981;
+        --warn: #F59E0B;
+        --crit: #EF4444;
     }
 
-    .wrap{min-height:100vh;padding:24px;background:
-
-        radial-gradient(900px 520px at -10% -10%, var(--brand-50) 0%, transparent 60%),
-
-        radial-gradient(900px 520px at 110% 120%, #fef3c7 0%, transparent 60%),
-
-        linear-gradient(180deg,#fff,var(--bg));
-
-        color:var(--ink);
-
+    .wrap {
+        min-height: 100vh;
+        padding: 24px;
+        background: radial-gradient(900px 520px at -10% -10%, var(--brand-50) 0%, transparent 60%), radial-gradient(900px 520px at 110% 120%, #fef3c7 0%, transparent 60%), linear-gradient(180deg,#fff,var(--bg));
+        color: var(--ink);
     }
 
-    .card{background:var(--glass);border:1px solid var(--stroke);border-radius:var(--radius);box-shadow:var(--shadow);backdrop-filter:blur(10px);}
-
-    .title{font-weight:900;letter-spacing:.2px;margin:0}
-
-    .muted{color:var(--muted)}
-
-    .btn-primary{
-
-        background:linear-gradient(180deg,var(--brand),var(--brand-600));
-
-        border:0;border-radius:12px;font-weight:900;
-
-        padding:10px 14px; box-shadow:0 8px 20px #f5822030;
-
+    .card {
+        background: var(--glass);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(10px);
     }
 
-    .btn-ghost{
-
-        background:#fff;border:1px solid #e5e7eb;border-radius:12px;font-weight:800;padding:10px 14px;
-
+    .title {
+        font-weight: 900;
+        letter-spacing: .2px;
+        margin: 0
     }
 
-    .grid{display:grid;grid-template-columns:1fr;gap:14px;}
+    .muted {
+        color: var(--muted)
+    }
 
-    @@media(min - width:1100px){ .grid{grid-template-columns:1fr 1fr;} }
+    .btn-primary {
+        background: linear-gradient(180deg,var(--brand),var(--brand-600));
+        border: 0;
+        border-radius: 12px;
+        font-weight: 900;
+        padding: 10px 14px;
+        box-shadow: 0 8px 20px #f5822030;
+    }
 
-    .device-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 14px 10px;}
+    .btn-ghost {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        font-weight: 800;
+        padding: 10px 14px;
+    }
 
-    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
 
-    .box{padding:0 14px 14px;}
+    @@media(min - width:1100px) {
+        .grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
 
-    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .device-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 14px 14px 10px;
+    }
 
-    .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
 
-    .lab{font-size:12px;font-weight:900;color:#334155;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+    .box {
+        padding: 0 14px 14px;
+    }
 
-    .inp{width:100%;height:40px;border-radius:12px;border:1px solid #e5e7eb;padding:0 12px;background:#fff;color:var(--ink)}
+    .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
 
-    .sep{height:1px;background:#eef2f7;margin:12px 0}
+    .row3 {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 10px;
+    }
 
-    .pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid transparent}
+    .lab {
+        font-size: 12px;
+        font-weight: 900;
+        color: #334155;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: .5px
+    }
 
-    .pill-ok{background:#d1fae5;color:#065f46;border-color:#a7f3d0}
+    .inp {
+        width: 100%;
+        height: 40px;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 0 12px;
+        background: #fff;
+        color: var(--ink)
+    }
 
-    .pill-off{background:#f1f5f9;color:#475569;border-color:#e2e8f0}
+    .sep {
+        height: 1px;
+        background: #eef2f7;
+        margin: 12px 0
+    }
 
-    .toastx{position:fixed;right:18px;top:18px;z-index:2000;min-width:260px;max-width:380px}
+    .pill {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+        border: 1px solid transparent
+    }
 
-    .toastx .t{background:#111827;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 18px 40px rgba(0,0,0,.18);margin-bottom:10px}
+    .pill-ok {
+        background: #d1fae5;
+        color: #065f46;
+        border-color: #a7f3d0
+    }
 
+    .pill-off {
+        background: #f1f5f9;
+        color: #475569;
+        border-color: #e2e8f0
+    }
+
+    .toastx {
+        position: fixed;
+        right: 18px;
+        top: 18px;
+        z-index: 2000;
+        min-width: 260px;
+        max-width: 380px
+    }
+
+        .toastx .t {
+            background: #111827;
+            color: #fff;
+            border-radius: 14px;
+            padding: 12px 14px;
+            box-shadow: 0 18px 40px rgba(0,0,0,.18);
+            margin-bottom: 10px
+        }
 </style>
 
-
-
 <div class="wrap">
-
     <div class="d-flex align-items-end justify-content-between mb-3">
-
         <div>
-
             <h2 class="title">⚠️ Alert Thresholds</h2>
-
             <div class="muted">Nhập ngưỡng nhiệt/ẩm cho từng kênh (TMP1..TMP4, HUM1..HUM2) rồi bấm Save.</div>
-
         </div>
-
         <div class="d-flex gap-2">
-
             <button class="btn-ghost" id="btnReload">Reload</button>
-
         </div>
-
     </div>
-
-
 
     <div class="card p-3 mb-3">
-
         <div class="muted">
-
             Devices assigned: <span class="mono">@devices.Count</span>
-
         </div>
-
     </div>
-
-
 
     <div class="grid" id="grid">
-
         @if (devices.Count == 0)
-
         {
-
             <div class="card p-3">
-
                 <div class="muted">Bạn chưa được gán thiết bị nào.</div>
-
             </div>
-
         }
-
         else
-
         {
-
             foreach (var d in devices)
-
             {
-
                 <div class="card" data-guid="@d.DeviceGuid" data-name="@d.DeviceName">
-
                     <div class="device-head">
-
                         <div>
-
                             <div style="font-weight:900">@(!string.IsNullOrWhiteSpace(d.DeviceName) ? d.DeviceName : "Device")</div>
-
                             <div class="muted mono" style="font-size:12px">@d.DeviceGuid</div>
-
                         </div>
-
                         <div>
-
                             <span class="pill pill-off" data-pill>Rule: —</span>
-
                         </div>
-
                     </div>
-
                     <div class="box">
-
                         <div class="sep"></div>
-
-
 
                         <div class="lab">TMP1</div>
-
                         <div class="row2">
-
                             <input class="inp" data-k="t1min" placeholder="Min (°C)" inputmode="decimal">
-
                             <input class="inp" data-k="t1max" placeholder="Max (°C)" inputmode="decimal">
-
                         </div>
-
-
 
                         <div class="lab mt-2">TMP2</div>
-
                         <div class="row2">
-
                             <input class="inp" data-k="t2min" placeholder="Min (°C)" inputmode="decimal">
-
                             <input class="inp" data-k="t2max" placeholder="Max (°C)" inputmode="decimal">
-
                         </div>
-
-
 
                         <div class="lab mt-2">TMP3</div>
-
                         <div class="row2">
-
                             <input class="inp" data-k="t3min" placeholder="Min (°C)" inputmode="decimal">
-
                             <input class="inp" data-k="t3max" placeholder="Max (°C)" inputmode="decimal">
-
                         </div>
-
-
 
                         <div class="lab mt-2">TMP4</div>
-
                         <div class="row2">
-
                             <input class="inp" data-k="t4min" placeholder="Min (°C)" inputmode="decimal">
-
                             <input class="inp" data-k="t4max" placeholder="Max (°C)" inputmode="decimal">
-
                         </div>
 
-
-
                         <div class="sep"></div>
-
-
 
                         <div class="lab">HUM1</div>
-
                         <div class="row2">
-
                             <input class="inp" data-k="h1min" placeholder="Min (%RH)" inputmode="decimal">
-
                             <input class="inp" data-k="h1max" placeholder="Max (%RH)" inputmode="decimal">
-
                         </div>
-
-
 
                         <div class="lab mt-2">HUM2</div>
-
                         <div class="row2">
-
                             <input class="inp" data-k="h2min" placeholder="Min (%RH)" inputmode="decimal">
-
                             <input class="inp" data-k="h2max" placeholder="Max (%RH)" inputmode="decimal">
-
                         </div>
-
-
 
                         <div class="sep"></div>
 
-
-
                         <div class="row3">
-
                             <div>
-
                                 <div class="lab">Debounce hits</div>
-
                                 <input class="inp" data-k="debounce" placeholder="2" inputmode="numeric">
-
                             </div>
-
                             <div>
-
                                 <div class="lab">Cooldown (sec)</div>
-
                                 <input class="inp" data-k="cooldown" placeholder="180" inputmode="numeric">
-
                             </div>
-
                             <div>
-
                                 <div class="lab">Enabled</div>
-
                                 <select class="inp" data-k="enabled">
-
                                     <option value="true">On</option>
-
                                     <option value="false">Off</option>
-
                                 </select>
-
                             </div>
-
                         </div>
-
-
 
                         <div class="d-flex gap-2 mt-3">
-
                             <button class="btn-primary" data-save>Save</button>
-
                             <button class="btn-ghost" data-clear>Clear</button>
-
                         </div>
-
-
 
                         <div class="muted mt-2" style="font-size:12px">
-
                             Lưu theo user + deviceGuid. Để trống nghĩa là không áp ngưỡng kênh đó.
-
                         </div>
-
                     </div>
-
                 </div>
-
             }
-
         }
-
     </div>
 
-
-
     <div class="toastx" id="toastx"></div>
-
 </div>
 
-
-
 <script>
-
     (function(){
-
       const toastBox = document.getElementById('toastx');
 
-
-
       function toast(msg){
-
         const el = document.createElement('div');
-
         el.className = 't';
-
         el.textContent = msg;
-
         toastBox.appendChild(el);
-
         setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .2s'; }, 2500);
-
         setTimeout(()=>{ el.remove(); }, 2900);
-
       }
-
-
 
       function numOrNull(v){
-
         if(v == null) return null;
-
         const s = String(v).trim().replace(',', '.');
-
         if(!s) return null;
-
         const n = Number(s);
-
         return Number.isFinite(n) ? n : null;
-
       }
-
       function intOr(v, def){
-
         const s = String(v ?? '').trim();
-
         if(!s) return def;
-
         const n = parseInt(s, 10);
-
         return Number.isFinite(n) ? n : def;
-
       }
-
-
 
       async function loadRules(){
-
         const res = await fetch('/api/elitech/alerts/rules');
-
         if(!res.ok){ toast('Không load được rules'); return; }
-
         const json = await res.json();
-
-        const list = json?.data ?? \[];
-
-
+        const list = json?.data ?? [];
 
         // map by guid
-
         const map = new Map();
-
         for(const r of list){
-
           map.set((r.deviceGuid || '').toLowerCase(), r);
-
         }
 
-
-
-        document.querySelectorAll('\[data-guid]').forEach(card=>{
-
+        document.querySelectorAll('[data-guid]').forEach(card=>{
           const guid = (card.getAttribute('data-guid') || '').toLowerCase();
-
           const rule = map.get(guid);
-
-          const pill = card.querySelector('\[data-pill]');
-
-
+          const pill = card.querySelector('[data-pill]');
 
           if(!rule){
-
             pill.textContent = 'Rule: —';
-
             pill.className = 'pill pill-off';
-
             return;
-
           }
 
-
-
           pill.textContent = rule.enabled ? 'Rule: ON' : 'Rule: OFF';
-
           pill.className = rule.enabled ? 'pill pill-ok' : 'pill pill-off';
 
-
-
           // fill inputs
+          const t = rule.tempRanges || [];
+          const h = rule.humRanges || [];
 
-          const t = rule.tempRanges || \[];
+          setKV(card,'t1min', t?.[0]?.min); setKV(card,'t1max', t?.[0]?.max);
+          setKV(card,'t2min', t?.[1]?.min); setKV(card,'t2max', t?.[1]?.max);
+          setKV(card,'t3min', t?.[2]?.min); setKV(card,'t3max', t?.[2]?.max);
+          setKV(card,'t4min', t?.[3]?.min); setKV(card,'t4max', t?.[3]?.max);
 
-          const h = rule.humRanges || \[];
-
-
-
-          setKV(card,'t1min', t?.\[0]?.min); setKV(card,'t1max', t?.\[0]?.max);
-
-          setKV(card,'t2min', t?.\[1]?.min); setKV(card,'t2max', t?.\[1]?.max);
-
-          setKV(card,'t3min', t?.\[2]?.min); setKV(card,'t3max', t?.\[2]?.max);
-
-          setKV(card,'t4min', t?.\[3]?.min); setKV(card,'t4max', t?.\[3]?.max);
-
-
-
-          setKV(card,'h1min', h?.\[0]?.min); setKV(card,'h1max', h?.\[0]?.max);
-
-          setKV(card,'h2min', h?.\[1]?.min); setKV(card,'h2max', h?.\[1]?.max);
-
-
+          setKV(card,'h1min', h?.[0]?.min); setKV(card,'h1max', h?.[0]?.max);
+          setKV(card,'h2min', h?.[1]?.min); setKV(card,'h2max', h?.[1]?.max);
 
           setKV(card,'debounce', rule.debounceHits ?? 2);
-
           setKV(card,'cooldown', rule.cooldownSeconds ?? 180);
-
           setKV(card,'enabled', String(rule.enabled ?? true));
-
         });
 
-
-
         toast('Loaded rules');
-
       }
-
-
 
       function setKV(card, key, val){
-
-        const el = card.querySelector(`\[data-k="${key}"]`);
-
+        const el = card.querySelector(`[data-k="${key}"]`);
         if(!el) return;
-
         if(el.tagName === 'SELECT') el.value = (val == null ? 'true' : String(val));
-
         else el.value = (val == null ? '' : String(val));
-
       }
-
-
 
       function getKV(card, key){
-
-        const el = card.querySelector(`\[data-k="${key}"]`);
-
+        const el = card.querySelector(`[data-k="${key}"]`);
         return el ? el.value : '';
-
       }
-
-
 
       async function saveRule(card){
-
         const guid = card.getAttribute('data-guid');
-
         const name = card.getAttribute('data-name');
 
-
-
-        const tempRanges = \[
-
+        const tempRanges = [
           { min: numOrNull(getKV(card,'t1min')), max: numOrNull(getKV(card,'t1max')) },
-
           { min: numOrNull(getKV(card,'t2min')), max: numOrNull(getKV(card,'t2max')) },
-
           { min: numOrNull(getKV(card,'t3min')), max: numOrNull(getKV(card,'t3max')) },
-
           { min: numOrNull(getKV(card,'t4min')), max: numOrNull(getKV(card,'t4max')) },
-
         ];
-
-        const humRanges = \[
-
+        const humRanges = [
           { min: numOrNull(getKV(card,'h1min')), max: numOrNull(getKV(card,'h1max')) },
-
           { min: numOrNull(getKV(card,'h2min')), max: numOrNull(getKV(card,'h2max')) },
-
         ];
-
-
 
         const payload = {
-
           deviceGuid: guid,
-
           deviceName: name,
-
           tempRanges,
-
           humRanges,
-
           debounceHits: intOr(getKV(card,'debounce'), 2),
-
           cooldownSeconds: intOr(getKV(card,'cooldown'), 180),
-
           enabled: (getKV(card,'enabled') === 'true')
-
         };
 
-
-
     const res = await fetch('/api/elitech/alerts/rules', {
-
       method: 'POST',
-
       headers: { 'Content-Type': 'application/json' },
-
       body: JSON.stringify(payload)
-
     });
 
-
-
     if (!res.ok) {
-
       let errText = `Save thất bại (${res.status})`;
-
       let detail = null;
 
-
-
       try {
-
         // cố gắng đọc JSON lỗi từ backend
-
         const err = await res.json();
-
         detail = err;
-
         if (err?.message) errText += `: ${err.message}`;
-
       } catch {
-
         // fallback nếu backend không trả JSON
-
         const t = await res.text();
-
         if (t) errText += `: ${t}`;
-
       }
-
-
 
       // phân loại lỗi phổ biến để đọc phát hiểu ngay
-
       switch (res.status) {
-
         case 400:
-
           errText = '❌ Dữ liệu gửi lên không hợp lệ (400)';
-
           break;
-
         case 401:
-
           errText = '🔒 Bạn chưa đăng nhập hoặc session hết hạn (401)';
-
           break;
-
         case 403:
-
           errText = '⛔ Thiết bị này chưa được gán cho bạn (403)';
-
           break;
-
         case 404:
-
           errText = '❓ API không tồn tại (404)';
-
           break;
-
         case 500:
-
           errText = '💥 Lỗi server (500)';
-
           break;
-
       }
-
-
 
       toast(errText);
 
-
-
       // log chi tiết cho dev
-
       console.error('Save rule failed', {
-
         status: res.status,
-
         payload,
-
         detail
-
       });
 
-
-
       return;
-
     }
 
-
-
     // OK
-
     toast('Saved ✅');
 
-
-
-        const pill = card.querySelector('\[data-pill]');
-
+        const pill = card.querySelector('[data-pill]');
         pill.textContent = payload.enabled ? 'Rule: ON' : 'Rule: OFF';
-
         pill.className = payload.enabled ? 'pill pill-ok' : 'pill pill-off';
 
-
-
         toast('Saved ✅');
-
       }
-
-
 
       function clearCard(card){
-
-        \['t1min','t1max','t2min','t2max','t3min','t3max','t4min','t4max','h1min','h1max','h2min','h2max'].forEach(k=>setKV(card,k,''));
-
+        ['t1min','t1max','t2min','t2max','t3min','t3max','t4min','t4max','h1min','h1max','h2min','h2max'].forEach(k=>setKV(card,k,''));
         setKV(card,'debounce', 2);
-
         setKV(card,'cooldown', 180);
-
         setKV(card,'enabled', 'true');
-
       }
-
-
 
       document.getElementById('btnReload')?.addEventListener('click', loadRules);
 
-
-
-      document.querySelectorAll('\[data-save]').forEach(btn=>{
-
+      document.querySelectorAll('[data-save]').forEach(btn=>{
         btn.addEventListener('click', (e)=>{
-
           e.preventDefault();
-
-          const card = btn.closest('\[data-guid]');
-
+          const card = btn.closest('[data-guid]');
           if(card) saveRule(card);
-
         });
-
       });
 
-
-
-      document.querySelectorAll('\[data-clear]').forEach(btn=>{
-
+      document.querySelectorAll('[data-clear]').forEach(btn=>{
         btn.addEventListener('click', (e)=>{
-
           e.preventDefault();
-
-          const card = btn.closest('\[data-guid]');
-
+          const card = btn.closest('[data-guid]');
           if(card) { clearCard(card); toast('Cleared'); }
-
         });
-
       });
-
-
 
       // init
-
       loadRules();
-
     })();
-
 </script>

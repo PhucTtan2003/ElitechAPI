@@ -614,12 +614,12 @@
 
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                                <a class="dropdown-item" href="/Profile">
                                                     <i class="bi bi-person me-2"></i> Profile
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" asp-controller="Account" asp-action="Settings">
+                                                <a class="dropdown-item" href="/Settings">
                                                     <i class="bi bi-gear me-2"></i> Settings
                                                 </a>
                                             </li>
@@ -766,291 +766,251 @@
                 </div>
             </div>
         </footer>
+        
         <div id="elitechToastHost" style="position:fixed;right:18px;top:18px;z-index:4000;max-width:420px"></div>
+        <audio id="alarmAudio" preload="auto">
+            <source src="/sounds/alarm.mp3" type="audio/mpeg" />
+        </audio>
+
         <script>
-
-            (function(){
-
+            (function () {
               const host = document.getElementById('elitechToastHost');
-
-              if(!host) return;
-
-
+              if (!host) return;
 
               // =========================
-
               // (A) Persist "seen" across page reloads / navigation
-
               // =========================
+              const LS_KEY = 'elitech_seen_alert_ids_v1';
 
-              const LS_KEY = 'elitech\_seen\_alert\_ids\_v1';
-
-
-
-              function loadSeen(){
-
-                try{
-
+              function loadSeen() {
+                try {
                   const raw = localStorage.getItem(LS_KEY);
-
                   const arr = raw ? JSON.parse(raw) : [];
-
-                  // chỉ nhận mảng string
-
                   return new Set(Array.isArray(arr) ? arr.filter(x => typeof x === 'string') : []);
-
-                }catch{
-
+                } catch {
                   return new Set();
-
                 }
-
               }
 
-
-
-              function saveSeen(set){
-
-                try{
-
-                  // giới hạn 300 ids gần nhất để khỏi phình localStorage
-
+              function saveSeen(set) {
+                try {
                   const arr = Array.from(set);
-
                   const trimmed = arr.length > 300 ? arr.slice(arr.length - 300) : arr;
-
                   localStorage.setItem(LS_KEY, JSON.stringify(trimmed));
-
-                }catch{}
-
+                } catch { }
               }
-
-
 
               const seen = loadSeen();
 
-
-
               // =========================
-
-              // Audio unlock
-
+              // (B) Audio MP3 (loop while toast exists)
               // =========================
-
+              const AUDIO_KEY = 'elitech_audio_unlocked_v1';
               let audioUnlocked = false;
 
+              // 2 audio để ưu tiên HIGH > WARN (nếu sau này bạn cần)
+              const audioHigh = new Audio('/sounds/alarm.mp3');
+              const audioWarn = new Audio('/sounds/alarm.mp3');
 
+              audioHigh.preload = 'auto';
+              audioWarn.preload = 'auto';
+              audioHigh.loop = true;
+              audioWarn.loop = true;
+              audioHigh.volume = 0.85;
+              audioWarn.volume = 0.60;
 
-              function playBeep(volume=0.2, durationMs=180, freq=880){
+              // Đếm số toast đang hiện
+              let activeHighCount = 0;
+              let activeWarnCount = 0;
 
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+              // Nếu toast tới trước khi unlock
+              let pendingLevel = null; // 'high' | 'warn' | null
 
-                const ctx = new AudioCtx();
+              // (chỉ là hint) đã unlock trước đó
+              try {
+                if (localStorage.getItem(AUDIO_KEY) === '1') audioUnlocked = true;
+              } catch { }
 
-                const o = ctx.createOscillator();
-
-                const g = ctx.createGain();
-
-                o.type = 'sine';
-
-                o.frequency.value = freq;
-
-                g.gain.value = volume;
-
-                o.connect(g);
-
-                g.connect(ctx.destination);
-
-                o.start();
-
-                setTimeout(() => { o.stop(); ctx.close(); }, durationMs);
-
+              function normalizeLevel(level) {
+                const lv = String(level || '').toLowerCase();
+                // Backend bạn đang set Level="ALARM" => coi là HIGH
+                if (lv === 'warn' || lv === 'warning') return 'warn';
+                return 'high';
               }
 
-
-
-              function unlockAudio(){
-
-                if(audioUnlocked) return;
-
-                audioUnlocked = true;
-
-                try { playBeep(0.05, 120, 880); } catch {}
-
-                window.removeEventListener('click', unlockAudio);
-
-                window.removeEventListener('keydown', unlockAudio);
-
+              function stopAllAudio() {
+                try { audioHigh.pause(); audioHigh.currentTime = 0; } catch { }
+                try { audioWarn.pause(); audioWarn.currentTime = 0; } catch { }
               }
 
+              function syncAudio() {
+                const needHigh = activeHighCount > 0;
+                const needWarn = !needHigh && activeWarnCount > 0;
+
+                if (!needHigh && !needWarn) {
+                  stopAllAudio();
+                  return;
+                }
+
+                // ưu tiên HIGH
+                if (needHigh) {
+                  if (!audioWarn.paused) { audioWarn.pause(); audioWarn.currentTime = 0; }
+                  if (audioHigh.paused) {
+                    audioHigh.currentTime = 0;
+                    audioHigh.play().catch(err => console.warn('⛔ play HIGH blocked:', err));
+                  }
+                  return;
+                }
+
+                // chỉ WARN
+                if (!audioHigh.paused) { audioHigh.pause(); audioHigh.currentTime = 0; }
+                if (audioWarn.paused) {
+                  audioWarn.currentTime = 0;
+                  audioWarn.play().catch(err => console.warn('⛔ play WARN blocked:', err));
+                }
+              }
+
+              async function unlockAudio() {
+                if (audioUnlocked) return;
+
+                try {
+                  // warm up -> qua autoplay policy
+                  await audioHigh.play();
+                  audioHigh.pause(); audioHigh.currentTime = 0;
+
+                  await audioWarn.play();
+                  audioWarn.pause(); audioWarn.currentTime = 0;
+
+                  audioUnlocked = true;
+                  try { localStorage.setItem(AUDIO_KEY, '1'); } catch { }
+
+                  // nếu toast tới trước lúc unlock -> áp pending
+                  if (pendingLevel) {
+                    if (pendingLevel === 'warn') activeWarnCount++;
+                    else activeHighCount++;
+                    pendingLevel = null;
+                    syncAudio();
+                  }
+
+                  console.log('✅ Audio unlocked');
+                } catch (e) {
+                  audioUnlocked = false;
+                  console.warn('❌ Unlock failed:', e);
+                }
+              }
+
+              // user click/keydown 1 lần để unlock
               window.addEventListener('click', unlockAudio, { once: true });
-
               window.addEventListener('keydown', unlockAudio, { once: true });
 
+              function beginSound(level) {
+                const lv = normalizeLevel(level);
 
+                if (!audioUnlocked) {
+                  pendingLevel = lv;
+                  console.log('🔇 audio locked → pendingLevel=', pendingLevel);
+                  return;
+                }
 
-              // =========================
+                if (lv === 'warn') activeWarnCount++;
+                else activeHighCount++;
 
-              // Helper: stable id key
-
-              // (chỉ để phục vụ nguyên nhân A: persist seen)
-
-              // =========================
-
-              function stableKey(a){
-
-                // ưu tiên id string (nếu có)
-
-                const raw = a?.id ?? a?._id ?? a?.Id ?? a?.ID;
-
-                if(typeof raw === 'string' && raw.trim()) return raw.trim();
-
-
-
-                // fallback nếu không có id: deviceGuid + occurredAtUtc
-
-                const dg = (a?.deviceGuid ?? a?.DeviceGuid ?? '').toString().trim();
-
-                const ts = (a?.occurredAtUtc ?? a?.OccurredAtUtc ?? '').toString().trim();
-
-                return (dg && ts) ? (dg + '|' + ts) : (dg || ts || JSON.stringify(a));
-
+                syncAudio();
               }
 
+              function endSound(level) {
+                const lv = normalizeLevel(level);
 
+                if (lv === 'warn') activeWarnCount = Math.max(0, activeWarnCount - 1);
+                else activeHighCount = Math.max(0, activeHighCount - 1);
 
-              function toastAlert(a){
+                syncAudio();
+              }
 
+              // =========================
+              // Helper: stable id key
+              // =========================
+              function stableKey(a) {
+                const raw = a?.id ?? a?._id ?? a?.Id ?? a?.ID;
+                if (typeof raw === 'string' && raw.trim()) return raw.trim();
+
+                const dg = (a?.deviceGuid ?? a?.DeviceGuid ?? '').toString().trim();
+                const ts = (a?.occurredAtUtc ?? a?.OccurredAtUtc ?? a?.ts ?? a?.alarmTimeStamp ?? '').toString().trim();
+                return (dg && ts) ? (dg + '|' + ts) : (dg || ts || JSON.stringify(a));
+              }
+
+              function toastAlert(a) {
                 const key = stableKey(a);
 
-
-
                 // ✅ chống spam khi reload/chuyển trang
-
-                if(seen.has(key)) return;
-
+                if (seen.has(key)) return;
                 seen.add(key);
-
                 saveSeen(seen);
 
-
-
                 const dev = (a?.deviceName ?? a?.DeviceName ?? 'Device').toString();
-
-                const reasons = (a?.reasons ?? a?.Reasons ?? '').toString();
-
-                const whenRaw = a?.occurredAtUtc ?? a?.OccurredAtUtc;
-
+                const reasons = (a?.reasons ?? a?.Reasons ?? a?.message ?? a?.Message ?? 'ALARM').toString();
+                const whenRaw = a?.occurredAtUtc ?? a?.OccurredAtUtc ?? a?.ts;
                 const when = whenRaw ? new Date(whenRaw).toLocaleString() : '';
 
-
+                // ✅ lấy Level từ backend (Worker đang set "ALARM")
+                const level = (a?.level ?? a?.Level ?? 'high');
 
                 const el = document.createElement('div');
+                el.setAttribute('data-level', normalizeLevel(level));
+                el.setAttribute('data-alert-key', key);
 
                 el.style.cssText = `
-
                   background:#111827;color:#fff;border-radius:14px;padding:12px 14px;margin-bottom:10px;
-
                   box-shadow:0 18px 40px rgba(0,0,0,.18);cursor:pointer;border:1px solid rgba(255,255,255,.1)
-
                 `;
-
                 el.innerHTML = `
-
                   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-
                     <div style="font-weight:900">⚠️ ${dev}</div>
-
                     <div style="opacity:.75;font-size:12px">${when}</div>
-
                   </div>
-
-                  <div style="opacity:.9;margin-top:6px;font-size:13px">${reasons || 'ALARM'}</div>
-
+                  <div style="opacity:.9;margin-top:6px;font-size:13px">${reasons}</div>
                   <div style="opacity:.75;margin-top:6px;font-size:12px">Bấm để xem chi tiết</div>
-
                 `;
-
-
 
                 el.addEventListener('click', async () => {
-
-                  // ✅ giữ nguyên behavior: chỉ mark-read khi click
-
-                  try{
-
+                  try {
                     const oid = a?.id ?? a?._id ?? a?.Id ?? a?.ID;
-
-                    if(typeof oid === 'string' && oid.trim()){
-
-                      await fetch('/api/elitech/alerts/mark-read?id=' + encodeURIComponent(oid.trim()), { method:'POST' });
-
+                    if (typeof oid === 'string' && oid.trim()) {
+                      await fetch('/api/elitech/alerts/mark-read?id=' + encodeURIComponent(oid.trim()), { method: 'POST' });
                     }
+                  } catch { }
 
-                  }catch{}
-
-
-
-                  window.location.href = '/ElitechRealtimePage';
-
-                  // hoặc:
-
-                  // const dg = a?.deviceGuid ?? a?.DeviceGuid ?? '';
-
-                  // window.location.href = '/ElitechRealtime?deviceGuids=' + encodeURIComponent(dg);
-
+                  window.location.href = '/realtime';
                 });
-
-
 
                 host.appendChild(el);
 
+                // ✅ div xuất hiện -> bật chuông MP3 (loop)
+                beginSound(level);
 
-
-                if(audioUnlocked){
-
-                  try { playBeep(0.25, 220, 880); } catch {}
-
-                }
-
-
-
-                setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .25s'; }, 9000);
-
-                setTimeout(()=>{ el.remove(); }, 9400);
-
+                // auto fade/remove
+                setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .25s'; }, 9000);
+                setTimeout(() => {
+                  // ✅ div biến mất -> tắt chuông
+                  endSound(level);
+                  el.remove();
+                }, 9400);
               }
 
-
-
-              async function pollUnread(){
-
-                try{
-
+              async function pollUnread() {
+                try {
                   const res = await fetch('/api/elitech/alerts/unread?take=5', { cache: 'no-store' });
-
-                  if(!res.ok) return;
-
+                  if (!res.ok) return;
                   const json = await res.json();
-
                   const list = json?.data ?? [];
-
                   list.reverse().forEach(toastAlert);
-
-                }catch{}
-
+                } catch { }
               }
-
-
 
               pollUnread();
-
               setInterval(pollUnread, 15000);
-
             })();
-
         </script>
-
 
     </div>
 

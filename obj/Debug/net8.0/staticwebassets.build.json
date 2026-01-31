@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "urq8q8K2E8Ayd84GTDttM/ujs8SXfD0TlURo4e3XMVU=",
+  "Hash": "m5EPjBLQyaZmVsLXtSfduB8ldQNmOEgtkSDTRrOLA/A=",
   "Source": "Elitech",
   "BasePath": "_content/Elitech",
   "Mode": "Default",
@@ -241,8 +241,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "08719mzuw4",
-      "Integrity": "MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s=",
+      "Fingerprint": "8m8abnfbn1",
+      "Integrity": "IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\elitech-history.js"
@@ -1506,6 +1506,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Pictures\\logoelitech.png"
+    },
+    {
+      "Identity": "C:\\Users\\TAM\\OneDrive\\Máy tính\\Elitech\\wwwroot\\sounds\\alarm.mp3",
+      "SourceId": "Elitech",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\TAM\\OneDrive\\Máy tính\\Elitech\\wwwroot\\",
+      "BasePath": "_content/Elitech",
+      "RelativePath": "sounds/alarm#[.{fingerprint}]?.mp3",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "vmiic2tk06",
+      "Integrity": "KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\sounds\\alarm.mp3"
     }
   ],
   "Endpoints": [
@@ -2106,7 +2127,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 26 Dec 2025 09:08:03 GMT"
+          "Value": "Fri, 30 Jan 2026 02:53:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2143,7 +2164,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 26 Dec 2025 09:08:03 GMT"
+          "Value": "Fri, 30 Jan 2026 02:53:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2180,7 +2201,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 26 Dec 2025 09:08:03 GMT"
+          "Value": "Fri, 30 Jan 2026 02:53:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2225,7 +2246,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 26 Dec 2025 09:08:03 GMT"
+          "Value": "Fri, 30 Jan 2026 02:53:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2330,7 +2351,7 @@
       ]
     },
     {
-      "Route": "js/elitech-history.08719mzuw4.js",
+      "Route": "js/elitech-history.8m8abnfbn1.js",
       "AssetFile": "C:\\Users\\TAM\\OneDrive\\Máy tính\\Elitech\\wwwroot\\js\\elitech-history.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -2348,11 +2369,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s=\""
+          "Value": "\"IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 06 Jan 2026 08:49:37 GMT"
+          "Value": "Sat, 31 Jan 2026 07:17:42 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2362,7 +2383,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "08719mzuw4"
+          "Value": "8m8abnfbn1"
         },
         {
           "Name": "label",
@@ -2370,7 +2391,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s="
+          "Value": "sha256-IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc="
         }
       ]
     },
@@ -2393,11 +2414,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s=\""
+          "Value": "\"IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 06 Jan 2026 08:49:37 GMT"
+          "Value": "Sat, 31 Jan 2026 07:17:42 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2407,7 +2428,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s="
+          "Value": "sha256-IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc="
         }
       ]
     },
@@ -7328,6 +7349,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-kLRCRRJ276JTKa193REpjP8s4XBEof7LgkBreqh7wLI="
+        }
+      ]
+    },
+    {
+      "Route": "sounds/alarm.mp3",
+      "AssetFile": "C:\\Users\\TAM\\OneDrive\\Máy tính\\Elitech\\wwwroot\\sounds\\alarm.mp3",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "986116"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "audio/mpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 08 Sep 2025 02:33:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI="
+        }
+      ]
+    },
+    {
+      "Route": "sounds/alarm.vmiic2tk06.mp3",
+      "AssetFile": "C:\\Users\\TAM\\OneDrive\\Máy tính\\Elitech\\wwwroot\\sounds\\alarm.mp3",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "986116"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "audio/mpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 08 Sep 2025 02:33:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vmiic2tk06"
+        },
+        {
+          "Name": "label",
+          "Value": "sounds/alarm.mp3"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI="
         }
       ]
     }

@@ -620,13 +620,18 @@
         if (_hub) return _hub;
 
         _hub = new signalR.HubConnectionBuilder()
-            .withUrl("/hubs/alarm")
-            .withAutomaticReconnect()
-            .build();
+                .withUrl("/hubs/alarm")
+                .withAutomaticReconnect()
+                .build();
+
+        _hub.onreconnecting(() => setStat("Reconnecting...", "warn"));
+        _hub.onreconnected(() => setStat("Live connected", "ok"));
+        _hub.onclose(() => setStat("Disconnected", "bad"));
 
         // ✅ ĐÂY CHÍNH LÀ CHỖ _hub.on("alarm.new", ...)
+        _hub.off("alarm.new");
         _hub.on("alarm.new", (items) => {
-            if (!items || !items.length) return;
+                if (!items || !items.length) return;
 
             // dedupe key
             const key = x =>
@@ -665,6 +670,7 @@
         });
 
         await _hub.start();
+        setStat("Live connected", "ok");
         return _hub;
     }
 

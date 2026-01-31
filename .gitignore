@@ -1,0 +1,9 @@
+# App config (secrets)
+appsettings*.json
+
+# .NET build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+**/.vs/**

@@ -44,6 +44,7 @@ namespace Elitech.Admin.Controllers
                     username = x.Username,
                     role = x.Role,             // RoleViewModel
                     isActive = x.IsActive,
+                    phone = x.Phone,
                     createdAtUtc = x.CreatedAtUtc
                 }).ToList();
 

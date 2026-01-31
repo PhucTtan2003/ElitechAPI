@@ -594,6 +594,35 @@
         .elx-mod-head-hint {
             text-align: left;
         }
+        /* ===== Avatar in Accounts table (GLOBAL) ===== */
+
+        .elx-th-ava {
+            width: 64px;
+        }
+        /* ===== Avatar (GLOBAL) ===== */
+        .elx-ava {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            overflow: hidden;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(148,163,184,.55);
+            background: #fff;
+            box-shadow: 0 8px 18px rgba(15,23,42,.12);
+        }
+
+            .elx-ava img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+                display: block !important;
+            }
+
+            .elx-ava i {
+                font-size: 18px;
+                color: #64748b;
+            }
     }
 </style>
 
@@ -876,35 +905,7 @@
         </div>
     </div>
 
-    <!-- Accounts -->
-    <div class="elx-card" style="margin: 0 18px 18px">
-        <div class="elx-card-header">
-            <h5>Danh sách Accounts</h5>
-            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-                <button class="elx-btn primary" id="btnLoadAccounts">
-                    <i class="bi bi-arrow-repeat"></i> Load Accounts
-                </button>
-                <span class="elx-card-sub" id="accountsHint" style="margin:0;">
-                    Danh sách từ MongoDB (ElitechAuth.Accounts).
-                </span>
-            </div>
-        </div>
 
-        <div class="elx-table-wrap" id="accountsTableWrap" style="display:none;">
-            <table class="elx-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Username</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Created</th>
-                    </tr>
-                </thead>
-                <tbody id="accountsTbody"></tbody>
-            </table>
-        </div>
-    </div>
 
 
     <!-- Dock -->
@@ -1138,7 +1139,7 @@
             }
         });
 
-              
+
         // ===== Accounts list =====
         const $btnLoadAccounts = document.getElementById('btnLoadAccounts');
         const $accountsHint = document.getElementById('accountsHint');
@@ -1196,15 +1197,30 @@
                 ? `<span class="elx-chip-status info">${roleLabel(a.role)}</span>`
                 : `<span class="elx-chip-status warn">${roleLabel(a.role)}</span>`;
 
-              return `
-                <tr>
-                  <td>${i + 1}</td>
-                  <td style="font-weight:900">${escapeHtml(a.username)}</td>
-                  <td>${roleChip}</td>
-                  <td>${statusChip}</td>
-                  <td>${escapeHtml(fmtDate(a.createdAtUtc))}</td>
-                </tr>
-              `;
+                      return `
+                              <tr>
+                                <td>${i + 1}</td>
+
+                                <td>
+                                  <span class="elx-ava">
+                                    ${
+                                            a.avatarUrl
+                                                ? `<img src="${escapeHtml(a.avatarUrl)}" alt="avatar"
+                                                     style="width:34px;height:34px;object-fit:cover;display:block"
+                                                     onerror="this.outerHTML='<i class=\\'bi bi-person-fill\\'></i>';" />`
+                                                : `<i class="bi bi-person-fill"></i>`
+
+                                    }
+                                  </span>
+                                </td>
+
+                                <td style="font-weight:900">${escapeHtml(a.username)}</td>
+                                <td>${roleChip}</td>
+                                <td>${statusChip}</td>
+                                <td>${escapeHtml(fmtDate(a.createdAtUtc))}</td>
+                              </tr>
+                            `;
+
             }).join('');
 
             $accountsHint.textContent = `Đã tải ${arr.length} accounts.`;

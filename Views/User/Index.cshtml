@@ -3,10 +3,8 @@
     ViewData["Title"] = "Thiết bị của tôi";
     Layout = "_Layout";
 
-    // ViewBag.Devices: danh sách thiết bị admin đã gán cho user (từ Controller)
     var assignedDevices = ViewBag.Devices ?? new List<object>();
 
-    // meta cơ bản (nếu muốn dùng trong React)
     var userMeta = new
     {
         name = User?.Identity?.Name ?? "",
@@ -16,17 +14,35 @@
 }
 
 <style>
-    /* ===== User Devices Page ===== */
-    .ud-wrap {
-        padding: 10px 14px 20px;
+    :root {
+        --bg: #eef3fb;
+        --card: rgba(255,255,255,.92);
+        --stroke: rgba(13,25,55,.10);
+        --shadow: 0 18px 40px rgba(9,22,48,.14);
+        --radius: 18px;
+        --txt: #0f172a;
+        --mut: #64748b;
+        --brand: #2563eb;
+        --brand2: #3b82f6;
+        --ok: #16a34a;
+        --warn: #f59e0b;
+        --bad: #ef4444;
     }
 
+    /* ===== Page background ===== */
+    .ud-wrap {
+        padding: 14px 16px 22px;
+        background: radial-gradient(1100px 520px at 15% 0%, rgba(37,99,235,.18), transparent 60%), radial-gradient(900px 420px at 90% 10%, rgba(245,130,32,.10), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.0));
+    }
+
+    /* ===== Hero ===== */
     .ud-hero {
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         justify-content: space-between;
         gap: 16px;
-        margin-bottom: 16px;
+        margin: 6px 0 14px;
+        flex-wrap: wrap;
     }
 
     .ud-hero-left {
@@ -36,19 +52,19 @@
     }
 
     .ud-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
         display: grid;
         place-items: center;
-        background: linear-gradient(180deg,#3b82f6,#2563eb);
+        background: linear-gradient(180deg, var(--brand2), var(--brand));
         color: #fff;
         font-size: 26px;
         box-shadow: 0 14px 32px rgba(37,99,235,.45);
         position: relative;
         overflow: hidden;
     }
-        /* subtle shine */
+
         .ud-icon:after {
             content: "";
             position: absolute;
@@ -60,53 +76,89 @@
 
     @@keyframes udShine {
         0% {
-            transform: translateX(-40%) rotate(25deg);
+            transform: translateX(-40%) rotate(25deg)
         }
 
         100% {
-            transform: translateX(40%) rotate(25deg);
+            transform: translateX(40%) rotate(25deg)
         }
     }
 
     .ud-hero h1 {
         margin: 0;
-        font-weight: 900;
-        font-size: 1.25rem;
+        font-weight: 950;
+        font-size: 1.35rem;
+        color: var(--txt);
     }
 
     .ud-hero p {
-        margin: 2px 0 0;
-        color: var(--elx-muted);
-        font-weight: 700;
-        font-size: .9rem;
+        margin: 4px 0 0;
+        color: var(--mut);
+        font-weight: 750;
+        font-size: .92rem;
+    }
+
+    .ud-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
     }
 
     .ud-pill {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: .35rem .75rem;
+        gap: 8px;
+        padding: .45rem .8rem;
         border-radius: 999px;
-        font-size: .75rem;
+        font-size: .78rem;
         font-weight: 900;
-        border: 1px solid var(--elx-border);
-        background: #fff;
+        border: 1px solid var(--stroke);
+        background: rgba(255,255,255,.75);
         box-shadow: 0 10px 24px rgba(15,23,42,.08);
-        margin-left: 6px;
         white-space: nowrap;
+        color: #334155;
+    }
+
+    .ud-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #cbd5e1;
+    }
+
+        .ud-dot.ok {
+            background: var(--ok);
+        }
+
+        .ud-dot.warn {
+            background: var(--warn);
+        }
+
+        .ud-dot.bad {
+            background: var(--bad);
+        }
+
+    /* ===== Grid layout ===== */
+    .ud-grid {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap: 14px;
+        align-items: start;
     }
 
     .ud-card {
-        background: rgba(255,255,255,.95);
-        border: 1px solid var(--elx-border);
-        border-radius: 18px;
-        box-shadow: 0 14px 34px rgba(15,23,42,.12);
+        background: var(--card);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
         overflow: hidden;
     }
 
     .ud-card-hd {
         padding: 14px 16px;
-        border-bottom: 1px dashed rgba(231,235,243,.9);
+        border-bottom: 1px solid rgba(231,235,243,.9);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -114,29 +166,30 @@
     }
 
         .ud-card-hd b {
-            font-weight: 900;
+            font-weight: 950;
+            color: var(--txt);
         }
 
     .ud-sub {
         font-size: .85rem;
-        font-weight: 700;
-        color: var(--elx-muted);
+        font-weight: 750;
+        color: var(--mut);
     }
 
     .ud-body {
         padding: 14px 16px 16px;
     }
 
-    /* Empty hint */
+    /* Hint */
     .ud-hint {
         display: flex;
-        gap: 14px;
+        gap: 12px;
         align-items: flex-start;
         border-radius: 16px;
-        padding: 14px;
+        padding: 12px;
         background: linear-gradient(180deg,#f8fafc,#fff);
-        border: 1px dashed rgba(59,130,246,.45);
-        margin-bottom: 14px;
+        border: 1px dashed rgba(37,99,235,.45);
+        margin-bottom: 12px;
     }
 
         .ud-hint .ico {
@@ -146,29 +199,29 @@
             display: grid;
             place-items: center;
             background: #fff;
-            border: 1px solid var(--elx-border);
-            color: #2563eb;
-            box-shadow: 0 10px 24px rgba(15,23,42,.12);
+            border: 1px solid var(--stroke);
+            color: var(--brand);
+            box-shadow: 0 10px 24px rgba(15,23,42,.10);
             flex: 0 0 auto;
             font-size: 20px;
         }
 
         .ud-hint b {
             display: block;
-            font-weight: 900;
+            font-weight: 950;
             margin-bottom: 2px;
         }
 
         .ud-hint span {
             color: #334155;
-            font-weight: 700;
-            font-size: .85rem;
-            line-height: 1.3rem;
+            font-weight: 750;
+            font-size: .86rem;
+            line-height: 1.35rem;
         }
 
-    /* React mount frame (Dashboard) */
+    /* React mount */
     #react-root-user {
-        min-height: 320px;
+        min-height: 420px;
         border-radius: 16px;
         background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(59,130,246,.45), rgba(14,165,233,.45)) border-box;
         border: 2px solid transparent;
@@ -177,14 +230,12 @@
         overflow: hidden;
     }
 
-    /* pre-render loading shimmer (will be hidden by React after mount) */
     .ud-preload {
         position: absolute;
         inset: 0;
         padding: 14px;
         display: grid;
         gap: 12px;
-        grid-template-columns: 1fr;
     }
 
         .ud-preload .row {
@@ -203,7 +254,7 @@
     }
 
         .ud-skel.big {
-            height: 210px;
+            height: 230px;
         }
 
     @@keyframes udSk {
@@ -216,117 +267,404 @@
         }
     }
 
+    /* Right column cards */
+    .ud-mini {
+        display: grid;
+        gap: 14px;
+    }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat {
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+        background: rgba(255,255,255,.78);
+        box-shadow: 0 12px 28px rgba(9,22,48,.10);
+        padding: 12px;
+    }
+
+        .stat .k {
+            font-size: 12px;
+            font-weight: 900;
+            color: #64748b;
+        }
+
+        .stat .v {
+            margin-top: 6px;
+            font-size: 18px;
+            font-weight: 950;
+            color: var(--txt);
+        }
+
+        .stat .s {
+            margin-top: 2px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #94a3b8;
+        }
+
     .ud-footer {
         margin-top: 12px;
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
         align-items: center;
-        font-size: .8rem;
-        font-weight: 800;
-        color: var(--elx-muted);
+        font-size: .82rem;
+        font-weight: 850;
+        color: var(--mut);
     }
 
-    @@media (max-width: 576px) {
-        .ud-wrap {
-            padding: 8px 10px 18px;
+    /* ===== Toast ===== */
+    .toast-wrap {
+        position: fixed;
+        top: 86px; /* tránh đè header */
+        right: 18px;
+        width: min(360px, calc(100vw - 28px));
+        display: grid;
+        gap: 10px;
+        z-index: 9999;
+        pointer-events: none;
+    }
+
+    .toast {
+        pointer-events: auto;
+        border-radius: 16px;
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.92);
+        box-shadow: 0 18px 40px rgba(9,22,48,.18);
+        overflow: hidden;
+        transform: translateY(-6px);
+        opacity: 0;
+        animation: toastIn .18s ease forwards;
+    }
+
+    @@keyframes toastIn {
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .toast .hd {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(231,235,243,.9);
+    }
+
+    .toast .title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 950;
+        color: var(--txt);
+        font-size: 13px;
+    }
+
+    .t-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #cbd5e1;
+    }
+
+        .t-dot.ok {
+            background: var(--ok);
         }
 
-        .ud-hero {
-            flex-direction: column;
-            align-items: flex-start;
+        .t-dot.warn {
+            background: var(--warn);
+        }
+
+        .t-dot.bad {
+            background: var(--bad);
+        }
+
+    .toast .close {
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.7);
+        border-radius: 10px;
+        padding: 4px 8px;
+        font-weight: 950;
+        cursor: pointer;
+    }
+
+    .toast .bd {
+        padding: 10px 12px 12px;
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 13px;
+        line-height: 1.35;
+    }
+
+    .toast .meta {
+        margin-top: 8px;
+        color: #64748b;
+        font-weight: 800;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    @@media (max-width: 980px) {
+        .ud-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
 
 <div class="ud-wrap">
 
-    <!-- ===== HERO ===== -->
     <div class="ud-hero">
         <div class="ud-hero-left">
-            <div class="ud-icon">
-                <i class="bi bi-cpu"></i>
-            </div>
+            <div class="ud-icon"><i class="bi bi-cpu"></i></div>
             <div>
-                <h1>Thiết bị của tôi</h1>
-                <p>Danh sách thiết bị đã được Admin gán cho tài khoản của bạn</p>
+                <h1>Dashboard thiết bị</h1>
+                <p>Realtime + lịch sử + cảnh báo quan trọng (toast) theo quyền user</p>
             </div>
         </div>
 
-        <div>
-            <span class="ud-pill">
-                <i class="bi bi-person-check"></i> User
-            </span>
-            <span class="ud-pill">
-                <i class="bi bi-cloud-check"></i> Elitech Cloud
-            </span>
+        <div class="ud-pills">
+            <span class="ud-pill"><span class="ud-dot ok"></span> Live / SignalR</span>
+            <span class="ud-pill"><i class="bi bi-person-check"></i> @userMeta.name</span>
+            <span class="ud-pill"><i class="bi bi-shield-lock"></i> Role: @userMeta.role</span>
         </div>
     </div>
 
-    <!-- ===== CARD ===== -->
-    <div class="ud-card">
-        <div class="ud-card-hd">
-            <div>
-                <b>Dashboard thiết bị</b>
-                <div class="ud-sub">
-                    Chọn thiết bị để xem realtime & lịch sử (KPI + biểu đồ)
+    <div class="ud-grid">
+
+        <!-- LEFT: main dashboard -->
+        <div class="ud-card">
+            <div class="ud-card-hd">
+                <div>
+                    <b>Thiết bị của tôi</b>
+                    <div class="ud-sub">Chỉ hiển thị thiết bị đã được Admin gán • Dữ liệu realtime cập nhật tự động</div>
                 </div>
+                <div class="ud-sub">Local: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")</div>
             </div>
 
-            <div class="ud-sub">
-                Local: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")
+            <div class="ud-body">
+                <div class="ud-hint">
+                    <div class="ico"><i class="bi bi-lightbulb"></i></div>
+                    <div>
+                        <b>Tip</b>
+                        <span>
+                            • Khi vượt ngưỡng theo rule, server sẽ bắn <b>alert.toast</b> về group <b>user:{userId}</b><br />
+                            • Toast sẽ hiện ở góc phải và tự tắt sau vài giây
+                        </span>
+                    </div>
+                </div>
+
+                <div id="react-root-user">
+                    <div class="ud-preload" id="ud-preload">
+                        <div class="row">
+                            <div class="ud-skel"></div>
+                            <div class="ud-skel"></div>
+                            <div class="ud-skel"></div>
+                        </div>
+                        <div class="row">
+                            <div class="ud-skel"></div>
+                            <div class="ud-skel"></div>
+                            <div class="ud-skel"></div>
+                        </div>
+                        <div class="ud-skel big"></div>
+                    </div>
+                </div>
+
+                <div class="ud-footer">
+                    <span><i class="bi bi-info-circle"></i> Không thấy thiết bị? Liên hệ Admin để được gán quyền.</span>
+                    <span><i class="bi bi-cloud-check"></i> Elitech Cloud + Mongo cache/state.</span>
+                </div>
             </div>
         </div>
 
-        <div class="ud-body">
+        <!-- RIGHT: quick stats + status -->
+        <div class="ud-mini">
+            <div class="ud-card">
+                <div class="ud-card-hd">
+                    <div>
+                        <b>Trạng thái</b>
+                        <div class="ud-sub">Kết nối realtime và cảnh báo</div>
+                    </div>
+                </div>
+                <div class="ud-body">
+                    <div class="stat-grid">
+                        <div class="stat">
+                            <div class="k">SignalR</div>
+                            <div class="v" id="srState">Connecting…</div>
+                            <div class="s" id="srStateSub">/hubs/alarm</div>
+                        </div>
+                        <div class="stat">
+                            <div class="k">Toast received</div>
+                            <div class="v" id="toastCount">0</div>
+                            <div class="s">important events</div>
+                        </div>
+                    </div>
 
-            <!-- Hint -->
-            <div class="ud-hint">
-                <div class="ico"><i class="bi bi-lightbulb"></i></div>
-                <div>
-                    <b>Hướng dẫn nhanh</b>
-                    <span>
-                        • Chỉ hiển thị <b>thiết bị đã được gán</b> cho bạn<br />
-                        • Chọn thiết bị để xem <b>biểu đồ nhiệt độ / độ ẩm</b><br />
-                        • Dữ liệu realtime cập nhật tự động
-                    </span>
+                    <div class="stat" style="margin-top:10px">
+                        <div class="k">User</div>
+                        <div class="v" style="font-size:16px">@userMeta.name</div>
+                        <div class="s">userId: @userMeta.userId</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- React mount -->
-            <div id="react-root-user">
-                <!-- Preload skeleton while JS loads -->
-                <div class="ud-preload" id="ud-preload">
-                    <div class="row">
-                        <div class="ud-skel"></div>
-                        <div class="ud-skel"></div>
-                        <div class="ud-skel"></div>
+            <div class="ud-card">
+                <div class="ud-card-hd">
+                    <div>
+                        <b>Gợi ý</b>
+                        <div class="ud-sub">Chỉ push event quan trọng</div>
                     </div>
-                    <div class="row">
-                        <div class="ud-skel"></div>
-                        <div class="ud-skel"></div>
-                        <div class="ud-skel"></div>
-                    </div>
-                    <div class="ud-skel big"></div>
+                </div>
+                <div class="ud-body" style="color:#334155;font-weight:800;line-height:1.45">
+                    • Alarm record (history) bạn vẫn xem ở trang Alarm<br />
+                    • Cảnh báo vượt ngưỡng (rule) → push <b>alert.toast</b><br />
+                    • Tránh spam: debounce + cooldown theo rule/state
                 </div>
             </div>
-
-            <div class="ud-footer">
-                <span><i class="bi bi-info-circle"></i> Không thấy thiết bị? Liên hệ Admin để được gán quyền.</span>
-                <span><i class="bi bi-shield-lock"></i> Dữ liệu hiển thị theo quyền user.</span>
-            </div>
-
         </div>
     </div>
 </div>
 
-<script>
-    // Preload danh sách thiết bị đã gán (server -> client)
-    // React sẽ đọc window.__USER_DEVICES__ để render list device
-    window.__USER_DEVICES__ = @Html.Raw(JsonSerializer.Serialize(assignedDevices));
+<!-- Toast container -->
+<div class="toast-wrap" id="toastWrap"></div>
 
-    // Meta user (optional)
+<script>
+    window.__USER_DEVICES__ = @Html.Raw(JsonSerializer.Serialize(assignedDevices));
     window.__USER_META__ = @Html.Raw(JsonSerializer.Serialize(userMeta));
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+<script>
+    // =========================
+    // Toast UI (dynamic message, không hard-code)
+    // =========================
+    let _toastSeq = 0;
+    let _toastReceived = 0;
+
+    function toneToDot(level) {
+        const s = (level || "").toLowerCase();
+        if (s === "high" || s === "bad" || s === "error") return "bad";
+        if (s === "warn" || s === "warning") return "warn";
+        return "ok";
+    }
+
+    function fmtLocal(ts) {
+        if (!ts) return new Date().toLocaleString();
+        return new Date(ts * 1000).toLocaleString();
+    }
+
+    function showToast(payload) {
+        const wrap = document.getElementById("toastWrap");
+        if (!wrap) return;
+
+        _toastReceived++;
+        const c = document.getElementById("toastCount");
+        if (c) c.textContent = String(_toastReceived);
+
+        const id = "t" + (++_toastSeq);
+
+        const dot = toneToDot(payload?.level);
+        const title = payload?.title || "Cảnh báo";
+        const msg = payload?.message || "";
+        const device = payload?.deviceName || payload?.deviceGuid || "";
+        const time = fmtLocal(payload?.ts);
+
+        const el = document.createElement("div");
+        el.className = "toast";
+        el.id = id;
+
+        el.innerHTML = `
+            <div class="hd">
+                <div class="title">
+                    <span class="t-dot ${dot}"></span>
+                    <span>${escapeHtml(title)}</span>
+                </div>
+                <button class="close" title="Close">×</button>
+            </div>
+            <div class="bd">
+                ${escapeHtml(msg)}
+                <div class="meta">
+                    <span>${escapeHtml(device)}</span>
+                    <span>${escapeHtml(time)}</span>
+                </div>
+            </div>
+        `;
+
+        el.querySelector(".close").addEventListener("click", () => removeToast(id));
+        wrap.prepend(el);
+
+        // auto dismiss
+        setTimeout(() => removeToast(id), 6500);
+
+        // giữ tối đa 4 toast
+        while (wrap.children.length > 4) {
+            wrap.removeChild(wrap.lastElementChild);
+        }
+    }
+
+    function removeToast(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.opacity = "0";
+        el.style.transform = "translateY(-6px)";
+        setTimeout(() => el.remove(), 160);
+    }
+
+    function escapeHtml(s) {
+        return (s ?? "").toString()
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // =========================
+    // SignalR connect: chỉ nhận event quan trọng (alert.toast)
+    // =========================
+    let _hub = null;
+
+    function setSrState(text, tone) {
+        const el = document.getElementById("srState");
+        if (!el) return;
+        el.textContent = text;
+    }
+
+    async function startHub() {
+        if (_hub) return;
+
+        _hub = new signalR.HubConnectionBuilder()
+            .withUrl("/hubs/alarm")
+            .withAutomaticReconnect()
+            .build();
+
+        _hub.onreconnecting(() => setSrState("Reconnecting…"));
+        _hub.onreconnected(() => setSrState("Live connected"));
+        _hub.onclose(() => setSrState("Disconnected"));
+
+        // ✅ server push "alert.toast" (important)
+        _hub.on("alert.toast", (payload) => {
+            // payload là object dynamic bạn gửi từ worker
+            showToast(payload);
+        });
+
+        await _hub.start();
+        setSrState("Live connected");
+
+        // Nếu Hub đã auto join theo claims ở OnConnectedAsync thì KHÔNG cần invoke JoinUser/JoinRole nữa.
+        // Nhưng nếu bạn chưa dùng OnConnectedAsync (hoặc muốn chắc chắn), bật đoạn dưới:
+    }
+
+    (function init() {
+        startHub().catch(() => setSrState("Disconnected"));
+    })();
 </script>
 
 <script type="module" src="/app/entry-user.js"></script>

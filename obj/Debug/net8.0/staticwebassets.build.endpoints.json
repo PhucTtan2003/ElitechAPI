@@ -29,7 +29,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 26 Dec 2025 09:08:03 GMT"
+          "Value": "Fri, 30 Jan 2026 02:53:00 GMT"
         }
       ],
       "EndpointProperties": [
@@ -66,7 +66,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 26 Dec 2025 09:08:03 GMT"
+          "Value": "Fri, 30 Jan 2026 02:53:00 GMT"
         }
       ],
       "EndpointProperties": [
@@ -905,7 +905,7 @@
       ]
     },
     {
-      "Route": "js/elitech-history.08719mzuw4.js",
+      "Route": "js/elitech-history.8m8abnfbn1.js",
       "AssetFile": "js/elitech-history.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -927,21 +927,21 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s=\""
+          "Value": "\"IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 06 Jan 2026 08:49:37 GMT"
+          "Value": "Sat, 31 Jan 2026 07:17:42 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "08719mzuw4"
+          "Value": "8m8abnfbn1"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s="
+          "Value": "sha256-IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc="
         },
         {
           "Name": "label",
@@ -972,17 +972,17 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s=\""
+          "Value": "\"IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 06 Jan 2026 08:49:37 GMT"
+          "Value": "Sat, 31 Jan 2026 07:17:42 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s="
+          "Value": "sha256-IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc="
         }
       ]
     },
@@ -5739,6 +5739,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-OZVI+w57FGwS9boYCZpH1ZSpcP7pYhLu4KtIUvPlZ4I="
+        }
+      ]
+    },
+    {
+      "Route": "sounds/alarm.mp3",
+      "AssetFile": "sounds/alarm.mp3",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "986116"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "audio/mpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 08 Sep 2025 02:33:16 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI="
+        }
+      ]
+    },
+    {
+      "Route": "sounds/alarm.vmiic2tk06.mp3",
+      "AssetFile": "sounds/alarm.mp3",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "986116"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "audio/mpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 08 Sep 2025 02:33:16 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vmiic2tk06"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI="
+        },
+        {
+          "Name": "label",
+          "Value": "sounds/alarm.mp3"
         }
       ]
     }

@@ -1,0 +1,573 @@
+﻿@model Elitech.Models.AccountViewModel
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_Layout";
+}
+
+<style>
+    /* ===== Profile Page (match Elitech vibe) ===== */
+    .pf-wrap {
+        max-width: 980px;
+        margin: 24px auto;
+        padding: 0 14px;
+    }
+
+    .pf-hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .pf-hero-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .pf-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 24px;
+        background: linear-gradient(180deg, var(--elx-navy), var(--elx-navy-800));
+        box-shadow: 0 18px 45px rgba(15,35,78,.35);
+        border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .pf-title {
+        margin: 0;
+        font-weight: 900;
+        letter-spacing: -.02em;
+        font-size: 1.55rem;
+    }
+
+    .pf-sub {
+        margin: 2px 0 0;
+        color: var(--elx-muted);
+        font-weight: 600;
+        font-size: .92rem;
+    }
+
+    .pf-badges {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .pf-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.78);
+        border: 1px solid rgba(226,232,240,.95);
+        box-shadow: 0 12px 28px rgba(15,35,78,.10);
+        font-weight: 800;
+        font-size: .85rem;
+        color: #0f172a;
+        backdrop-filter: blur(16px) saturate(170%);
+    }
+
+        .pf-badge i {
+            opacity: .9
+        }
+
+    .pf-grid {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap: 16px;
+        margin-top: 14px;
+    }
+
+    @@media (max-width: 991.98px) {
+        .pf-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .pf-badges {
+            justify-content: flex-start;
+        }
+    }
+
+    .pf-card {
+        background: var(--elx-card);
+        border: 1px solid var(--elx-border);
+        border-radius: 22px;
+        box-shadow: var(--elx-shadow-soft);
+        backdrop-filter: blur(18px) saturate(170%);
+        overflow: hidden;
+        position: relative;
+    }
+
+        .pf-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: radial-gradient(700px 220px at 10% 0%, rgba(245,130,32,.18), transparent 60%), radial-gradient(700px 220px at 90% 0%, rgba(13,71,161,.18), transparent 60%);
+            pointer-events: none;
+        }
+
+    .pf-card-inner {
+        position: relative;
+        padding: 18px 18px 16px;
+    }
+
+    .pf-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .pf-card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        font-weight: 900;
+        font-size: 1.05rem;
+        letter-spacing: -.01em;
+        color: #0f172a;
+    }
+
+    .pf-mini {
+        font-size: .82rem;
+        color: var(--elx-muted);
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .pf-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(15,23,42,.92);
+        color: #e5edff;
+        border: 1px solid rgba(148,163,184,.55);
+        font-weight: 800;
+        font-size: .78rem;
+    }
+
+        .pf-chip .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 0 rgba(34,197,94,.55);
+            animation: pfPulse 1.6s infinite;
+        }
+
+    @@keyframes pfPulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(34,197,94,.55);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(34,197,94,0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(34,197,94,0);
+        }
+    }
+
+    .pf-form {
+        display: grid;
+        gap: 12px;
+    }
+
+    .pf-row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    @@media (max-width: 768px) {
+        .pf-row2 {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .pf-label {
+        font-weight: 800;
+        color: #0f172a;
+        font-size: .86rem;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .pf-input {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(148,163,184,.55);
+        background: rgba(255,255,255,.88);
+        padding: 10px 12px;
+        outline: none;
+        font-weight: 700;
+        color: #0f172a;
+        box-shadow: 0 10px 26px rgba(15,35,78,.06);
+    }
+
+        .pf-input:focus {
+            border-color: rgba(59,130,246,.55);
+            box-shadow: 0 0 0 4px rgba(59,130,246,.14), 0 10px 26px rgba(15,35,78,.08);
+        }
+
+        .pf-input[disabled] {
+            opacity: .75;
+            background: rgba(241,245,249,.92);
+        }
+
+    .pf-help {
+        margin-top: 8px;
+        color: var(--elx-muted);
+        font-size: .82rem;
+        font-weight: 700;
+    }
+
+    .pf-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .pf-btn {
+        border: 0;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-weight: 900;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 16px 32px rgba(15,35,78,.18);
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .pf-btn-primary {
+        color: #0b1220;
+        background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
+        border: 1px solid rgba(255,255,255,.45);
+    }
+
+        .pf-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 44px rgba(15,35,78,.22);
+        }
+
+    .pf-btn-outline {
+        background: rgba(255,255,255,.75);
+        border: 1px solid rgba(226,232,240,.95);
+        color: #0f172a;
+        font-weight: 900;
+    }
+
+    .pf-alert {
+        border-radius: 18px;
+        padding: 12px 14px;
+        border: 1px solid rgba(226,232,240,.95);
+        background: rgba(255,255,255,.78);
+        box-shadow: 0 14px 30px rgba(15,35,78,.12);
+        backdrop-filter: blur(16px) saturate(170%);
+        font-weight: 800;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+        .pf-alert.ok {
+            border-color: rgba(34,197,94,.35);
+        }
+
+        .pf-alert.err {
+            border-color: rgba(239,68,68,.35);
+        }
+
+        .pf-alert i {
+            margin-top: 2px;
+        }
+
+        .pf-alert .t {
+            font-weight: 900;
+            margin: 0;
+        }
+
+        .pf-alert .d {
+            margin: 2px 0 0;
+            font-weight: 700;
+            color: var(--elx-muted);
+        }
+
+    .pf-side {
+        display: grid;
+        gap: 16px;
+    }
+
+    .pf-preview {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(226,232,240,.95);
+        background: rgba(255,255,255,.72);
+        box-shadow: 0 14px 30px rgba(15,35,78,.12);
+    }
+
+    .pf-avatarBig {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.45);
+        box-shadow: 0 16px 34px rgba(15,35,78,.22);
+        background: linear-gradient(180deg, rgba(245,130,32,.9), rgba(13,71,161,.9));
+        display: grid;
+        place-items: center;
+        color: #fff;
+        flex: 0 0 auto;
+    }
+
+        .pf-avatarBig img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+    .pf-avatarMeta {
+        line-height: 1.2;
+    }
+
+        .pf-avatarMeta .u {
+            font-weight: 900;
+        }
+
+        .pf-avatarMeta .r {
+            color: var(--elx-muted);
+            font-weight: 800;
+            font-size: .82rem;
+        }
+
+    .pf-note {
+        padding: 14px 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(226,232,240,.95);
+        background: rgba(255,255,255,.72);
+        box-shadow: 0 14px 30px rgba(15,35,78,.10);
+        color: #0f172a;
+        font-weight: 800;
+        font-size: .9rem;
+    }
+
+        .pf-note small {
+            display: block;
+            margin-top: 6px;
+            color: var(--elx-muted);
+            font-weight: 700;
+            font-size: .82rem;
+        }
+</style>
+
+<div class="pf-wrap">
+
+    <div class="pf-hero">
+        <div class="pf-hero-left">
+            <div class="pf-icon"><i class="bi bi-person-gear"></i></div>
+            <div>
+                <h1 class="pf-title">Profile & Settings</h1>
+                <p class="pf-sub">Cập nhật thông tin cá nhân • avatar • đổi mật khẩu</p>
+            </div>
+        </div>
+
+        <div class="pf-badges">
+            <span class="pf-badge"><i class="bi bi-shield-check"></i> Secure Profile</span>
+            <span class="pf-badge"><i class="bi bi-database-check"></i> MongoDB</span>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="pf-alert ok">
+            <i class="bi bi-check-circle-fill" style="color:#16a34a;"></i>
+            <div>
+                <p class="t">Cập nhật thành công</p>
+                <p class="d">@TempData["Success"]</p>
+            </div>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="pf-alert err">
+            <i class="bi bi-exclamation-triangle-fill" style="color:#ef4444;"></i>
+            <div>
+                <p class="t">Có lỗi</p>
+                <p class="d">@TempData["Error"]</p>
+            </div>
+        </div>
+    }
+
+    @* ✅ IMPORTANT: multipart for file upload *@
+    <form method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="pf-grid">
+
+            <!-- LEFT: Profile form -->
+            <div class="pf-card">
+                <div class="pf-card-inner">
+                    <div class="pf-card-head">
+                        <div>
+                            <h3 class="pf-card-title"><i class="bi bi-person-vcard"></i> Thông tin cá nhân</h3>
+                            <p class="pf-mini">Bạn có thể cập nhật họ tên, email, số điện thoại, và upload avatar.</p>
+                        </div>
+
+                        <span class="pf-chip"><span class="dot"></span> Logged in</span>
+                    </div>
+
+                    <div class="pf-form">
+                        <div class="pf-row2">
+                            <div>
+                                <label class="pf-label">Username</label>
+                                <input class="pf-input" value="@Model.Username" disabled />
+                            </div>
+                            <div>
+                                <label class="pf-label">Role</label>
+                                <input class="pf-input" value="@Model.Role" disabled />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="pf-label">Họ tên</label>
+                            <input class="pf-input" name="fullName" value="@Model.FullName" placeholder="Nguyễn Văn A" />
+                        </div>
+
+                        <div class="pf-row2">
+                            <div>
+                                <label class="pf-label">Email</label>
+                                <input class="pf-input" name="email" value="@Model.Email" placeholder="email@example.com" />
+                            </div>
+                            <div>
+                                <label class="pf-label">Số điện thoại</label>
+                                <input class="pf-input" name="phone" value="@Model.Phone" placeholder="0123 456 789" />
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Password + Preview -->
+            <div class="pf-side">
+
+                <div class="pf-card">
+                    <div class="pf-card-inner">
+                        <div class="pf-card-head">
+                            <div>
+                                <h3 class="pf-card-title"><i class="bi bi-key"></i> Đổi mật khẩu</h3>
+                                <p class="pf-mini">Để trống nếu không muốn đổi mật khẩu.</p>
+                            </div>
+                            <span class="pf-badge" style="box-shadow:none;background:rgba(255,255,255,.68);">
+                                <i class="bi bi-lock-fill"></i> Password hashed
+                            </span>
+                        </div>
+
+                        <div class="pf-form">
+                            <div>
+                                <label class="pf-label">Mật khẩu hiện tại</label>
+                                <input class="pf-input" type="password" name="currentPassword" autocomplete="current-password" />
+                            </div>
+
+                            <div>
+                                <label class="pf-label">Mật khẩu mới</label>
+                                <input class="pf-input" type="password" name="newPassword" autocomplete="new-password" />
+                            </div>
+
+                            <div>
+                                <label class="pf-label">Nhập lại mật khẩu mới</label>
+                                <input class="pf-input" type="password" name="confirmNewPassword" autocomplete="new-password" />
+                            </div>
+
+                            <div class="pf-help">Mật khẩu mới tối thiểu 6 ký tự.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pf-preview">
+                    <div class="pf-avatarBig">
+                        @* @if (!string.IsNullOrWhiteSpace(Model.AvatarUrl)) *@
+                        @* { *@
+                        @*     <img src="@Model.AvatarUrl" alt="avatar" *@
+                        @*          onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=&quot;bi bi-person-fill&quot; style=&quot;font-size:1.2rem&quot;></i>';" /> *@
+                        @* } *@
+                        @* else *@
+                        @* { *@
+                        @*     <i class="bi bi-person-fill" style="font-size:1.2rem"></i> *@
+                        @* } *@
+                    </div>
+                    <div class="pf-avatarMeta">
+                        <div class="u">@Model.Username</div>
+                        <div class="r">@Model.Role • Elitech</div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="pf-actions">
+            <a class="pf-btn pf-btn-outline" href="javascript:history.back()">
+                <i class="bi bi-arrow-left"></i> Quay lại
+            </a>
+            <button type="submit" class="pf-btn pf-btn-primary">
+                <i class="bi bi-save2"></i> Lưu thay đổi
+            </button>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <script>
+        (function(){
+          const input = document.querySelector('input[name="avatar"]');
+          if(!input) return;
+
+          input.addEventListener('change', function(){
+            const file = this.files && this.files[0];
+            if(!file) return;
+
+            const img = document.querySelector('.pf-avatarBig img');
+            const box = document.querySelector('.pf-avatarBig');
+
+            const url = URL.createObjectURL(file);
+
+            // nếu chưa có img thì tạo
+            if(!img){
+              box.innerHTML = '';
+              const newImg = document.createElement('img');
+              newImg.src = url;
+              newImg.alt = 'avatar';
+              box.appendChild(newImg);
+            } else {
+              img.style.display = 'block';
+              img.src = url;
+            }
+          });
+        })();
+    </script>
+}

@@ -1,5 +1,6 @@
 ﻿using Elitech.Data;
 using Elitech.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Elitech.Services
@@ -13,6 +14,9 @@ namespace Elitech.Services
             _ctx = ctx;
         }
 
+        // =========================
+        // BASIC
+        // =========================
         public Task<AccountViewModel> GetByUsernameAsync(string username)
             => _ctx.Accounts.Find(x => x.Username == username).FirstOrDefaultAsync();
 
@@ -35,7 +39,13 @@ namespace Elitech.Services
                 IsActive = true,
 
                 // ✅ FIX: để bảng Accounts có ngày tạo (JS đang đọc createdAtUtc)
-                CreatedAtUtc = DateTime.UtcNow
+                CreatedAtUtc = DateTime.UtcNow,
+
+                // profile fields (optional)
+                FullName = null,
+                Email = null,
+                Phone = null,
+                //AvatarUrl = null
             };
 
             await _ctx.Accounts.InsertOneAsync(acc);
@@ -103,5 +113,95 @@ namespace Elitech.Services
 
             return res.ModifiedCount > 0;
         }
+
+        // =========================================================
+        // PROFILE / SETTINGS (MongoContext style)
+        // =========================================================
+
+        // ✅ Lấy thông tin profile (theo username)
+        public Task<AccountViewModel> GetProfileAsync(string username)
+            => _ctx.Accounts.Find(x => x.Username == username).FirstOrDefaultAsync();
+
+        // ✅ Update thông tin cá nhân
+        public async Task<bool> UpdateProfileAsync(
+            string username,
+            string? fullName,
+            string? email,
+            string? phone,
+            string? avatarUrl)
+        {
+            username = (username ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(username)) return false;
+
+            string? Norm(string? s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
+
+            var update = Builders<AccountViewModel>.Update
+                .Set(x => x.FullName, Norm(fullName))
+                .Set(x => x.Email, Norm(email))
+                .Set(x => x.Phone, Norm(phone));
+
+            // ✅ chỉ set avatar khi có avatar mới
+            //if (!string.IsNullOrWhiteSpace(avatarUrl))
+            //    update = update.Set(x => x.AvatarUrl, avatarUrl);
+
+            var res = await _ctx.Accounts.UpdateOneAsync(x => x.Username == username, update);
+            return res.ModifiedCount > 0;
+        }
+
+
+        // ✅ Đổi mật khẩu (Settings)
+        // - kiểm tra mật khẩu hiện tại
+        // - hash mật khẩu mới
+        public async Task<bool> ChangePasswordAsync(
+            string username,
+            string currentPassword,
+            string newPassword)
+        {
+            username = (username ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(username)) return false;
+            if (string.IsNullOrWhiteSpace(currentPassword)) return false;
+            if (string.IsNullOrWhiteSpace(newPassword)) return false;
+
+            var acc = await GetByUsernameAsync(username);
+            if (acc is null || !acc.IsActive) return false;
+
+            if (!BCrypt.Net.BCrypt.Verify(currentPassword, acc.PasswordHash))
+                return false;
+
+            var newHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+
+            var update = Builders<AccountViewModel>.Update
+                .Set(x => x.PasswordHash, newHash);
+
+            var res = await _ctx.Accounts.UpdateOneAsync(
+                x => x.Username == username,
+                update);
+
+            return res.ModifiedCount > 0;
+        }
+        //public async Task<AccountViewModel?> GetByUserIdAsync(string userId)
+        //{
+        //    userId = (userId ?? "").Trim();
+        //    if (string.IsNullOrWhiteSpace(userId)) return null;
+
+        //    // TH1: userId là ObjectId (phổ biến nếu claim lưu MongoId)
+        //    if (ObjectId.TryParse(userId, out var oid))
+        //    {
+        //        // AccountViewModel cần có Id kiểu ObjectId
+        //        var byId = await _ctx.Accounts.Find(x => x.Id == oid).FirstOrDefaultAsync();
+        //        if (byId != null) return byId;
+        //    }
+
+        //    // TH2: fallback nếu claim thực tế lại là username
+        //    return await GetByUsernameAsync(userId);
+        //}
+
+        //public async Task<string?> GetPhoneByUserIdAsync(string userId)
+        //{
+        //    var acc = await GetByUserIdAsync(userId);
+        //    var phone = (acc?.Phone ?? "").Trim();
+        //    return string.IsNullOrWhiteSpace(phone) ? null : phone;
+        //}
+
     }
 }

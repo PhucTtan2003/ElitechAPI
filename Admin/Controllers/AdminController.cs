@@ -73,24 +73,58 @@ namespace Elitech.Controllers
                 return View(model);
             }
 
+            model.Username = model.Username.Trim();
+
+            // ✅ Validate phone (optional)
+            // - nếu user nhập phone mà không hợp lệ => báo lỗi
+            string? NormalizeVnPhone(string? phone)
+            {
+                if (string.IsNullOrWhiteSpace(phone)) return null;
+
+                var raw = phone.Trim()
+                    .Replace(" ", "")
+                    .Replace("-", "")
+                    .Replace(".", "");
+
+                if (raw.StartsWith("+")) raw = raw[1..];
+
+                if (raw.StartsWith("0"))
+                    raw = "84" + raw[1..];
+
+                if (!raw.StartsWith("84")) return null;
+                if (!raw.All(char.IsDigit)) return null;
+                if (raw.Length < 11 || raw.Length > 12) return null;
+
+                return raw;
+            }
+
+            var phoneNorm = NormalizeVnPhone(model.Phone);
+            if (!string.IsNullOrWhiteSpace(model.Phone) && phoneNorm is null)
+            {
+                ModelState.AddModelError("", "Số điện thoại không hợp lệ. VD: 0987654321 hoặc +84987654321");
+                return View(model);
+            }
+
             // check trùng username
-            var existing = await _accounts.GetByUsernameAsync(model.Username.Trim());
+            var existing = await _accounts.GetByUsernameAsync(model.Username);
             if (existing != null)
             {
                 ModelState.AddModelError("", "Username đã tồn tại.");
                 return View(model);
             }
 
-            // tạo account (hash password trong service)
+            // ✅ tạo account (hash password trong service) + lưu phone
             await _accounts.CreateAsync(
-                username: model.Username.Trim(),
+                username: model.Username,
                 password: model.Password,
                 role: model.Role
+                
             );
 
             TempData["Success"] = "Tạo tài khoản thành công.";
             return RedirectToAction("Index");
         }
+
 
         // =========================
         // ADMIN JSON API (under /Admin)
@@ -374,6 +408,8 @@ namespace Elitech.Controllers
             public string Username { get; set; } = "";
             public string Password { get; set; } = "";
             public RoleViewModel Role { get; set; } = RoleViewModel.User;
+
+            public string? Phone { get; set; }
         }
 
         // =========================

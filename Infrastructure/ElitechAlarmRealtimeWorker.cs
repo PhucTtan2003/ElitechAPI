@@ -11,8 +11,10 @@ public class ElitechAlarmRealtimeWorker : BackgroundService
     private readonly ElitechApiClient _api;
     private readonly IHubContext<ElitechAlarmHub> _hub;
 
+
     // cache lastSeen per deviceGuid
     private readonly IMemoryCache _cache;
+    private readonly IConfiguration _cfg;
 
     // interval poll server-side
     private static readonly TimeSpan PollInterval = TimeSpan.FromSeconds(5);
@@ -22,25 +24,24 @@ public class ElitechAlarmRealtimeWorker : BackgroundService
         ILogger<ElitechAlarmRealtimeWorker> logger,
         ElitechApiClient api,
         IHubContext<ElitechAlarmHub> hub,
-        IMemoryCache cache)
+        IMemoryCache cache,
+        IConfiguration cfg)
     {
         _logger = logger;
         _api = api;
         _hub = hub;
         _cache = cache;
+        _cfg = cfg;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("ElitechAlarmRealtimeWorker started.");
+        _logger.LogInformation("ElitechAlarmRealtimeWorker started");
 
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                // Lưu ý: nếu bạn muốn tối ưu hơn, bạn có thể track danh sách device đang được subscribe
-                // bằng 1 registry. Ở đây mình làm kiểu đơn giản: pull theo device list mà bạn quản lý.
-                // => Bạn tự thay danh sách deviceGuids theo hệ thống của bạn (Mongo assignment).
                 var deviceGuids = await GetActiveDeviceGuidsAsync(stoppingToken);
 
                 foreach (var deviceGuid in deviceGuids)
@@ -52,14 +53,17 @@ public class ElitechAlarmRealtimeWorker : BackgroundService
             catch (OperationCanceledException) { }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AlarmRealtime loop error");
+                _logger.LogError(ex, "AlarmRealtimeWorker loop error");
             }
 
-            try { await Task.Delay(PollInterval, stoppingToken); } catch { }
-        }
+            // ⬇️ interval từ appsettings
+            var sec = _cfg.GetValue<int>("AlarmRealtime:PollSeconds", 300);
+            sec = Math.Clamp(sec, 30, 3600);
 
-        _logger.LogInformation("ElitechAlarmRealtimeWorker stopped.");
+            await Task.Delay(TimeSpan.FromSeconds(sec), stoppingToken);
+        }
     }
+
 
     private async Task<List<string>> GetActiveDeviceGuidsAsync(CancellationToken ct)
     {

@@ -174,8 +174,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>08719mzuw4</Fingerprint>
-      <Integrity>MLQjxEmjDuSNHJTSJU4kq3fXwFUinMMkJKGzWuwKX5s=</Integrity>
+      <Fingerprint>8m8abnfbn1</Fingerprint>
+      <Integrity>IKGfDxAlqWc2zQxb/Tx8yabv9F6R/Dnk7Gf3AX2K7mc=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\elitech-history.js'))</OriginalItemSpec>
@@ -1259,6 +1259,24 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Pictures\logoelitech.png'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\sounds\alarm.mp3'))">
+      <SourceType>Package</SourceType>
+      <SourceId>Elitech</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Elitech</BasePath>
+      <RelativePath>sounds/alarm.mp3</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>vmiic2tk06</Fingerprint>
+      <Integrity>KS2QkYykuMPBKKkgZkaC0rbTf6z2jhHH0JcQmbAwStI=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\sounds\alarm.mp3'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>
