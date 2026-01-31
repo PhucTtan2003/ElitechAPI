@@ -18,6 +18,12 @@ namespace Elitech.Models
 
         [BsonElement("role")]
         public RoleViewModel Role { get; set; } = RoleViewModel.User;
+        [BsonElement("email")]
+        public string Email {  get; set; } = string.Empty;
+        [BsonElement("fullName")]
+        public string Fullname { get; set; } = string.Empty;
+        [BsonElement("phone")]
+        public string Phone { get; set; } = string.Empty;
 
         [BsonElement("isActive")]
         public bool IsActive { get; set; } = true;
