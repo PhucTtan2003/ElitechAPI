@@ -6,7 +6,8 @@ namespace Elitech.Services;
 
 public class ElitechAlertEngine
 {
-    private static readonly Regex NumRx = new(@"-?\d+(\.\d+)?", RegexOptions.Compiled);
+    private static readonly Regex NumRx =
+        new(@"-?\d+([.,]\d+)?", RegexOptions.Compiled);
 
     public static double? ParseNumber(object? x)
     {

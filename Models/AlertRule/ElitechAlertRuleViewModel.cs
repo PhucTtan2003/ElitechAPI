@@ -11,6 +11,12 @@ public class ElitechAlertRuleViewModel
         public double? Max { get; set; }
     }
 
+    [BsonIgnoreIfNull]
+    public string? Scope { get; set; }
+
+    [BsonIgnoreIfNull]
+    public string? TargetUserId { get; set; }
+
     [BsonId] public ObjectId Id { get; set; }
 
     public string? UserId { get; set; } = default!;

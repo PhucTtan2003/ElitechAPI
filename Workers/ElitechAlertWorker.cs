@@ -12,7 +12,7 @@ public class ElitechAlertWorker : BackgroundService
     private readonly ILogger<ElitechAlertWorker> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
 
-    // Worker tick: có thể 60–120s, debounce vẫn theo SAMPLE nên không spam
+    // Worker tick: có thể 60–120s, debounce vẫn theo SAMPLE
     private static readonly TimeSpan Interval = TimeSpan.FromSeconds(120);
 
     public ElitechAlertWorker(ILogger<ElitechAlertWorker> logger, IServiceScopeFactory scopeFactory)
@@ -110,21 +110,21 @@ public class ElitechAlertWorker : BackgroundService
                                    ?? new ElitechAlertState { UserId = userId, DeviceGuid = guid };
 
                         // ✅ Nếu sampleTs có và không đổi => không tính debounce nữa (không +1)
-                        // BUT vẫn nên update "LastSeenAtUtc" (nếu bạn có field) hoặc ít nhất giữ state ổn định
+                        // BUT vẫn nên update "LastSeenAtUtc" (nếu có field) hoặc ít nhất giữ state ổn định
                         if (sampleTs.HasValue && state.LastSampleTs.HasValue && state.LastSampleTs.Value == sampleTs.Value)
                         {
-                            // Nếu bạn có field UpdatedAtUtc / LastSeenAtUtc thì update ở đây:
+                            // Nếu có field UpdatedAtUtc / LastSeenAtUtc thì update ở đây:
                             // state.UpdatedAtUtc = DateTime.UtcNow;
                             // await eventSvc.UpsertStateAsync(state, stoppingToken);
 
                             continue;
                         }
 
-                        // ✅ sample mới => lưu dấu
+                        // sample mới => lưu dấu
                         if (sampleTs.HasValue)
                             state.LastSampleTs = sampleTs.Value;
 
-                        // parse tmp/hum 4+2 (typed)
+                        // parse tmp/hum 4+2
                         var temps = new double?[4]
                         {
                             ElitechAlertEngine.ParseNumber(row.tmp1),
@@ -140,7 +140,22 @@ public class ElitechAlertWorker : BackgroundService
 
                         var (isBadRaw, reasons) = ElitechAlertEngine.Evaluate(rule, temps, hums);
 
-                        // ✅ debounce theo SAMPLE (vì block trên đã đảm bảo chỉ chạy khi sample mới)
+                        var reasonsNorm = (reasons ?? "").Trim();
+
+                        _logger.LogWarning(
+                            "[ALERT-DBG-RAW] user={UserId} guid={Guid} " +
+                            "tmp=[{T1},{T2},{T3},{T4}] hum=[{H1},{H2}] " +
+                            "parsedTmp=[{PT1},{PT2},{PT3},{PT4}] parsedHum=[{PH1},{PH2}] " +
+                            "reasonsRaw='{Reasons}' isBadRaw={IsBadRaw}",
+                            userId, guid,
+                            row.tmp1, row.tmp2, row.tmp3, row.tmp4,
+                            row.hum1, row.hum2,
+                            temps[0], temps[1], temps[2], temps[3],
+                            hums[0], hums[1],
+                            reasonsNorm, isBadRaw
+                        );
+
+                        // debounce theo SAMPLE
                         if (isBadRaw) state.ConsecutiveBadHits = Math.Min(state.ConsecutiveBadHits + 1, 999);
                         else state.ConsecutiveBadHits = 0;
 
@@ -153,23 +168,32 @@ public class ElitechAlertWorker : BackgroundService
                         var canCooldown = state.LastAlertAtUtc == null
                             || (nowUtc - state.LastAlertAtUtc.Value).TotalSeconds >= cooldown;
 
-                        var reasonsNorm = (reasons ?? "").Trim();
                         var reasonsChanged = !string.Equals(state.LastReasons ?? "", reasonsNorm, StringComparison.OrdinalIgnoreCase);
 
-                        // ✅ TEST: nhắc lại mỗi 2 hit khi vẫn BAD
+                        //nhắc lại mỗi 2 hit khi vẫn BAD
                         const int RepeatEveryHits_Test = 2;
 
-                        // nhắc lại khi vẫn BAD và hit là bội số của 2
                         var hitReminder = nowBad
                             && state.ConsecutiveBadHits >= debounce
                             && (state.ConsecutiveBadHits % RepeatEveryHits_Test == 0);
 
-                        // ✅ fire khi:
                         // - OK -> BAD
                         // - hoặc vẫn BAD nhưng reasons đổi
                         // - hoặc vẫn BAD và tới mốc nhắc lại (mỗi 2 hit)
                         var fire = nowBad && canCooldown && (!state.IsBad || reasonsChanged || hitReminder);
 
+                        _logger.LogWarning(
+                            "[ALERT-DBG-STATE] user={UserId} guid={Guid} " +
+                            "hits={Hits} debounce={Debounce} " +
+                            "isBadRaw={IsBadRaw} nowBad={NowBad} wasBad={WasBad} " +
+                            "canCooldown={CanCooldown} reasonsChanged={ReasonsChanged} hitReminder={HitReminder} " +
+                            "=> FIRE={Fire}",
+                            userId, guid,
+                            state.ConsecutiveBadHits, debounce,
+                            isBadRaw, nowBad, state.IsBad,
+                            canCooldown, reasonsChanged, hitReminder,
+                            fire
+                        );
 
                         if (fire)
                         {

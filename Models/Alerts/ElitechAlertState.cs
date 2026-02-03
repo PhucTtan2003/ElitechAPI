@@ -18,5 +18,7 @@ public class ElitechAlertState
 
     public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
     public long? LastSampleTs { get; set; } // unix seconds
+    [BsonIgnoreIfNull]
+    public DateTime? LastSmsAtUtc { get; set; }
 
 }
