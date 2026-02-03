@@ -2,12 +2,67 @@
     ViewData["Title"] = "Elitech - Lịch sử thiết bị";
     Layout = "_Layout";
     var isAdmin = (bool)(ViewBag.IsAdmin ?? false);
-    var theme = isAdmin ? "dark" : "light";
+    var theme = "light";
 }
 
 <script>
-    document.documentElement.setAttribute("data-elitech-theme", "@theme");
+    // ✅ Theme: ưu tiên localStorage, fallback = server default ("light")
+    (function () {
+        const key = "elitechTheme";
+        const saved = localStorage.getItem(key);
+        const theme = saved || "@theme";
+        document.documentElement.setAttribute("data-elitech-theme", theme);
+    })();
 </script>
+
+<link rel="stylesheet" href="~/css/elitech-history.css" asp-append-version="true" />
+
+<style>
+    /* ✅ Toggle theme button - nhẹ, không đụng CSS chính */
+    .elx-theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.10);
+        backdrop-filter: blur(10px);
+        color: inherit;
+        font-weight: 800;
+        font-size: .85rem;
+        cursor: pointer;
+        user-select: none;
+        transition: transform .12s ease, box-shadow .12s ease;
+        box-shadow: 0 10px 24px rgba(15,23,42,.12);
+    }
+
+        .elx-theme-toggle:hover {
+            transform: translateY(-1px);
+        }
+
+        .elx-theme-toggle:active {
+            transform: scale(.98);
+        }
+
+    .elx-theme-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #94a3b8;
+        box-shadow: 0 0 0 3px rgba(148,163,184,.18);
+    }
+
+    .elx-theme-toggle[data-theme="dark"] .elx-theme-dot {
+        background: #60a5fa;
+        box-shadow: 0 0 0 3px rgba(96,165,250,.18);
+    }
+
+    .elx-theme-label {
+        opacity: .9;
+        white-space: nowrap;
+    }
+</style>
 
 <link rel="stylesheet" href="~/css/elitech-history.css" asp-append-version="true" />
 

@@ -2,38 +2,432 @@
     ViewData["Title"] = "🔧 Elitech Device Info";
     var deviceGuids = (ViewBag.DeviceGuids as string) ?? "";
 }
-<div class="container py-3">
-    <div class="d-flex align-items-center justify-content-between mb-3">
-        <h3 class="mb-0">🔧 Elitech Device Info</h3>
-        <small class="text-muted">Device GUIDs: <code id="guidShow">@deviceGuids</code></small>
+
+<style>
+    /* ===============================
+       Elitech Device Info – PRO UI (light, premium, not heavy)
+       - badges by value (sms/voice)
+       - per-row copy guid
+       - mini toast (pure CSS)
+       (SCRIPT BELOW: KEEP ORIGINAL, only UI wrapper & extra handlers outside it)
+       =============================== */
+
+    .ed-wrap {
+        padding: 14px 0 22px;
+    }
+
+    .ed-shell {
+        border-radius: 18px;
+        border: 1px solid rgba(15,23,42,.10);
+        background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.74));
+        box-shadow: 0 18px 45px rgba(2,8,23,.08);
+        overflow: hidden;
+    }
+
+    .ed-head {
+        padding: 14px 16px 12px;
+        border-bottom: 1px solid rgba(15,23,42,.08);
+        background: radial-gradient(900px 260px at 20% 0%, rgba(79,70,229,.16), transparent 55%), radial-gradient(860px 240px at 85% 0%, rgba(20,184,166,.12), transparent 55%), rgba(255,255,255,.82);
+        backdrop-filter: blur(10px);
+    }
+
+    .ed-title {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 950;
+        letter-spacing: .2px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .ed-title .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, rgba(79,70,229,1), rgba(20,184,166,1));
+            box-shadow: 0 10px 18px rgba(79,70,229,.25);
+        }
+
+    .ed-sub {
+        margin-top: 6px;
+        color: rgba(100,116,139,.95);
+        font-size: .86rem;
+        font-weight: 750;
+        line-height: 1.35rem;
+    }
+
+    .ed-chipline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .ed-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(255,255,255,.92);
+        color: rgba(15,23,42,.78);
+        font-weight: 900;
+        font-size: .78rem;
+        box-shadow: 0 10px 18px rgba(2,8,23,.06);
+    }
+
+        .ed-chip code {
+            font-weight: 900;
+            color: rgba(15,23,42,.88);
+            background: rgba(15,23,42,.05);
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+    .ed-chip-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(15,23,42,.12);
+        background: rgba(255,255,255,.92);
+        font-weight: 950;
+        font-size: .78rem;
+        color: rgba(15,23,42,.78);
+        box-shadow: 0 10px 18px rgba(2,8,23,.06);
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+    }
+
+        .ed-chip-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .ed-chip-btn:active {
+            transform: translateY(0);
+        }
+
+        .ed-chip-btn i {
+            opacity: .9;
+        }
+
+    .ed-body {
+        padding: 14px 16px 16px;
+    }
+
+    /* Form */
+    .ed-form {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .ed-input {
+        border-radius: 14px !important;
+        border: 1px solid rgba(15,23,42,.12) !important;
+        background: rgba(255,255,255,.95) !important;
+        box-shadow: inset 0 1px 0 rgba(2,8,23,.04);
+        font-weight: 700;
+    }
+
+        .ed-input:focus {
+            border-color: rgba(79,70,229,.55) !important;
+            box-shadow: 0 0 0 4px rgba(79,70,229,.14) !important;
+        }
+
+    .ed-btn {
+        border-radius: 14px !important;
+        font-weight: 950 !important;
+        padding: 10px 14px !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 12px 24px rgba(2,8,23,.08);
+    }
+
+    .ed-btn-primary {
+        border: 0 !important;
+        color: #fff !important;
+        background: radial-gradient(160px 60px at 20% 10%, rgba(255,255,255,.30), transparent 60%), linear-gradient(180deg, rgba(79,70,229,1), rgba(124,58,237,1)) !important;
+    }
+
+    .ed-btn-ghost {
+        border: 1px solid rgba(15,23,42,.14) !important;
+        background: rgba(255,255,255,.92) !important;
+        color: rgba(15,23,42,.78) !important;
+    }
+
+    .ed-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .ed-btn:active {
+        transform: translateY(0);
+    }
+
+    /* Error alert */
+    #err {
+        border-radius: 14px;
+        border: 1px solid rgba(245,158,11,.22) !important;
+        background: rgba(255,251,235,.92) !important;
+        color: rgba(146,64,14,.92) !important;
+        font-weight: 850;
+    }
+
+    /* Table card */
+    .ed-tablewrap {
+        margin-top: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(15,23,42,.10);
+        overflow: hidden;
+        background: rgba(255,255,255,.92);
+        box-shadow: 0 12px 24px rgba(2,8,23,.06);
+    }
+
+        .ed-tablewrap .table {
+            margin: 0;
+        }
+
+        .ed-tablewrap thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: radial-gradient(700px 220px at 20% 0%, rgba(20,184,166,.10), transparent 55%), rgba(255,255,255,.96);
+            border-bottom: 1px solid rgba(15,23,42,.08) !important;
+            font-size: .82rem;
+            font-weight: 950;
+            color: rgba(15,23,42,.78);
+            padding: 10px 10px;
+            white-space: nowrap;
+        }
+
+        .ed-tablewrap tbody td {
+            padding: 10px 10px;
+            font-weight: 700;
+            color: rgba(15,23,42,.78);
+            vertical-align: middle;
+        }
+
+        .ed-tablewrap tbody tr:hover {
+            background: rgba(79,70,229,.06);
+        }
+
+        .ed-tablewrap code {
+            background: rgba(15,23,42,.06);
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: 900;
+        }
+
+    /* Count badge (sms/voice) */
+    .ed-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: .78rem;
+        font-weight: 950;
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(255,255,255,.92);
+        min-width: 62px;
+        justify-content: center;
+    }
+
+        .ed-count i {
+            font-size: .9rem;
+            opacity: .9;
+        }
+
+        .ed-count.zero {
+            color: rgba(15,23,42,.55);
+        }
+
+        .ed-count.pos {
+            border-color: rgba(22,163,74,.20);
+            background: rgba(22,163,74,.08);
+            color: #166534;
+        }
+
+    /* Copy button per row */
+    .ed-copy {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(15,23,42,.12);
+        background: rgba(255,255,255,.95);
+        font-weight: 950;
+        font-size: .78rem;
+        color: rgba(15,23,42,.72);
+        box-shadow: 0 10px 18px rgba(2,8,23,.06);
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .ed-copy:hover {
+            transform: translateY(-1px);
+        }
+
+        .ed-copy:active {
+            transform: translateY(0);
+        }
+
+    /* Mini toast */
+    .ed-toast {
+        position: fixed;
+        right: 16px;
+        top: 16px;
+        z-index: 25000;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.16);
+        background: rgba(17,24,39,.92);
+        color: #fff;
+        font-weight: 900;
+        font-size: .85rem;
+        box-shadow: 0 18px 40px rgba(0,0,0,.22);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transform: translateY(-6px);
+        pointer-events: none;
+        transition: opacity .18s ease, transform .18s ease;
+    }
+
+        .ed-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ed-toast .small {
+            display: block;
+            opacity: .8;
+            font-weight: 800;
+            margin-top: 2px;
+            font-size: .78rem;
+        }
+
+    /* Tips */
+    .ed-tips {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        opacity: .92;
+    }
+
+    .ed-tip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(255,255,255,.92);
+        font-weight: 900;
+        font-size: .78rem;
+        color: rgba(15,23,42,.65);
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .ed-form
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .ed-chipline {
+        justify-content: flex-start;
+    }
+
+    }
+</style>
+
+<div class="ed-wrap">
+    <div class="ed-shell">
+
+        <div class="ed-head">
+            <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+                <div>
+                    <h3 class="ed-title"><span class="dot"></span> Elitech Device Info</h3>
+                    <div class="ed-sub">
+                        Dán danh sách GUID (phân tách bằng dấu phẩy). Bấm <b>Fetch via API</b> để tải chi tiết thiết bị.
+                    </div>
+                </div>
+
+                <div class="ed-chipline">
+                    <span class="ed-chip">
+                        Device GUIDs:
+                        <code id="guidShow">@deviceGuids</code>
+                    </span>
+
+                    <button type="button" class="ed-chip-btn" id="btnCopyAll">
+                        <i class="bi bi-clipboard"></i> Copy all GUIDs
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ed-body">
+            <form method="get" class="ed-form mb-2">
+                <input name="deviceGuids" class="form-control ed-input" placeholder="GUID1,GUID2" value="@deviceGuids" />
+                <button class="btn ed-btn ed-btn-primary" type="submit">
+                    <i class="bi bi-arrow-repeat"></i> Load
+                </button>
+                <button type="button" id="btnFetch" class="btn ed-btn ed-btn-ghost">
+                    <i class="bi bi-cloud-download"></i> Fetch via API
+                </button>
+            </form>
+
+            <div id="err" class="alert alert-warning d-none mb-0"></div>
+
+            <div class="ed-tablewrap table-responsive mt-3">
+                <table class="table table-sm table-striped align-middle" id="tbl">
+                    <thead>
+                        <tr>
+                            <th style="min-width:180px;">Tên thiết bị</th>
+                            <th style="min-width:260px;">GUID</th>
+                            <th style="min-width:160px;">Loại thiết bị</th>
+                            <th style="min-width:140px;">Scene</th>
+                            <th style="min-width:90px;">SubUID</th>
+                            <th style="min-width:110px;">SMS</th>
+                            <th style="min-width:110px;">Voice</th>
+                            <th style="min-width:170px;">Hết hạn</th>
+                            <th style="min-width:170px;">Lần cuối</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body">
+                        <tr>
+                            <td colspan="10" class="text-muted" style="padding:14px 10px;font-weight:800">
+                                No data
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ed-tips">
+                <span class="ed-tip"><i class="bi bi-info-circle"></i> Tip: nhập nhiều GUID, phân tách dấu phẩy</span>
+                <span class="ed-tip"><i class="bi bi-shield-check"></i> Read-only • Safe</span>
+                <span class="ed-tip"><i class="bi bi-clipboard-check"></i> Có nút copy GUID từng dòng</span>
+            </div>
+        </div>
+
     </div>
+</div>
 
-    <form method="get" class="d-flex gap-2 flex-wrap mb-3">
-        <input name="deviceGuids" class="form-control" placeholder="GUID1,GUID2" value="@deviceGuids" />
-        <button class="btn btn-primary">Load</button>
-        <button type="button" id="btnFetch" class="btn btn-outline-secondary">Fetch via API</button>
-    </form>
-
-    <div id="err" class="alert alert-warning d-none"></div>
-
-    <div class="table-responsive">
-        <table class="table table-sm table-striped align-middle" id="tbl">
-            <thead>
-                <tr>
-                    <th>Tên thiết bị</th>
-                    <th>GUID</th>
-                    <th>Loại thiết bị</th>
-                    <th>Scene</th>
-                    <th>SubUID</th>
-                    <th>SMS</th>
-                    <th>Voice</th>
-                    <th>Hết hạn</th>
-                    <th>Lần cuối</th>
-                </tr>
-            </thead>
-            <tbody id="body"><tr><td colspan="10" class="text-muted">No data</td></tr></tbody>
-        </table>
-    </div>
+<div class="ed-toast" id="edToast">
+    ✅ Copied
+    <span class="small" id="edToastSub">—</span>
 </div>
 
 <script>
@@ -67,12 +461,34 @@
     body.innerHTML = rows.map(x => `
       <tr>
         <td>${x.deviceName || "-"}</td>
-        <td><code>${x.deviceGuid}</code></td>
+        <td>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+                <code>${x.deviceGuid}</code>
+                <button type="button" class="ed-copy" data-copy="${x.deviceGuid}">
+                    <i class="bi bi-clipboard"></i> Copy
+                </button>
+            </div>
+        </td>
         <td>${x.deviceTypeName || "-"}</td>
         <td>${x.sceneName || "-"}</td>
         <td>${x.subUid ?? "-"}</td>
-        <td>${x.smsCount ?? 0}</td>
-        <td>${x.voiceCount ?? 0}</td>
+
+        <td>
+          ${
+            (x.smsCount ?? 0) > 0
+              ? `<span class="ed-count pos"><i class="bi bi-chat-dots"></i> ${x.smsCount ?? 0}</span>`
+              : `<span class="ed-count zero"><i class="bi bi-chat-dots"></i> ${x.smsCount ?? 0}</span>`
+          }
+        </td>
+
+        <td>
+          ${
+            (x.voiceCount ?? 0) > 0
+              ? `<span class="ed-count pos"><i class="bi bi-telephone"></i> ${x.voiceCount ?? 0}</span>`
+              : `<span class="ed-count zero"><i class="bi bi-telephone"></i> ${x.voiceCount ?? 0}</span>`
+          }
+        </td>
+
         <td>${x.expiredTime ? new Date(x.expiredTime*1000).toLocaleString() : "-"}</td>
         <td>${x.lastTimeStr || (x.lastTime ? new Date(x.lastTime*1000).toLocaleString() : "-")}</td>
       </tr>
@@ -81,4 +497,64 @@
 
     document.getElementById('btnFetch').addEventListener('click', fetchInfo);
     if (deviceGuids) fetchInfo(); // tự fetch nếu đã có query
+</script>
+
+<script>
+    /* ===== UI-only helpers (does NOT touch your old script above) ===== */
+    (function () {
+      const toast = document.getElementById('edToast');
+      const toastSub = document.getElementById('edToastSub');
+
+      function showToast(title, sub) {
+        if (!toast) return;
+        toast.firstChild.nodeValue = `✅ ${title}`;
+        if (toastSub) toastSub.textContent = sub || "";
+        toast.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => toast.classList.remove('show'), 1200);
+      }
+
+      async function copyText(text, okLabel) {
+        const val = (text || "").toString().trim();
+        if (!val) { showToast("Nothing to copy", ""); return; }
+
+        try {
+          await navigator.clipboard.writeText(val);
+          showToast(okLabel || "Copied", val.length > 42 ? (val.slice(0, 20) + "…") : val);
+          return true;
+        } catch {
+          // fallback
+          try {
+            const ta = document.createElement("textarea");
+            ta.value = val;
+            ta.style.position = "fixed";
+            ta.style.left = "-9999px";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            ta.remove();
+            showToast(okLabel || "Copied", val.length > 42 ? (val.slice(0, 20) + "…") : val);
+            return true;
+          } catch {
+            showToast("Copy failed", "Browser blocked clipboard");
+            return false;
+          }
+        }
+      }
+
+      // Copy all GUIDs from chip (server value)
+      const btnCopyAll = document.getElementById('btnCopyAll');
+      btnCopyAll?.addEventListener('click', () => {
+        const raw = document.getElementById('guidShow')?.textContent || "";
+        copyText(raw, "Copied all GUIDs");
+      });
+
+      // Delegate copy per row
+      document.addEventListener('click', (e) => {
+        const btn = e.target?.closest?.('.ed-copy');
+        if (!btn) return;
+        const guid = btn.getAttribute('data-copy') || "";
+        copyText(guid, "Copied GUID");
+      });
+    })();
 </script>

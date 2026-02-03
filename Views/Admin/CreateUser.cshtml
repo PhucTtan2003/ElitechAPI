@@ -2,451 +2,225 @@
 
 @{
     ViewData["Title"] = "Tạo tài khoản người dùng";
+    var hasSuccess = TempData["Success"] != null;
 }
 
 <style>
-    /* ===== CreateUser page polish (v2 full) ===== */
-    .cu-wrap {
-        margin: 0 18px 22px;
-    }
+/* ===============================
+   CREATE USER – UI POLISH v4 (clean)
+   + Confirm Admin modal
+   + Generate/Copy password
+   + Auto reset after success
+   =============================== */
 
-    .cu-shell {
-        max-width: 980px;
-        margin: 0 auto;
-    }
+.cu-wrap{margin:0 18px 22px}
+.cu-shell{max-width:980px;margin:0 auto}
 
-    /* Breadcrumb mini */
-    .cu-bc {
-        font-size: .82rem;
-        color: #64748b;
-        margin: 4px 0 10px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        flex-wrap: wrap;
-    }
+/* ===== HERO ===== */
+.cu-hero{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:16px;margin:12px 0 18px;flex-wrap:wrap
+}
+.cu-hero-left{display:flex;gap:14px;align-items:center}
+.cu-hero-icon{
+    width:54px;height:54px;border-radius:16px;
+    display:grid;place-items:center;font-size:26px;color:#111827;
+    background:linear-gradient(135deg,#F58220,#E36F15,#1E88E5);
+    background-size:200% 200%;
+    animation:cu-grad 6s ease infinite;
+    box-shadow:0 14px 32px rgba(245,130,32,.45)
+}
+@@keyframes cu-grad{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+.cu-hero h1{margin:0 0 2px;font-size:1.35rem;font-weight:900}
+.cu-hero p{margin:0;font-size:.9rem;color:#64748b;font-weight:700}
 
-        .cu-bc a {
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 800;
-        }
+/* ===== CARD ===== */
+.cu-card{
+    background:linear-gradient(#fff,#fff) padding-box,
+               linear-gradient(135deg,rgba(245,130,32,.6),rgba(30,136,229,.45)) border-box;
+    border:2px solid transparent;border-radius:18px;
+    box-shadow:0 16px 38px rgba(15,23,42,.14);overflow:hidden
+}
+.cu-head{
+    padding:14px 16px;border-bottom:1px dashed #e5e7eb;
+    display:flex;justify-content:space-between;gap:10px;align-items:baseline
+}
+.cu-head h5{margin:0;font-size:1rem;font-weight:900;display:flex;align-items:center;gap:8px}
+.cu-sub{font-size:.82rem;color:#64748b;font-weight:800}
+.cu-body{padding:16px}
 
-            .cu-bc a:hover {
-                text-decoration: underline;
-            }
+/* ===== ALERT ===== */
+.cu-alert{
+    display:flex;gap:12px;padding:12px;border-radius:14px;margin-bottom:14px;
+    align-items:flex-start;border:1px solid #e5e7eb;background:#f8fafc
+}
+.cu-alert.ok{background:#ecfdf5;border-color:#bbf7d0}
+.cu-alert.err{background:#fff1f2;border-color:#fecaca}
+.cu-alert .ico{
+    width:34px;height:34px;border-radius:12px;display:grid;place-items:center;
+    background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.1)
+}
+.cu-alert.ok .ico{color:#059669}
+.cu-alert.err .ico{color:#b91c1c}
+.cu-alert b{display:block;font-weight:900}
+.cu-alert .msg{font-size:.85rem;font-weight:700;color:#334155;line-height:1.25rem}
 
-        .cu-bc .cur {
-            color: #0f172a;
-            font-weight: 900;
-        }
+/* ===== FORM ===== */
+.cu-label{font-weight:900;font-size:.85rem;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.cu-label i{color:#f97316}
+.cu-help{font-size:.8rem;color:#64748b;margin-top:6px;line-height:1.25rem}
 
-    /* Card */
-    .cu-card {
-        margin: 0 0 18px;
-        background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(245,130,32,.62), rgba(30,136,229,.50)) border-box;
-        border: 2px solid transparent;
-        border-radius: 18px;
-        box-shadow: 0 14px 34px rgba(15,23,42,.12);
-        overflow: hidden;
-        position: relative;
-    }
+/* Strength / role pill */
+.cu-pill{
+    margin-top:8px;display:inline-flex;align-items:center;gap:8px;
+    padding:6px 10px;border-radius:999px;font-size:.8rem;font-weight:900;
+    border:1px solid #e5e7eb;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.1)
+}
+.cu-pill .dot{width:10px;height:10px;border-radius:50%}
+.cu-pill.ok .dot{background:#10B981}
+.cu-pill.warn .dot{background:#F59E0B}
+.cu-pill.bad .dot{background:#EF4444}
 
-        .cu-card::before {
-            content: "";
-            position: absolute;
-            inset: -80px -120px auto auto;
-            width: 260px;
-            height: 260px;
-            background: radial-gradient(circle at 30% 30%, rgba(245,130,32,.22), transparent 60%);
-            pointer-events: none;
-            filter: blur(1px);
-        }
+/* Actions */
+.cu-actions{margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 
-        .cu-card::after {
-            content: "";
-            position: absolute;
-            inset: auto auto -120px -120px;
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle at 60% 40%, rgba(30,136,229,.18), transparent 62%);
-            pointer-events: none;
-        }
+/* Password row tools */
+.cu-inline-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.cu-mini{
+    padding:8px 10px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;
+    font-weight:900;font-size:.82rem;display:inline-flex;gap:8px;align-items:center;
+    box-shadow:0 10px 22px rgba(15,23,42,.10);cursor:pointer;
+    transition: transform .12s ease;
+}
+.cu-mini:hover{transform:translateY(-1px)}
+.cu-mini:active{transform:scale(.98)}
+.cu-mini.brand{
+    border:0;
+    background:linear-gradient(180deg,#F58220,#E36F15);
+    color:#111827;
+    box-shadow:0 12px 26px rgba(245,130,32,.28)
+}
+.cu-mini.blue{
+    border-color:rgba(30,136,229,.35);
+    background:linear-gradient(180deg,#e0edff,#f8fbff);
+    color:#1e40af;
+}
+.cu-mini:disabled{opacity:.65;cursor:not-allowed;transform:none}
 
-    .cu-head {
-        padding: 14px 16px 10px;
-        border-bottom: 1px dashed rgba(226,232,240,.9);
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 10px;
-        position: relative;
-        z-index: 1;
-    }
+/* Copy hint */
+.cu-hintline{font-size:.8rem;color:#64748b;font-weight:800;margin-top:8px}
+.cu-hint-ok{color:#059669;font-weight:900}
+.cu-hint-warn{color:#b45309;font-weight:900}
+.cu-hint-err{color:#b91c1c;font-weight:900}
 
-        .cu-head h5 {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+/* Modal polish */
+.cu-modal-head{display:flex;gap:10px;align-items:center}
+.cu-modal-ico{
+    width:38px;height:38px;border-radius:14px;display:grid;place-items:center;
+    background:#fff7ed;border:1px solid #fed7aa;color:#b45309
+}
 
-    .cu-sub {
-        color: var(--mut);
-        font-size: .85rem;
-        font-weight: 800;
-    }
+/* Loading spin */
+@@keyframes cu-spin{to{transform:rotate(360deg)}}
+.cu-spin{display:inline-block;animation:cu-spin 1s linear infinite}
 
-    .cu-body {
-        padding: 14px 16px 16px;
-        position: relative;
-        z-index: 1;
-    }
+/* ===== Back to Admin button – POLISHED (nhẹ) ===== */
+.sx-btn.back-admin{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 14px;
+    border-radius:999px;
+    font-size:.82rem;
+    font-weight:900;
+    letter-spacing:.02em;
+    color:#1e3a8a;
+    background:linear-gradient(180deg,#eef6ff,#ffffff);
+    border:1px solid rgba(30,136,229,.35);
+    box-shadow:0 10px 26px rgba(30,136,229,.18), inset 0 0 0 1px rgba(255,255,255,.7);
+    text-decoration:none;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.sx-btn.back-admin i{font-size:1rem;transition:transform .15s ease}
+.sx-btn.back-admin:hover{
+    background:linear-gradient(180deg,#dbeafe,#f8fbff);
+    transform:translateY(-1px);
+    box-shadow:0 14px 34px rgba(30,136,229,.28), inset 0 0 0 1px rgba(255,255,255,.8);
+}
+.sx-btn.back-admin:hover i{transform:translateX(-2px)}
+.sx-btn.back-admin:active{transform:scale(.96)}
 
-    /* Alerts */
-    .cu-alert {
-        border-radius: 14px;
-        padding: 12px 12px;
-        border: 1px solid rgba(226,232,240,.9);
-        background: rgba(248,250,252,.70);
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-        margin-bottom: 12px;
-    }
-
-        .cu-alert .ico {
-            width: 34px;
-            height: 34px;
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-            background: #fff;
-            border: 1px solid rgba(226,232,240,.9);
-            box-shadow: 0 10px 24px rgba(15,23,42,.10);
-            flex: 0 0 auto;
-            color: #111827;
-        }
-
-        .cu-alert .txt b {
-            display: block;
-            font-weight: 900;
-            margin-bottom: 2px;
-        }
-
-        .cu-alert .txt div {
-            color: #334155;
-            font-weight: 700;
-            font-size: .85rem;
-            line-height: 1.25rem;
-        }
-
-        .cu-alert.ok {
-            border-color: #bbf7d0;
-            background: #ecfdf5;
-        }
-
-            .cu-alert.ok .ico {
-                color: #059669;
-                border-color: #bbf7d0;
-            }
-
-        .cu-alert.err {
-            border-color: #fecaca;
-            background: #fff1f2;
-        }
-
-            .cu-alert.err .ico {
-                color: #b91c1c;
-                border-color: #fecaca;
-            }
-
-    /* Shake when error */
-    @@keyframes cu-shake {
-        0% {
-            transform: translateX(0);
-        }
-
-        20% {
-            transform: translateX(-4px);
-        }
-
-        40% {
-            transform: translateX(4px);
-        }
-
-        60% {
-            transform: translateX(-3px);
-        }
-
-        80% {
-            transform: translateX(3px);
-        }
-
-        100% {
-            transform: translateX(0);
-        }
-    }
-
-    .cu-alert.err {
-        animation: cu-shake .35s ease;
-    }
-
-    /* Form micro */
-    .cu-label {
-        font-weight: 900;
-        font-size: .85rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 6px;
-    }
-
-        .cu-label i {
-            color: #f97316;
-        }
-
-    .cu-help {
-        margin-top: 6px;
-        font-size: .8rem;
-        color: var(--mut);
-        line-height: 1.25rem;
-    }
-
-    .cu-actions {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        flex-wrap: wrap;
-        margin-top: 6px;
-    }
-
-        .cu-actions .elx-btn.primary {
-            padding: 11px 18px;
-            font-size: .9rem;
-            position: relative;
-        }
-
-    /* input focus ring (xịn hơn) */
-    .elx-input:focus {
-        outline: none;
-        border-color: rgba(245,130,32,.8);
-        box-shadow: 0 0 0 3px rgba(245,130,32,.18), 0 12px 28px rgba(15,23,42,.14);
-    }
-
-    /* Strength pill (re-used for pwd + role) */
-    .cu-strength {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 7px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(226,232,240,.9);
-        background: rgba(255,255,255,.8);
-        box-shadow: 0 10px 24px rgba(15,23,42,.10);
-        font-size: .8rem;
-        font-weight: 900;
-        color: #111827;
-        margin-top: 8px;
-        width: fit-content;
-    }
-
-        .cu-strength .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            background: #cbd5e1;
-        }
-
-        .cu-strength.ok .dot {
-            background: #10B981;
-        }
-
-        .cu-strength.warn .dot {
-            background: #F59E0B;
-        }
-
-        .cu-strength.bad .dot {
-            background: #EF4444;
-        }
-
-    /* Inline kv note */
-    .cu-note {
-        border-radius: 14px;
-        padding: 12px 12px;
-        background: linear-gradient(180deg,#f8fafc,#fff);
-        border: 1px dashed rgba(245,130,32,.45);
-    }
-
-        .cu-note b {
-            display: block;
-            font-weight: 900;
-            margin-bottom: 4px;
-        }
-
-        .cu-note span {
-            color: #334155;
-            font-weight: 700;
-            font-size: .85rem;
-            line-height: 1.3rem;
-            display: block;
-        }
-
-    /* Hero icon animated gradient */
-    .cu-hero-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        display: grid;
-        place-items: center;
-        color: #111827;
-        font-size: 26px;
-        box-shadow: 0 12px 28px rgba(245,130,32,.45);
-        background: linear-gradient(135deg,#F58220,#E36F15,#1E88E5);
-        background-size: 200% 200%;
-        animation: cu-gradient 6s ease infinite;
-    }
-
-    @@keyframes cu-gradient {
-        0% {
-            background-position: 0% 50%;
-        }
-
-        50% {
-            background-position: 100% 50%;
-        }
-
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-
-    /* Loading icon spin */
-    @@keyframes cu-spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .cu-spin {
-        display: inline-block;
-        animation: cu-spin 1s linear infinite;
-    }
-
-    /* Mobile */
-    @@media (max-width: 576px) {
-        .cu-wrap {
-            margin: 0 12px 18px;
-        }
-
-        .cu-head {
-            padding: 12px 12px 10px;
-        }
-
-        .cu-body {
-            padding: 12px;
-        }
-    }
-    /* ===== Back to Admin button ===== */
-    .sx-btn.back-admin {
-        border: 1px solid rgba(30, 136, 229, .35);
-        background: linear-gradient(180deg, #e0edff, #f8fbff);
-        color: #1e40af;
-        font-weight: 900;
-        box-shadow: 0 10px 26px rgba(30,136,229,.18);
-    }
-
-        .sx-btn.back-admin i {
-            font-size: 1rem;
-        }
-
-        .sx-btn.back-admin:hover {
-            background: linear-gradient(180deg, #dbeafe, #eef6ff);
-            transform: translateY(-1px);
-        }
-
-        .sx-btn.back-admin:active {
-            transform: scale(.97);
-        }
+/* Mobile */
+@@media(max-width:576px){
+    .cu-wrap{margin:0 12px 18px}
+    .cu-body{padding:12px}
+    .sx-btn.back-admin{padding:8px 12px;font-size:.78rem}
+}
 </style>
 
 <div class="elx-dashboard">
     <div class="cu-wrap">
         <div class="cu-shell">
 
-            <!-- ===== Breadcrumb mini ===== -->
-            <div class="cu-bc">
-                <a asp-controller="Admin" asp-action="Index">Admin</a>
-                <span> / </span>
-                <span class="cur">Create User</span>
-            </div>
-
             <!-- ===== HERO ===== -->
-            <div class="elx-hero" style="margin: 8px 0 16px;">
-                <div class="elx-hero-left" style="display:flex;gap:14px;align-items:center;">
-                    <div class="cu-hero-icon">
-                        <i class="bi bi-person-plus"></i>
-                    </div>
-
+            <div class="cu-hero">
+                <div class="cu-hero-left">
+                    <div class="cu-hero-icon"><i class="bi bi-person-plus"></i></div>
                     <div>
-                        <h1 style="margin-bottom:2px;">Tạo tài khoản người dùng</h1>
-                        <p>Admin tạo user mới • mật khẩu được hash • phân quyền rõ ràng</p>
+                        <h1>Tạo tài khoản người dùng</h1>
+                        <p>Admin tạo user mới • phân quyền • mật khẩu hash an toàn</p>
                     </div>
                 </div>
 
-                <div class="elx-hero-right">
-                    <span class="elx-hero-pill"><i class="bi bi-shield-lock"></i> Admin only</span>
-                    <span class="elx-hero-pill"><i class="bi bi-database-lock"></i> Password hashed</span>
-                </div>
-                <form asp-controller="Admin" asp-action="Index" method="get" style="display:inline;">
-                    <button type="submit" class="sx-btn back-admin">
-                        <i class="bi bi-arrow-left"></i> Về Admin
-                    </button>
-                </form>
+                <a asp-controller="Admin" asp-action="Index" class="sx-btn back-admin">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Về Admin</span>
+                </a>
             </div>
 
             <!-- ===== CARD ===== -->
             <div class="cu-card">
                 <div class="cu-head">
                     <h5><i class="bi bi-person-badge"></i> Thông tin tài khoản</h5>
-                    <span class="cu-sub">Username + Password • Role • MongoDB</span>
+                    <span class="cu-sub">MongoDB • BCrypt • Role-based</span>
                 </div>
 
                 <div class="cu-body">
-                    @* Success *@
-                    @if (TempData["Success"] != null)
+
+                    @if (hasSuccess)
                     {
                         <div class="cu-alert ok">
                             <div class="ico"><i class="bi bi-check-circle"></i></div>
-                            <div class="txt">
-                                <b>Thành công</b>
-                                <div>@TempData["Success"]</div>
+                            <div>
+                                <b>Tạo tài khoản thành công</b>
+                                <div class="msg">@TempData["Success"]</div>
                             </div>
                         </div>
                     }
 
-                    @* Validation errors *@
                     @if (!ViewData.ModelState.IsValid)
                     {
                         <div class="cu-alert err">
                             <div class="ico"><i class="bi bi-exclamation-triangle"></i></div>
-                            <div class="txt">
-                                <b>Có lỗi cần sửa</b>
-                                <div>
-                                    <ul style="margin:0;padding-left:16px">
-                                        @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                                        {
-                                            <li style="color:#b91c1c;font-weight:800">@err.ErrorMessage</li>
-                                        }
-                                    </ul>
-                                </div>
+                            <div style="width:100%">
+                                <b>Dữ liệu chưa hợp lệ</b>
+                                <div class="msg">Vui lòng kiểm tra lại:</div>
+                                <ul style="margin:8px 0 0;padding-left:18px">
+                                    @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li style="color:#b91c1c;font-weight:900;font-size:.85rem">@err.ErrorMessage</li>
+                                    }
+                                </ul>
                             </div>
                         </div>
                     }
 
-                    <form asp-action="CreateUser" method="post" autocomplete="off" id="createUserForm">
+                    <form asp-action="CreateUser" method="post" id="createUserForm" autocomplete="off">
                         @Html.AntiForgeryToken()
 
                         <div class="elx-form-grid">
@@ -454,19 +228,35 @@
                             <!-- Username -->
                             <div class="elx-col-6">
                                 <div class="cu-label"><i class="bi bi-person"></i> Username</div>
-                                <input asp-for="Username" class="elx-input" placeholder="VD: user_kho_a" />
-                                <div class="cu-help">Không dấu • không khoảng trắng • duy nhất</div>
+                                <input asp-for="Username" class="elx-input" placeholder="vd: user_kho_a" id="username" />
+                                <div class="cu-help">Không dấu, không khoảng trắng, duy nhất</div>
                             </div>
 
                             <!-- Password -->
                             <div class="elx-col-6">
                                 <div class="cu-label"><i class="bi bi-key"></i> Password</div>
-                                <input asp-for="Password" type="password" class="elx-input" placeholder="••••••••" id="pwd" />
-                                <div class="cu-help">Mật khẩu được <b>hash BCrypt</b>, không lưu plain text</div>
+                                <input asp-for="Password" type="password" class="elx-input" id="pwd" placeholder="••••••••" />
+                                <div class="cu-help">Password được hash bằng BCrypt (không lưu plain text)</div>
 
-                                <div class="cu-strength bad" id="pwdStrength" aria-live="polite">
+                                <div class="cu-pill bad" id="pwdStrength" aria-live="polite">
                                     <span class="dot"></span>
                                     <span id="pwdStrengthText">Độ mạnh: yếu</span>
+                                </div>
+
+                                <div class="cu-inline-tools">
+                                    <button type="button" class="cu-mini brand" id="btnGenPwd">
+                                        <i class="bi bi-magic"></i> Tạo mật khẩu
+                                    </button>
+                                    <button type="button" class="cu-mini blue" id="btnCopyPwd">
+                                        <i class="bi bi-clipboard"></i> Copy mật khẩu
+                                    </button>
+                                    <button type="button" class="cu-mini" id="btnTogglePwd">
+                                        <i class="bi bi-eye"></i> Hiện/Ẩn
+                                    </button>
+                                </div>
+
+                                <div class="cu-hintline" id="pwdHint">
+                                    Tip: Bấm “Tạo mật khẩu” để auto password mạnh, rồi copy gửi cho user.
                                 </div>
                             </div>
 
@@ -477,10 +267,9 @@
                                     <option value="User">User</option>
                                     <option value="Admin">Admin</option>
                                 </select>
-                                <div class="cu-help">User: sử dụng hệ thống • Admin: toàn quyền</div>
+                                <div class="cu-help">User: quyền hạn giới hạn • Admin: toàn quyền</div>
 
-                                <!-- Role preview badge -->
-                                <div class="cu-strength warn" id="rolePreview" aria-live="polite">
+                                <div class="cu-pill warn" id="rolePreview" aria-live="polite">
                                     <span class="dot"></span>
                                     <span id="rolePreviewText">Role: User</span>
                                 </div>
@@ -488,13 +277,15 @@
 
                             <!-- Security note -->
                             <div class="elx-col-12">
-                                <div class="cu-note">
-                                    <b><i class="bi bi-info-circle"></i> Gợi ý bảo mật</b>
-                                    <span>
-                                        • Password hash bằng <b>BCrypt</b><br />
-                                        • Không lưu thông tin nhạy cảm ở frontend<br />
-                                        • Nên dùng mật khẩu dài ≥ 8 ký tự, có chữ hoa + số + ký tự đặc biệt
-                                    </span>
+                                <div style="border-radius:14px;padding:12px;background:linear-gradient(180deg,#f8fafc,#fff);border:1px dashed rgba(245,130,32,.45)">
+                                    <div style="font-weight:900;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+                                        <i class="bi bi-info-circle" style="color:#f97316"></i> Gợi ý bảo mật
+                                    </div>
+                                    <div style="color:#334155;font-weight:800;font-size:.85rem;line-height:1.35rem">
+                                        • Password hash bằng <b>BCrypt</b><br/>
+                                        • Không lưu thông tin nhạy cảm ở frontend<br/>
+                                        • Nên dùng mật khẩu dài ≥ 12 ký tự, có chữ hoa + số + ký tự đặc biệt
+                                    </div>
                                 </div>
                             </div>
 
@@ -502,27 +293,18 @@
                             <div class="elx-col-12">
                                 <div class="cu-actions">
                                     <button type="submit" class="elx-btn primary" id="btnSubmit">
-                                        <i class="bi bi-person-check"></i>
-                                        Tạo & kích hoạt tài khoản
+                                        <i class="bi bi-person-check"></i> Tạo tài khoản
                                     </button>
 
-
+                                    <span class="cu-help" style="margin:0">
+                                        Nếu Role = <b>Admin</b> sẽ yêu cầu xác nhận.
+                                    </span>
                                 </div>
                             </div>
+
                         </div>
                     </form>
-                </div>
-            </div>
 
-            <!-- ===== Dock ===== -->
-            <div class="elx-dock" style="margin: 0;">
-                <div class="elx-dock-inner">
-                    <a asp-controller="Admin" asp-action="Index">
-                        <i class="bi bi-grid-1x2"></i> Dashboard
-                    </a>
-                    <a asp-controller="Admin" asp-action="CreateUser" class="active">
-                        <i class="bi bi-person-plus"></i> Create User
-                    </a>
                 </div>
             </div>
 
@@ -530,80 +312,225 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        // ===== Password strength (client-side hint only) =====
-        (function () {
-            const pwd = document.getElementById('pwd');
-            const box = document.getElementById('pwdStrength');
-            const text = document.getElementById('pwdStrengthText');
+<!-- ===== Admin Confirm Modal (Bootstrap) ===== -->
+<div class="modal fade" id="adminConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px;overflow:hidden;border:1px solid #e5e7eb">
+            <div class="modal-header" style="background:linear-gradient(180deg,#fff7ed,#fff);border-bottom:1px solid #e5e7eb">
+                <div class="cu-modal-head">
+                    <div class="cu-modal-ico"><i class="bi bi-shield-exclamation"></i></div>
+                    <div>
+                        <div style="font-weight:900">Xác nhận tạo Admin</div>
+                        <div style="font-size:.85rem;color:#64748b;font-weight:800">Admin có toàn quyền hệ thống</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-            if (!pwd || !box || !text) return;
+            <div class="modal-body" style="padding:14px 16px">
+                <div style="font-weight:900;margin-bottom:6px">Bạn chắc chắn muốn tạo tài khoản với Role = Admin?</div>
+                <div style="color:#334155;font-weight:800;font-size:.9rem;line-height:1.35rem">
+                    • Username: <span class="mono" id="mUsername">—</span><br />
+                    • Role: <b>Admin</b><br />
+                    • Lưu ý: chỉ cấp quyền Admin khi thật sự cần.
+                </div>
+            </div>
 
-            function score(p) {
-                if (!p) return 0;
-                let s = 0;
-                if (p.length >= 8) s++;
-                if (p.length >= 12) s++;
-                if (/[A-Z]/.test(p)) s++;
-                if (/[a-z]/.test(p)) s++;
-                if (/[0-9]/.test(p)) s++;
-                if (/[^A-Za-z0-9]/.test(p)) s++;
-                return s;
+            <div class="modal-footer" style="border-top:1px solid #e5e7eb;padding:12px 16px">
+                <button type="button" class="cu-mini" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Huỷ
+                </button>
+                <button type="button" class="cu-mini brand" id="btnConfirmAdmin">
+                    <i class="bi bi-check2-circle"></i> OK, tạo Admin
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+(function () {
+    const form = document.getElementById('createUserForm');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const username = document.getElementById('username');
+    const pwd = document.getElementById('pwd');
+    const roleSel = document.getElementById('roleSel');
+
+    const pwdStrength = document.getElementById('pwdStrength');
+    const pwdStrengthText = document.getElementById('pwdStrengthText');
+
+    const rolePreview = document.getElementById('rolePreview');
+    const rolePreviewText = document.getElementById('rolePreviewText');
+
+    const btnGenPwd = document.getElementById('btnGenPwd');
+    const btnCopyPwd = document.getElementById('btnCopyPwd');
+    const btnTogglePwd = document.getElementById('btnTogglePwd');
+    const pwdHint = document.getElementById('pwdHint');
+
+    // ===== Password strength =====
+    function score(p) {
+        if (!p) return 0;
+        let s = 0;
+        if (p.length >= 8) s++;
+        if (p.length >= 12) s++;
+        if (/[A-Z]/.test(p)) s++;
+        if (/[a-z]/.test(p)) s++;
+        if (/[0-9]/.test(p)) s++;
+        if (/[^A-Za-z0-9]/.test(p)) s++;
+        return s;
+    }
+    function renderStrength() {
+        if (!pwdStrength || !pwdStrengthText) return;
+        const s = score(pwd?.value || "");
+        pwdStrength.classList.remove('ok', 'warn', 'bad');
+        if (s >= 5) {
+            pwdStrength.classList.add('ok');
+            pwdStrengthText.textContent = 'Độ mạnh: mạnh';
+        } else if (s >= 3) {
+            pwdStrength.classList.add('warn');
+            pwdStrengthText.textContent = 'Độ mạnh: trung bình';
+        } else {
+            pwdStrength.classList.add('bad');
+            pwdStrengthText.textContent = 'Độ mạnh: yếu';
+        }
+    }
+    pwd?.addEventListener('input', renderStrength);
+    renderStrength();
+
+    // ===== Role preview =====
+    function renderRole() {
+        if (!rolePreview || !rolePreviewText || !roleSel) return;
+        rolePreview.classList.remove('ok', 'warn', 'bad');
+        if (roleSel.value === 'Admin') {
+            rolePreview.classList.add('ok');
+            rolePreviewText.textContent = 'Role: Admin (toàn quyền)';
+        } else {
+            rolePreview.classList.add('warn');
+            rolePreviewText.textContent = 'Role: User (giới hạn)';
+        }
+    }
+    roleSel?.addEventListener('change', renderRole);
+    renderRole();
+
+    // ===== Generate password =====
+    function genPassword(len = 14) {
+        // mix: lower/upper/num/special
+        const lower = "abcdefghijkmnpqrstuvwxyz";
+        const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+        const num = "23456789";
+        const special = "!@@#$%^&*_-+=?"; // ✅ fix double "@@"
+        const all = lower + upper + num + special;
+
+        const pick = (s) => s[Math.floor(Math.random() * s.length)];
+        let out = [pick(lower), pick(upper), pick(num), pick(special)];
+        for (let i = out.length; i < len; i++) out.push(pick(all));
+
+        for (let i = out.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [out[i], out[j]] = [out[j], out[i]];
+        }
+        return out.join("");
+    }
+
+    btnGenPwd?.addEventListener('click', () => {
+        if (!pwd) return;
+        pwd.value = genPassword(14);
+        pwd.type = "text"; // show once for convenience
+        renderStrength();
+        if (pwdHint) pwdHint.innerHTML = `<span class="cu-hint-ok">Đã tạo password mạnh.</span> Bấm “Copy mật khẩu” để gửi cho user.`;
+        pwd.focus();
+        setTimeout(() => { pwd.type = "password"; }, 2000);
+    });
+
+    // ===== Copy password =====
+    btnCopyPwd?.addEventListener('click', async () => {
+        const val = (pwd?.value || "").trim();
+        if (!val) {
+            if (pwdHint) pwdHint.innerHTML = `<span class="cu-hint-warn">Chưa có password.</span> Hãy nhập hoặc bấm “Tạo mật khẩu”.`;
+            pwd?.focus();
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(val);
+            if (pwdHint) pwdHint.innerHTML = `<span class="cu-hint-ok">Đã copy password.</span> Bạn có thể dán gửi cho user.`;
+        } catch {
+            try {
+                pwd.type = "text";
+                pwd.select();
+                document.execCommand("copy");
+                if (pwdHint) pwdHint.innerHTML = `<span class="cu-hint-ok">Đã copy password.</span>`;
+                setTimeout(() => { pwd.type = "password"; }, 1200);
+            } catch {
+                if (pwdHint) pwdHint.innerHTML = `<span class="cu-hint-err">Copy thất bại.</span> Trình duyệt chặn clipboard.`;
             }
+        }
+    });
 
-            function render(p) {
-                const s = score(p);
-                box.classList.remove('ok', 'warn', 'bad');
+    // ===== Toggle show/hide =====
+    btnTogglePwd?.addEventListener('click', () => {
+        if (!pwd) return;
+        pwd.type = (pwd.type === "password") ? "text" : "password";
+    });
 
-                if (s >= 5) {
-                    box.classList.add('ok');
-                    text.textContent = 'Độ mạnh: mạnh';
-                } else if (s >= 3) {
-                    box.classList.add('warn');
-                    text.textContent = 'Độ mạnh: trung bình';
-                } else {
-                    box.classList.add('bad');
-                    text.textContent = 'Độ mạnh: yếu';
+    // ===== Confirm Admin modal before submit =====
+    let adminConfirmed = false;
+
+    const modalEl = document.getElementById('adminConfirmModal');
+    const mUsername = document.getElementById('mUsername');
+    const btnConfirmAdmin = document.getElementById('btnConfirmAdmin');
+
+    let bsModal = null;
+    if (modalEl && window.bootstrap?.Modal) {
+        bsModal = new bootstrap.Modal(modalEl);
+    }
+
+    form?.addEventListener('submit', (e) => {
+        if (btnSubmit?.disabled) return;
+
+        const role = roleSel?.value || "User";
+        if (role === "Admin" && !adminConfirmed) {
+            e.preventDefault();
+            if (mUsername) mUsername.textContent = (username?.value || "—").trim() || "—";
+
+            if (bsModal) {
+                bsModal.show();
+            } else {
+                const ok = confirm("Bạn chắc chắn muốn tạo tài khoản Admin?");
+                if (ok) {
+                    adminConfirmed = true;
+                    form.submit();
                 }
             }
+            return;
+        }
 
-            render(pwd.value);
-            pwd.addEventListener('input', () => render(pwd.value));
-        })();
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<i class="bi bi-arrow-repeat cu-spin"></i> Đang tạo...';
+    });
 
-        // ===== Role preview badge =====
-        (function () {
-            const sel = document.getElementById('roleSel');
-            const box = document.getElementById('rolePreview');
-            const txt = document.getElementById('rolePreviewText');
-            if (!sel || !box || !txt) return;
+    btnConfirmAdmin?.addEventListener('click', () => {
+        adminConfirmed = true;
+        bsModal?.hide();
+        form?.requestSubmit ? form.requestSubmit() : form.submit();
+    });
 
-            function render() {
-                box.classList.remove('ok', 'warn', 'bad');
-                if (sel.value === 'Admin') {
-                    box.classList.add('ok');
-                    txt.textContent = 'Role: Admin (toàn quyền)';
-                } else {
-                    box.classList.add('warn');
-                    txt.textContent = 'Role: User (giới hạn)';
-                }
-            }
+    roleSel?.addEventListener('change', () => { adminConfirmed = false; });
 
-            render();
-            sel.addEventListener('change', render);
-        })();
-
-        // ===== Prevent double submit + loading state =====
-        (function () {
-            const form = document.getElementById('createUserForm');
-            const btn = document.getElementById('btnSubmit');
-            if (!form || !btn) return;
-
-            form.addEventListener('submit', () => {
-                btn.disabled = true;
-                btn.innerHTML = '<i class="bi bi-arrow-repeat cu-spin"></i> Đang tạo...';
-            });
-        })();
-    </script>
+    // ===== Auto reset after success =====
+    const hasSuccess = @((hasSuccess ? "true" : "false"));
+    if (hasSuccess) {
+        setTimeout(() => {
+            if (username) username.value = "";
+            if (pwd) { pwd.value = ""; pwd.type = "password"; }
+            if (roleSel) roleSel.value = "User";
+            renderStrength();
+            renderRole();
+            adminConfirmed = false;
+            if (pwdHint) pwdHint.textContent = "Tip: Bấm “Tạo mật khẩu” để auto password mạnh, rồi copy gửi cho user.";
+            username?.focus();
+        }, 150);
+    }
+})();
+</script>
 }

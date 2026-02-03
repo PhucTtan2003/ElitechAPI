@@ -157,15 +157,15 @@ public class ElitechAlertsNotifyController : ControllerBase
         return string.IsNullOrWhiteSpace(id) ? null : id;
 
     }
-    [HttpGet("my-phone")]
-    public async Task<IActionResult> MyPhone(CancellationToken ct = default)
-    {
-        var userId = GetUserId();
-        if (string.IsNullOrWhiteSpace(userId))
-            return Unauthorized(new { code = 401, message = "No userId claim" });
+    //[HttpGet("my-phone")]
+    //public async Task<IActionResult> MyPhone(CancellationToken ct = default)
+    //{
+    //    var userId = GetUserId();
+    //    if (string.IsNullOrWhiteSpace(userId))
+    //        return Unauthorized(new { code = 401, message = "No userId claim" });
 
-        var phone = await _accounts.GetPhoneByUserIdAsync(userId);
-        return Ok(new { userId, phone });
-    }
+    //    //var phone = await _accounts.GetPhoneByUserIdAsync(userId);
+    //    //return Ok(new { userId, phone });
+    //}
 
 }

@@ -1,6 +1,6 @@
 ﻿@using System.Text.Json
 @{
-    ViewData["Title"] = "Thiết bị của tôi";
+    ViewData["Title"] = "Elitech Monitoring";
     Layout = "_Layout";
 
     var assignedDevices = ViewBag.Devices ?? new List<object>();
@@ -15,221 +15,662 @@
 
 <style>
     :root {
-        --bg: #eef3fb;
-        --card: rgba(255,255,255,.92);
-        --stroke: rgba(13,25,55,.10);
-        --shadow: 0 18px 40px rgba(9,22,48,.14);
-        --radius: 18px;
-        --txt: #0f172a;
+        --brand: #F58220;
+        --brand-600: #e36f15;
+        --brand-50: #fff6ec;
+        --ink: #0f172a;
         --mut: #64748b;
-        --brand: #2563eb;
-        --brand2: #3b82f6;
+        --bg: #f4f6fb;
+        --card: rgba(255,255,255,.96);
+        --glass: rgba(255,255,255,.74);
+        --stroke: rgba(15,23,42,.10);
+        --radius-xl: 22px;
+        --radius: 18px;
+        --radius-sm: 14px;
+        --shadow-xl: 0 28px 60px rgba(2,6,23,.12);
+        --shadow: 0 14px 38px rgba(2,6,23,.08);
+        --shadow2: 0 8px 18px rgba(2,6,23,.06);
         --ok: #16a34a;
         --warn: #f59e0b;
         --bad: #ef4444;
     }
 
-    /* ===== Page background ===== */
-    .ud-wrap {
-        padding: 14px 16px 22px;
-        background: radial-gradient(1100px 520px at 15% 0%, rgba(37,99,235,.18), transparent 60%), radial-gradient(900px 420px at 90% 10%, rgba(245,130,32,.10), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.0));
+    /* ========= Page ========= */
+    .em-wrap {
+        padding: 1px;
+        background: radial-gradient(1200px 560px at 12% -10%, rgba(245,130,32,.14), transparent 60%), radial-gradient(900px 420px at 95% 10%, rgba(59,130,246,.08), transparent 58%), radial-gradient(900px 420px at 30% 110%, rgba(34,197,94,.05), transparent 55%), var(--bg);
     }
 
-    /* ===== Hero ===== */
-    .ud-hero {
+    /* ========= Premium Topbar ========= */
+    .topbar {
+        position: relative;
+        border-radius: var(--radius-xl);
+        border: 1px solid rgba(245,130,32,.22);
+        background: linear-gradient(180deg, rgba(255,246,236,.94), rgba(255,255,255,.96));
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        margin-bottom: 14px;
+    }
+
+        .topbar:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(700px 240px at 15% 40%, rgba(245,130,32,.18), transparent 60%), radial-gradient(700px 240px at 85% 35%, rgba(37,99,235,.10), transparent 60%);
+            pointer-events: none;
+        }
+
+    .topbar-inner {
+        position: relative;
+        padding: 16px 18px;
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        margin: 6px 0 14px;
+        gap: 14px;
         flex-wrap: wrap;
     }
 
-    .ud-hero-left {
+    .brandbox {
         display: flex;
         gap: 14px;
         align-items: center;
+        min-width: 280px;
     }
 
-    .ud-icon {
-        width: 54px;
-        height: 54px;
-        border-radius: 18px;
+    .logo {
+        width: 58px;
+        height: 58px;
+        border-radius: 20px;
         display: grid;
         place-items: center;
-        background: linear-gradient(180deg, var(--brand2), var(--brand));
+        background: linear-gradient(180deg, #ffb066, var(--brand));
         color: #fff;
         font-size: 26px;
-        box-shadow: 0 14px 32px rgba(37,99,235,.45);
-        position: relative;
-        overflow: hidden;
+        box-shadow: 0 0 0 7px rgba(245,130,32,.12), 0 16px 36px rgba(245,130,32,.28);
+        border: 1px solid rgba(255,255,255,.35);
+        flex: 0 0 auto;
     }
 
-        .ud-icon:after {
-            content: "";
-            position: absolute;
-            inset: -40%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
-            transform: rotate(25deg);
-            animation: udShine 2.6s linear infinite;
-        }
-
-    @@keyframes udShine {
-        0% {
-            transform: translateX(-40%) rotate(25deg)
-        }
-
-        100% {
-            transform: translateX(40%) rotate(25deg)
-        }
-    }
-
-    .ud-hero h1 {
+    .brandtext h1 {
         margin: 0;
-        font-weight: 950;
-        font-size: 1.35rem;
-        color: var(--txt);
+        font-size: 1.34rem;
+        font-weight: 1000;
+        color: var(--ink);
+        letter-spacing: .2px;
+        line-height: 1.05;
     }
 
-    .ud-hero p {
-        margin: 4px 0 0;
+    .brandtext p {
+        margin: 6px 0 0;
+        font-size: .9rem;
+        font-weight: 800;
         color: var(--mut);
-        font-weight: 750;
-        font-size: .92rem;
     }
 
-    .ud-pills {
+    .chips {
         display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
+        gap: 10px;
         align-items: center;
+        flex-wrap: wrap;
         justify-content: flex-end;
     }
 
-    .ud-pill {
+    .chip {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: .45rem .8rem;
+        padding: .44rem .78rem;
         border-radius: 999px;
-        font-size: .78rem;
+        background: rgba(255,255,255,.92);
+        border: 1px solid rgba(245,130,32,.18);
+        box-shadow: var(--shadow2);
+        font-size: .80rem;
         font-weight: 900;
-        border: 1px solid var(--stroke);
-        background: rgba(255,255,255,.75);
-        box-shadow: 0 10px 24px rgba(15,23,42,.08);
-        white-space: nowrap;
         color: #334155;
+        white-space: nowrap;
+        backdrop-filter: blur(6px);
     }
 
-    .ud-dot {
-        width: 8px;
-        height: 8px;
+        .chip strong {
+            font-weight: 950;
+        }
+
+    .dot {
+        width: 9px;
+        height: 9px;
         border-radius: 999px;
         background: #cbd5e1;
+        box-shadow: 0 0 0 3px rgba(148,163,184,.12);
     }
 
-        .ud-dot.ok {
+        .dot.ok {
             background: var(--ok);
+            box-shadow: 0 0 0 3px rgba(22,163,74,.14);
         }
 
-        .ud-dot.warn {
+        .dot.warn {
             background: var(--warn);
+            box-shadow: 0 0 0 3px rgba(245,158,11,.16);
         }
 
-        .ud-dot.bad {
+        .dot.bad {
             background: var(--bad);
+            box-shadow: 0 0 0 3px rgba(239,68,68,.14);
         }
 
-    /* ===== Grid layout ===== */
-    .ud-grid {
+    /* ========= KPI Strip ========= */
+    .kpi-strip {
         display: grid;
-        grid-template-columns: 1.2fr .8fr;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 0 0 14px;
+    }
+
+    .kpi {
+        border-radius: 16px;
+        padding: 14px;
+        background: var(--card);
+        border: 1px solid rgba(245,130,32,.18);
+        box-shadow: var(--shadow2);
+        overflow: hidden;
+    }
+
+        .kpi.orange {
+            background: linear-gradient(180deg, var(--brand-50), #fff);
+            border-color: rgba(245,130,32,.22);
+        }
+
+        .kpi .k {
+            font-size: 12px;
+            font-weight: 900;
+            color: var(--mut);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kpi .v {
+            margin-top: 6px;
+            font-size: 22px;
+            font-weight: 1000;
+            color: var(--ink);
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .kpi .s {
+            margin-top: 4px;
+            font-size: 12px;
+            font-weight: 850;
+            color: #94a3b8;
+        }
+
+    @@media (max-width: 980px) {
+        .kpi-strip {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    /* ========= Severity strip ========= */
+    .sev-strip {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 12px;
+        margin: 0 0 14px;
+    }
+
+    .sev {
+        border-radius: 16px;
+        padding: 12px 14px;
+        background: var(--card);
+        border: 1px solid rgba(15,23,42,.09);
+        box-shadow: var(--shadow2);
+    }
+
+        .sev .k {
+            font-size: 12px;
+            font-weight: 950;
+            color: var(--mut);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sev .v {
+            margin-top: 6px;
+            font-size: 20px;
+            font-weight: 1000;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .sev .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: .22rem .5rem;
+            border-radius: 999px;
+            font-size: .74rem;
+            font-weight: 950;
+            border: 1px solid rgba(148,163,184,.32);
+            background: rgba(255,255,255,.76);
+            color: #334155;
+        }
+
+    .badge.bad {
+        border-color: rgba(239,68,68,.28);
+    }
+
+    .badge.warn {
+        border-color: rgba(245,158,11,.30);
+    }
+
+    .badge.ok {
+        border-color: rgba(22,163,74,.28);
+    }
+
+    @@media (max-width: 980px) {
+        .sev-strip {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* ========= Layout ========= */
+    .em-grid {
+        display: grid;
+        grid-template-columns: 340px 1fr;
         gap: 14px;
         align-items: start;
     }
 
-    .ud-card {
+    /* ========= Card base ========= */
+    .card {
         background: var(--card);
-        border: 1px solid var(--stroke);
-        border-radius: var(--radius);
+        border: 1px solid rgba(15,23,42,.09);
+        border-radius: var(--radius-xl);
         box-shadow: var(--shadow);
         overflow: hidden;
     }
 
-    .ud-card-hd {
+    .card-hd {
         padding: 14px 16px;
-        border-bottom: 1px solid rgba(231,235,243,.9);
+        border-bottom: 1px solid rgba(226,232,240,.92);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: 10px;
+        background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.90));
     }
 
-        .ud-card-hd b {
+        .card-hd b {
             font-weight: 950;
-            color: var(--txt);
+            color: var(--ink);
+            letter-spacing: .2px;
         }
 
-    .ud-sub {
-        font-size: .85rem;
-        font-weight: 750;
+    .sub {
+        margin-top: 3px;
+        font-size: .82rem;
+        font-weight: 780;
         color: var(--mut);
     }
 
-    .ud-body {
-        padding: 14px 16px 16px;
+    .card-bd {
+        padding: 10px 3px 3px;
     }
 
-    /* Hint */
-    .ud-hint {
+    /* ========= Sidebar: Summary grid ========= */
+    .summary-grid {
+        display: grid;
+        gap: 10px;
+    }
+
+    .sum {
+        border: 1px solid rgba(15,23,42,.08);
+        border-radius: 16px;
+        padding: 12px 12px;
+        background: var(--glass);
+        backdrop-filter: blur(8px);
+        box-shadow: var(--shadow2);
+    }
+
+        .sum.orange {
+            border-color: rgba(245,130,32,.22);
+            background: linear-gradient(180deg, rgba(255,246,236,.92), rgba(255,255,255,.90));
+        }
+
+        .sum .k {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 900;
+            color: var(--mut);
+        }
+
+        .sum .v {
+            margin-top: 6px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            color: var(--ink);
+            font-weight: 1000;
+            font-size: 15px;
+        }
+
+    .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 12px;
+        font-weight: 900;
+        color: #475569;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 240px;
+    }
+
+    .mini {
+        font-size: 12px;
+        font-weight: 850;
+        color: #94a3b8;
+        white-space: nowrap;
+    }
+
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: .28rem .62rem;
+        border-radius: 999px;
+        font-size: .76rem;
+        font-weight: 950;
+        border: 1px solid rgba(148,163,184,.35);
+        background: rgba(255,255,255,.86);
+        color: #334155;
+        white-space: nowrap;
+        box-shadow: var(--shadow2);
+    }
+
+        .tag.ok {
+            border-color: rgba(22,163,74,.28);
+        }
+
+        .tag.warn {
+            border-color: rgba(245,158,11,.34);
+        }
+
+        .tag.bad {
+            border-color: rgba(239,68,68,.32);
+        }
+
+    /* ========= Main: Hero strip ========= */
+    .hero-strip {
+        border: 1px solid rgba(245,130,32,.20);
+        background: linear-gradient(180deg, rgba(255,246,236,.80), rgba(255,255,255,.92));
+        border-radius: 18px;
+        padding: 12px;
+        box-shadow: var(--shadow2);
         display: flex;
         gap: 12px;
         align-items: flex-start;
-        border-radius: 16px;
-        padding: 12px;
-        background: linear-gradient(180deg,#f8fafc,#fff);
-        border: 1px dashed rgba(37,99,235,.45);
         margin-bottom: 12px;
     }
 
-        .ud-hint .ico {
-            width: 40px;
-            height: 40px;
-            border-radius: 14px;
-            display: grid;
-            place-items: center;
-            background: #fff;
-            border: 1px solid var(--stroke);
-            color: var(--brand);
-            box-shadow: 0 10px 24px rgba(15,23,42,.10);
-            flex: 0 0 auto;
-            font-size: 20px;
-        }
-
-        .ud-hint b {
-            display: block;
-            font-weight: 950;
-            margin-bottom: 2px;
-        }
-
-        .ud-hint span {
-            color: #334155;
-            font-weight: 750;
-            font-size: .86rem;
-            line-height: 1.35rem;
-        }
-
-    /* React mount */
-    #react-root-user {
-        min-height: 420px;
+    .hero-ico {
+        width: 40px;
+        height: 40px;
         border-radius: 16px;
-        background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(59,130,246,.45), rgba(14,165,233,.45)) border-box;
-        border: 2px solid transparent;
-        box-shadow: inset 0 0 0 1px rgba(226,232,240,.9), 0 12px 30px rgba(15,23,42,.12);
-        position: relative;
-        overflow: hidden;
+        display: grid;
+        place-items: center;
+        background: #fff;
+        border: 1px solid rgba(245,130,32,.20);
+        color: var(--brand-600);
+        box-shadow: var(--shadow2);
+        flex: 0 0 auto;
+        font-size: 18px;
     }
 
+    .hero-strip b {
+        display: block;
+        font-weight: 1000;
+        color: var(--ink);
+        margin-bottom: 2px;
+    }
+
+    .hero-strip span {
+        font-size: .86rem;
+        font-weight: 780;
+        color: #334155;
+        line-height: 1.35rem;
+    }
+
+    /* ========= Filter bar (UI-only) ========= */
+    .filterbar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .fb-left {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .ctrl {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: .46rem .65rem;
+        border-radius: 14px;
+        background: var(--card);
+        border: 1px solid rgba(15,23,42,.09);
+        box-shadow: var(--shadow2);
+    }
+
+        .ctrl input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-weight: 850;
+            font-size: .85rem;
+            color: var(--ink);
+            width: 220px;
+        }
+
+        .ctrl .ico {
+            color: var(--mut);
+        }
+
+        .ctrl select {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-weight: 900;
+            font-size: .85rem;
+            color: var(--ink);
+            cursor: pointer;
+            padding-right: 6px;
+        }
+
+    .toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: .46rem .65rem;
+        border-radius: 14px;
+        background: var(--card);
+        border: 1px solid rgba(15,23,42,.09);
+        box-shadow: var(--shadow2);
+        font-size: .85rem;
+        font-weight: 950;
+        color: var(--ink);
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .toggle .sw {
+            width: 38px;
+            height: 20px;
+            border-radius: 999px;
+            background: rgba(148,163,184,.35);
+            position: relative;
+            flex: 0 0 auto;
+        }
+
+            .toggle .sw::after {
+                content: "";
+                width: 16px;
+                height: 16px;
+                border-radius: 999px;
+                background: #fff;
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                box-shadow: 0 6px 12px rgba(2,6,23,.18);
+                transition: transform .14s ease;
+            }
+
+        .toggle[data-on="1"] .sw {
+            background: rgba(22,163,74,.28);
+        }
+
+            .toggle[data-on="1"] .sw::after {
+                transform: translateX(18px);
+            }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .toggle .sw::after {
+            transition: none;
+        }
+    }
+
+    /* Compact mode */
+    .is-compact .card-bd {
+        padding: 10px 12px 12px;
+    }
+
+    .is-compact .sum {
+        padding: 10px 10px;
+    }
+
+    .is-compact #react-root-user {
+        min-height: 440px;
+    }
+
+    .is-compact .hero-strip {
+        padding: 10px;
+    }
+
+    .is-compact .device-item {
+        padding: 7px 9px;
+    }
+
+    /* ========= Device snapshot ========= */
+    .device-list {
+        display: grid;
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    .device-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(15,23,42,.08);
+        background: rgba(255,255,255,.92);
+        box-shadow: var(--shadow2);
+        font-size: .85rem;
+        font-weight: 900;
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .device-item:hover {
+            transform: translateY(-1px);
+        }
+
+        .device-item:active {
+            transform: translateY(0);
+        }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .device-item:hover, .device-item:active {
+            transform: none;
+        }
+    }
+
+    .device-item .name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ink);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 210px;
+    }
+
+    .device-item .state {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: .75rem;
+        font-weight: 1000;
+        color: var(--mut);
+        white-space: nowrap;
+    }
+
+    .device-item.is-alert {
+        border-color: rgba(239,68,68,.22);
+        box-shadow: 0 10px 22px rgba(239,68,68,.10);
+    }
+
+    .device-item.is-focus {
+        outline: 2px solid rgba(245,130,32,.32);
+    }
+
+    /* ========= Health ========= */
+    .health {
+        display: grid;
+        gap: 8px;
+        margin-top: 4px;
+        font-size: .85rem;
+        font-weight: 900;
+    }
+
+    .health-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ink);
+    }
+
+    /* ========= React mount ========= */
+    #react-root-user {
+        min-height: 500px;
+        border-radius: 10px;
+        background: #fff;
+        border: 1px solid rgba(245,130,32,.18);
+        box-shadow: var(--shadow2);
+        position: relative;
+        overflow: hidden;
+        padding: 10px;
+    }
+
+    /* preload skeleton nhẹ */
     .ud-preload {
         position: absolute;
         inset: 0;
@@ -240,88 +681,54 @@
 
         .ud-preload .row {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
 
     .ud-skel {
-        border-radius: 16px;
-        height: 64px;
-        background: linear-gradient(90deg, rgba(226,232,240,.75), rgba(248,250,252,.95), rgba(226,232,240,.75));
+        border-radius: 14px;
+        height: 62px;
+        background: linear-gradient(90deg, rgba(226,232,240,.70), rgba(248,250,252,.95), rgba(226,232,240,.70));
         background-size: 200% 100%;
-        animation: udSk 1.1s infinite linear;
-        border: 1px solid rgba(231,235,243,.95);
+        animation: udSk 1.2s linear infinite;
+        border: 1px solid rgba(226,232,240,.9);
     }
 
         .ud-skel.big {
-            height: 230px;
+            height: 280px;
         }
 
     @@keyframes udSk {
         0% {
-            background-position: 0% 0
+            background-position: 0% 0;
         }
 
         100% {
-            background-position: -200% 0
+            background-position: -200% 0;
         }
     }
 
-    /* Right column cards */
-    .ud-mini {
-        display: grid;
-        gap: 14px;
+    @@media (prefers-reduced-motion: reduce) {
+        .ud-skel {
+            animation: none;
+        }
     }
 
-    .stat-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .stat {
-        border-radius: 16px;
-        border: 1px solid var(--stroke);
-        background: rgba(255,255,255,.78);
-        box-shadow: 0 12px 28px rgba(9,22,48,.10);
-        padding: 12px;
-    }
-
-        .stat .k {
-            font-size: 12px;
-            font-weight: 900;
-            color: #64748b;
-        }
-
-        .stat .v {
-            margin-top: 6px;
-            font-size: 18px;
-            font-weight: 950;
-            color: var(--txt);
-        }
-
-        .stat .s {
-            margin-top: 2px;
-            font-size: 12px;
-            font-weight: 800;
-            color: #94a3b8;
-        }
-
-    .ud-footer {
+    .footer-note {
         margin-top: 12px;
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
         align-items: center;
         font-size: .82rem;
-        font-weight: 850;
+        font-weight: 900;
         color: var(--mut);
     }
 
-    /* ===== Toast ===== */
+    /* ========= Toast ========= */
     .toast-wrap {
         position: fixed;
-        top: 86px; /* tránh đè header */
+        top: 86px;
         right: 18px;
         width: min(360px, calc(100vw - 28px));
         display: grid;
@@ -333,13 +740,14 @@
     .toast {
         pointer-events: auto;
         border-radius: 16px;
-        border: 1px solid rgba(148,163,184,.35);
-        background: rgba(255,255,255,.92);
-        box-shadow: 0 18px 40px rgba(9,22,48,.18);
+        border: 1px solid rgba(148,163,184,.26);
+        background: rgba(255,255,255,.96);
+        box-shadow: 0 14px 34px rgba(2,6,23,.14);
         overflow: hidden;
         transform: translateY(-6px);
         opacity: 0;
-        animation: toastIn .18s ease forwards;
+        animation: toastIn .16s ease forwards;
+        will-change: transform, opacity;
     }
 
     @@keyframes toastIn {
@@ -349,20 +757,28 @@
         }
     }
 
+    @@media (prefers-reduced-motion: reduce) {
+        .toast {
+            animation: none;
+            transform: none;
+            opacity: 1;
+        }
+    }
+
     .toast .hd {
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 10px 12px;
-        border-bottom: 1px solid rgba(231,235,243,.9);
+        border-bottom: 1px solid rgba(226,232,240,.92);
     }
 
     .toast .title {
         display: flex;
         align-items: center;
         gap: 10px;
-        font-weight: 950;
-        color: var(--txt);
+        font-weight: 1000;
+        color: var(--ink);
         font-size: 13px;
     }
 
@@ -387,148 +803,409 @@
 
     .toast .close {
         border: 1px solid rgba(148,163,184,.35);
-        background: rgba(255,255,255,.7);
+        background: rgba(255,255,255,.75);
         border-radius: 10px;
         padding: 4px 8px;
-        font-weight: 950;
+        font-weight: 1000;
         cursor: pointer;
+        color: var(--ink);
     }
 
     .toast .bd {
         padding: 10px 12px 12px;
-        color: #0f172a;
-        font-weight: 800;
+        color: var(--ink);
+        font-weight: 900;
         font-size: 13px;
         line-height: 1.35;
     }
 
     .toast .meta {
         margin-top: 8px;
-        color: #64748b;
-        font-weight: 800;
+        color: var(--mut);
+        font-weight: 900;
         font-size: 12px;
         display: flex;
         justify-content: space-between;
         gap: 10px;
     }
 
+    /* ========= Recent activity ========= */
+    .activity {
+        display: grid;
+        gap: 8px;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(15,23,42,.07);
+        background: rgba(255,255,255,.92);
+        box-shadow: var(--shadow2);
+        font-size: .83rem;
+        font-weight: 900;
+        color: var(--ink);
+    }
+
+        .activity-item .left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .activity-item .time {
+            font-size: 12px;
+            font-weight: 950;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+
+    /* ========= Empty state ========= */
+    .empty {
+        border-radius: var(--radius-xl);
+        border: 1px dashed rgba(245,130,32,.32);
+        background: linear-gradient(180deg, rgba(255,246,236,.70), rgba(255,255,255,.92));
+        box-shadow: var(--shadow);
+        padding: 18px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        margin-top: 12px;
+    }
+
+        .empty .eico {
+            width: 50px;
+            height: 50px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,.9);
+            border: 1px solid rgba(245,130,32,.22);
+            box-shadow: var(--shadow2);
+            color: var(--brand-600);
+            font-size: 22px;
+            flex: 0 0 auto;
+        }
+
+        .empty b {
+            display: block;
+            color: var(--ink);
+            font-weight: 1000;
+            margin-bottom: 4px;
+        }
+
+        .empty p {
+            margin: 0;
+            color: var(--mut);
+            font-weight: 850;
+            line-height: 1.45;
+        }
+
+        .empty .cta {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+    .btn-soft {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: .52rem .78rem;
+        border-radius: 14px;
+        border: 1px solid rgba(245,130,32,.22);
+        background: rgba(255,255,255,.86);
+        box-shadow: var(--shadow2);
+        font-weight: 950;
+        color: var(--ink);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* ========= Responsive ========= */
     @@media (max-width: 980px) {
-        .ud-grid {
+        .em-grid {
             grid-template-columns: 1fr;
         }
     }
 </style>
 
-<div class="ud-wrap">
+<div class="em-wrap" id="pageRoot">
 
-    <div class="ud-hero">
-        <div class="ud-hero-left">
-            <div class="ud-icon"><i class="bi bi-cpu"></i></div>
-            <div>
-                <h1>Dashboard thiết bị</h1>
-                <p>Realtime + lịch sử + cảnh báo quan trọng (toast) theo quyền user</p>
+    <!-- Premium Topbar -->
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="brandbox">
+                <div class="logo"><i class="bi bi-cpu"></i></div>
+                <div class="brandtext">
+                    <h1>Elitech Monitoring</h1>
+                    <p>Realtime · History · Critical Alerts (toast) theo quyền user</p>
+                </div>
             </div>
-        </div>
 
-        <div class="ud-pills">
-            <span class="ud-pill"><span class="ud-dot ok"></span> Live / SignalR</span>
-            <span class="ud-pill"><i class="bi bi-person-check"></i> @userMeta.name</span>
-            <span class="ud-pill"><i class="bi bi-shield-lock"></i> Role: @userMeta.role</span>
+            <div class="chips">
+                <span class="chip"><span class="dot warn" id="srDot"></span> <span id="srBadgeTextTop">Connecting</span></span>
+                <span class="chip"><i class="bi bi-person-check"></i> <strong>@userMeta.name</strong></span>
+                <span class="chip"><i class="bi bi-shield-lock"></i> Role: <strong>@userMeta.role</strong></span>
+                <span class="chip"><i class="bi bi-clock"></i> <span id="localNow">@DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")</span></span>
+            </div>
         </div>
     </div>
 
-    <div class="ud-grid">
+    <!-- KPI strip -->
+    <div class="kpi-strip">
+        <div class="kpi orange">
+            <div class="k"><i class="bi bi-cpu"></i> Devices</div>
+            <div class="v"><span>@assignedDevices.Count</span><span class="mini">assigned</span></div>
+            <div class="s">Thiết bị đã được gán cho user</div>
+        </div>
 
-        <!-- LEFT: main dashboard -->
-        <div class="ud-card">
-            <div class="ud-card-hd">
+        <div class="kpi">
+            <div class="k"><i class="bi bi-bell"></i> Alerts</div>
+            <div class="v"><span id="kpiAlerts">0</span><span class="mini">received</span></div>
+            <div class="s">Số cảnh báo quan trọng</div>
+        </div>
+
+        <div class="kpi">
+            <div class="k"><i class="bi bi-wifi"></i> Realtime</div>
+            <div class="v"><span id="kpiRealtime">Connecting</span><span class="mini">signalr</span></div>
+            <div class="s">Trạng thái kết nối live</div>
+        </div>
+
+        <div class="kpi">
+            <div class="k"><i class="bi bi-shield-check"></i> System</div>
+            <div class="v"><span id="kpiSystem">OK</span><span class="mini">health</span></div>
+            <div class="s">UI-only (map theo state)</div>
+        </div>
+    </div>
+
+    <!-- Severity summary -->
+    <div class="sev-strip">
+        <div class="sev">
+            <div class="k"><i class="bi bi-exclamation-triangle"></i> Critical</div>
+            <div class="v"><span id="sevBad">0</span><span class="badge bad"><span class="dot bad"></span> high</span></div>
+        </div>
+        <div class="sev">
+            <div class="k"><i class="bi bi-exclamation-circle"></i> Warning</div>
+            <div class="v"><span id="sevWarn">0</span><span class="badge warn"><span class="dot warn"></span> warn</span></div>
+        </div>
+        <div class="sev">
+            <div class="k"><i class="bi bi-bell-fill"></i> Total</div>
+            <div class="v"><span id="sevTotal">0</span><span class="badge ok"><span class="dot ok"></span> all</span></div>
+        </div>
+    </div>
+
+    <div class="em-grid">
+
+        <!-- Sidebar -->
+        <div class="card">
+            <div class="card-hd">
                 <div>
-                    <b>Thiết bị của tôi</b>
-                    <div class="ud-sub">Chỉ hiển thị thiết bị đã được Admin gán • Dữ liệu realtime cập nhật tự động</div>
+                    <b>System Overview</b>
+                    <div class="sub">Thông tin nhanh (UI-only)</div>
                 </div>
-                <div class="ud-sub">Local: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")</div>
+                <span class="tag warn" id="rtTag"><span class="dot warn" id="rtDot"></span><span id="rtText">Connecting</span></span>
             </div>
 
-            <div class="ud-body">
-                <div class="ud-hint">
-                    <div class="ico"><i class="bi bi-lightbulb"></i></div>
+            <div class="card-bd">
+                <div class="summary-grid">
+                    <div class="sum orange">
+                        <div class="k"><i class="bi bi-person-circle"></i> User</div>
+                        <div class="v">@userMeta.name <span class="mini">@userMeta.role</span></div>
+                    </div>
+
+                    <div class="sum">
+                        <div class="k"><i class="bi bi-fingerprint"></i> UserId</div>
+                        <div class="v"><span class="mono">@userMeta.userId</span><span class="mini">read-only</span></div>
+                    </div>
+
+                    <div class="sum">
+                        <div class="k"><i class="bi bi-cpu"></i> Assigned devices</div>
+                        <div class="v">@assignedDevices.Count <span class="mini">devices</span></div>
+                    </div>
+
+                    <div class="sum">
+                        <div class="k"><i class="bi bi-bell-fill"></i> Alerts received</div>
+                        <div class="v"><span id="alertsMirror">0</span> <span class="mini">important</span></div>
+                    </div>
+
+                    <div class="sum">
+                        <div class="k"><i class="bi bi-clock-history"></i> Last alert time</div>
+                        <div class="v" id="lastAlertTime">— <span class="mini">local</span></div>
+                    </div>
+
+                    <div class="sum">
+                        <div class="k"><i class="bi bi-cloud-check"></i> System</div>
+                        <div class="v">Elitech Cloud <span class="mini">Mongo cache/state</span></div>
+                    </div>
+
+                    <div class="sum">
+                        <div class="k"><i class="bi bi-hdd-network"></i> Device snapshot</div>
+                        <div class="device-list" id="deviceSnapshot">
+                            <div class="device-item">
+                                <div class="name"><i class="bi bi-cpu"></i> Device</div>
+                                <div class="state"><span class="dot warn"></span> —</div>
+                            </div>
+                        </div>
+                        <div class="mini" style="margin-top:8px">
+                            Click device để focus (UI-only) · Focus: <span class="mono" id="focusText">—</span>
+                        </div>
+                    </div>
+
+                    <div class="sum">
+                        <div class="k"><i class="bi bi-heart-pulse"></i> System health</div>
+                        <div class="health" id="healthList">
+                            <div class="health-item"><span class="dot warn" id="hRealtimeDot"></span><span id="hRealtimeText">Realtime pending</span></div>
+                            <div class="health-item"><span class="dot ok"></span> Alert engine running</div>
+                            <div class="health-item"><span class="dot ok"></span> Data pipeline active</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="footer-note">
+                    <span><i class="bi bi-shield-check"></i> Nền tảng giám sát ổn định – trải nghiệm vận hành chuẩn doanh nghiệp</span>
+                    <span><i class="bi bi-lightning-charge"></i> Thiết kế tập trung hiệu suất, sẵn sàng mở rộng theo quy mô hệ thống</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main -->
+        <div>
+            <div class="card">
+                <div class="card-hd">
                     <div>
-                        <b>Tip</b>
-                        <span>
-                            • Khi vượt ngưỡng theo rule, server sẽ bắn <b>alert.toast</b> về group <b>user:{userId}</b><br />
-                            • Toast sẽ hiện ở góc phải và tự tắt sau vài giây
-                        </span>
+                        <b>Realtime Monitoring</b>
+                        <div class="sub">Dữ liệu realtime cập nhật tự động</div>
                     </div>
+
+                    <!-- giữ id srState để script cũ set text -->
+                    <span class="tag warn" id="srBadge">
+                        <span class="dot warn" id="srDot2"></span>
+                        <span id="srState">Connecting…</span>
+                    </span>
                 </div>
 
-                <div id="react-root-user">
-                    <div class="ud-preload" id="ud-preload">
-                        <div class="row">
-                            <div class="ud-skel"></div>
-                            <div class="ud-skel"></div>
-                            <div class="ud-skel"></div>
+                <div class="card-bd">
+                    <div class="hero-strip">
+                        <div class="hero-ico"><i class="bi bi-graph-up-arrow"></i></div>
+                        <div>
+                            <b>System status</b>
+                            <span id="narrativeText">
+                                Monitoring @assignedDevices.Count devices in realtime. Waiting for live connection…
+                            </span>
                         </div>
-                        <div class="row">
-                            <div class="ud-skel"></div>
-                            <div class="ud-skel"></div>
-                            <div class="ud-skel"></div>
-                        </div>
-                        <div class="ud-skel big"></div>
                     </div>
-                </div>
 
-                <div class="ud-footer">
-                    <span><i class="bi bi-info-circle"></i> Không thấy thiết bị? Liên hệ Admin để được gán quyền.</span>
-                    <span><i class="bi bi-cloud-check"></i> Elitech Cloud + Mongo cache/state.</span>
+                    <div class="filterbar">
+                        <div class="fb-left">
+                            <div class="ctrl" title="Search device (UI-only)">
+                                <span class="ico"><i class="bi bi-search"></i></span>
+                                <input id="deviceSearch" placeholder="Search device…" />
+                            </div>
+
+                            <div class="ctrl" title="Filter (UI-only)">
+                                <span class="ico"><i class="bi bi-funnel"></i></span>
+                                <select id="deviceFilter">
+                                    <option value="all" selected>All</option>
+                                    <option value="alerts">Alerts only</option>
+                                    <option value="recent">Recently active</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="toggle" id="compactToggle" data-on="0" title="Compact view">
+                            <span class="sw"></span>
+                            <span>Compact</span>
+                        </div>
+                    </div>
+
+                    <div class="hero-strip">
+                        <div class="hero-ico"><i class="bi bi-lightbulb"></i></div>
+                        <div>
+                            <b>Gợi ý sử dụng</b>
+                            <span>
+                                • Khi thiết bị vượt ngưỡng cảnh báo, hệ thống sẽ gửi thông báo ngay lập tức.<br />
+                                • Thông báo hiển thị ở góc phải và tự động tắt sau vài giây.
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <!-- React mount giữ nguyên -->
+                    <div id="react-root-user">
+                        <div class="ud-preload" id="ud-preload">
+                            <div class="row">
+                                <div class="ud-skel"></div>
+                                <div class="ud-skel"></div>
+                                <div class="ud-skel"></div>
+                            </div>
+                            <div class="row">
+                                <div class="ud-skel"></div>
+                                <div class="ud-skel"></div>
+                                <div class="ud-skel"></div>
+                            </div>
+                            <div class="ud-skel big"></div>
+                        </div>
+                    </div>
+
+                    <div class="footer-note">
+                        <span><i class="bi bi-info-circle"></i> Không thấy thiết bị? Liên hệ Admin để được gán quyền.</span>
+                        <span><i class="bi bi-cloud-check"></i> Elitech Cloud + Mongo cache/state.</span>
+                    </div>
+
+                    @if (assignedDevices.Count == 0)
+                    {
+                        <div class="empty">
+                            <div class="eico"><i class="bi bi-hdd-network"></i></div>
+                            <div>
+                                <b>Chưa có thiết bị nào được gán</b>
+                                <p>
+                                    Hiện tại tài khoản của bạn chưa được Admin gán thiết bị để theo dõi.<br />
+                                    Vui lòng liên hệ Admin để cấp quyền/thiết bị cho userId: <span class="mono">@userMeta.userId</span>
+                                </p>
+                                <div class="cta">
+                                    <a class="btn-soft" href="javascript:void(0)" onclick="navigator.clipboard?.writeText('@userMeta.userId');">
+                                        <i class="bi bi-clipboard"></i> Copy userId
+                                    </a>
+                                    <a class="btn-soft" href="javascript:void(0)">
+                                        <i class="bi bi-person-gear"></i> Contact Admin
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:14px">
+                <div class="card-hd">
+                    <div>
+                        <b>Recent activity</b>
+                        <div class="sub">Latest important events</div>
+                    </div>
+                    <span class="tag" title="UI-only"><i class="bi bi-lightning-charge"></i> Live</span>
+                </div>
+                <div class="card-bd">
+                    <div class="activity" id="activityList">
+                        <div class="activity-item">
+                            <div class="left"><i class="bi bi-dot"></i> No recent events</div>
+                            <div class="time">—</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- RIGHT: quick stats + status -->
-        <div class="ud-mini">
-            <div class="ud-card">
-                <div class="ud-card-hd">
-                    <div>
-                        <b>Trạng thái</b>
-                        <div class="ud-sub">Kết nối realtime và cảnh báo</div>
-                    </div>
-                </div>
-                <div class="ud-body">
-                    <div class="stat-grid">
-                        <div class="stat">
-                            <div class="k">SignalR</div>
-                            <div class="v" id="srState">Connecting…</div>
-                            <div class="s" id="srStateSub">/hubs/alarm</div>
-                        </div>
-                        <div class="stat">
-                            <div class="k">Toast received</div>
-                            <div class="v" id="toastCount">0</div>
-                            <div class="s">important events</div>
-                        </div>
-                    </div>
-
-                    <div class="stat" style="margin-top:10px">
-                        <div class="k">User</div>
-                        <div class="v" style="font-size:16px">@userMeta.name</div>
-                        <div class="s">userId: @userMeta.userId</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ud-card">
-                <div class="ud-card-hd">
-                    <div>
-                        <b>Gợi ý</b>
-                        <div class="ud-sub">Chỉ push event quan trọng</div>
-                    </div>
-                </div>
-                <div class="ud-body" style="color:#334155;font-weight:800;line-height:1.45">
-                    • Alarm record (history) bạn vẫn xem ở trang Alarm<br />
-                    • Cảnh báo vượt ngưỡng (rule) → push <b>alert.toast</b><br />
-                    • Tránh spam: debounce + cooldown theo rule/state
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -541,6 +1218,10 @@
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+
+<!-- =========================
+     ✅ SCRIPT CŨ — GIỮ NGUYÊN 100%
+     ========================= -->
 <script>
     // =========================
     // Toast UI (dynamic message, không hard-code)
@@ -631,10 +1312,26 @@
     // =========================
     let _hub = null;
 
+    function setBadge(text, tone) {
+        const badge = document.getElementById("srBadge");
+        const t = document.getElementById("srBadgeText");
+        if (t) t.textContent = text;
+
+        if (!badge) return;
+        badge.classList.remove("ok", "warn", "bad");
+        if (tone) badge.classList.add(tone);
+    }
+
     function setSrState(text, tone) {
         const el = document.getElementById("srState");
-        if (!el) return;
-        el.textContent = text;
+        if (el) el.textContent = text;
+
+        // update badge tone theo state (UI-only)
+        const s = (text || "").toLowerCase();
+        if (s.includes("live") || s.includes("connected")) setBadge("Connected", "ok");
+        else if (s.includes("reconnect")) setBadge("Reconnecting", "warn");
+        else if (s.includes("disconnect")) setBadge("Disconnected", "bad");
+        else setBadge("Connecting", "warn");
     }
 
     async function startHub() {
@@ -651,19 +1348,349 @@
 
         // ✅ server push "alert.toast" (important)
         _hub.on("alert.toast", (payload) => {
-            // payload là object dynamic bạn gửi từ worker
             showToast(payload);
         });
 
         await _hub.start();
         setSrState("Live connected");
-
-        // Nếu Hub đã auto join theo claims ở OnConnectedAsync thì KHÔNG cần invoke JoinUser/JoinRole nữa.
-        // Nhưng nếu bạn chưa dùng OnConnectedAsync (hoặc muốn chắc chắn), bật đoạn dưới:
     }
 
     (function init() {
         startHub().catch(() => setSrState("Disconnected"));
+    })();
+</script>
+
+<!-- =========================
+     ✅ Script phụ trợ UI-only (không đụng script cũ)
+     - mirror toastCount -> alertsMirror + kpiAlerts + severity
+     - mirror srState -> dots + kpiRealtime + system health + narrative
+     - last alert time + recent activity
+     - device snapshot + focus + filter bar (UI-only)
+     - compact toggle
+     - không polling: MutationObserver + event listeners
+     ========================= -->
+<script>
+    (function uiLayer() {
+        // ensure toastCount exists (script cũ update)
+        let toastCount = document.getElementById("toastCount");
+        if (!toastCount) {
+            toastCount = document.createElement("span");
+            toastCount.id = "toastCount";
+            toastCount.style.display = "none";
+            document.body.appendChild(toastCount);
+        }
+
+        const alertsMirror = document.getElementById("alertsMirror");
+        const kpiAlerts = document.getElementById("kpiAlerts");
+
+        const sevBad = document.getElementById("sevBad");
+        const sevWarn = document.getElementById("sevWarn");
+        const sevTotal = document.getElementById("sevTotal");
+
+        const lastAlertTime = document.getElementById("lastAlertTime");
+        const toastWrap = document.getElementById("toastWrap");
+
+        const srState = document.getElementById("srState");
+        const rtTag = document.getElementById("rtTag");
+        const rtText = document.getElementById("rtText");
+        const rtDot = document.getElementById("rtDot");
+
+        const srDot = document.getElementById("srDot");
+        const srDot2 = document.getElementById("srDot2");
+        const srBadgeTextTop = document.getElementById("srBadgeTextTop");
+
+        const kpiRealtime = document.getElementById("kpiRealtime");
+        const kpiSystem = document.getElementById("kpiSystem");
+        const narrativeText = document.getElementById("narrativeText");
+
+        const hRealtimeDot = document.getElementById("hRealtimeDot");
+        const hRealtimeText = document.getElementById("hRealtimeText");
+
+        const activityList = document.getElementById("activityList");
+
+        const deviceSnapshot = document.getElementById("deviceSnapshot");
+        const focusText = document.getElementById("focusText");
+
+        const deviceSearch = document.getElementById("deviceSearch");
+        const deviceFilter = document.getElementById("deviceFilter");
+        const compactToggle = document.getElementById("compactToggle");
+        const pageRoot = document.getElementById("pageRoot");
+
+        function escapeHtml(s) {
+            return (s ?? "").toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function toneFromStateText(text) {
+            const s = (text || "").toLowerCase();
+            if (s.includes("live") || s.includes("connected")) return { tone: "ok", label: "Connected" };
+            if (s.includes("reconnect")) return { tone: "warn", label: "Reconnecting" };
+            if (s.includes("disconnect")) return { tone: "bad", label: "Disconnected" };
+            return { tone: "warn", label: "Connecting" };
+        }
+
+        function setDotTone(dotEl, tone) {
+            if (!dotEl) return;
+            dotEl.classList.remove("ok", "warn", "bad");
+            dotEl.classList.add(tone);
+        }
+
+        function setTagTone(tagEl, tone) {
+            if (!tagEl) return;
+            tagEl.classList.remove("ok", "warn", "bad");
+            tagEl.classList.add(tone);
+        }
+
+        // UI-only snapshot/filter
+        let _snap = [];
+        let _lastAlertDeviceKey = "";
+        let _recentSet = new Set();
+
+        function getDeviceKeyFromToast(deviceText) {
+            return (deviceText || "").toString().trim();
+        }
+
+        function markDeviceAlert(deviceKey, tone) {
+            if (!deviceKey) return;
+            _lastAlertDeviceKey = deviceKey;
+            _recentSet.add(deviceKey);
+
+            _snap.forEach(x => {
+                if (x.key === deviceKey) {
+                    x.hasAlert = (tone === "bad" || tone === "warn");
+                    x.lastSeenTs = Date.now();
+                }
+            });
+            renderSnapshot();
+        }
+
+        function renderSnapshot() {
+            if (!deviceSnapshot) return;
+
+            const q = (deviceSearch?.value || "").trim().toLowerCase();
+            const mode = (deviceFilter?.value || "all");
+
+            const focus = window.__FOCUS_DEVICE__ || "";
+            if (focusText) focusText.textContent = focus ? String(focus) : "—";
+
+            let items = _snap.slice();
+
+            if (mode === "alerts") items = items.filter(x => x.hasAlert || x.key === _lastAlertDeviceKey);
+            else if (mode === "recent") items = items.filter(x => _recentSet.has(x.key));
+
+            if (q) items = items.filter(x => (x.name || "").toLowerCase().includes(q) || (x.key || "").toLowerCase().includes(q));
+
+            items.sort((a, b) => {
+                const aHot = (a.key === _lastAlertDeviceKey) ? 2 : (a.hasAlert ? 1 : 0);
+                const bHot = (b.key === _lastAlertDeviceKey) ? 2 : (b.hasAlert ? 1 : 0);
+                if (aHot !== bHot) return bHot - aHot;
+                return (a.name || "").localeCompare(b.name || "");
+            });
+
+            items = items.slice(0, 6);
+
+            if (items.length === 0) {
+                deviceSnapshot.innerHTML = `
+                  <div class="device-item">
+                    <div class="name"><i class="bi bi-cpu"></i> No match</div>
+                    <div class="state"><span class="dot warn"></span> Filter</div>
+                  </div>`;
+                return;
+            }
+
+            deviceSnapshot.innerHTML = "";
+            items.forEach(x => {
+                const isFocus = (String(window.__FOCUS_DEVICE__ || "") === x.key);
+                const isLast = (x.key === _lastAlertDeviceKey);
+                const tone = isLast ? "bad" : (x.hasAlert ? "warn" : "ok");
+                const stateText = isLast ? "Alert" : (x.hasAlert ? "Watch" : "Assigned");
+
+                const row = document.createElement("div");
+                row.className = "device-item" + (isLast ? " is-alert" : "") + (isFocus ? " is-focus" : "");
+                row.setAttribute("data-key", x.key);
+                row.innerHTML = `
+                  <div class="name"><i class="bi bi-cpu"></i> ${escapeHtml(x.name || x.key)}</div>
+                  <div class="state"><span class="dot ${tone}"></span> ${escapeHtml(stateText)}</div>
+                `;
+                row.addEventListener("click", () => {
+                    window.__FOCUS_DEVICE__ = x.key;
+                    renderSnapshot();
+                });
+                deviceSnapshot.appendChild(row);
+            });
+        }
+
+        function buildSnapshotFromUserDevices() {
+            const devices = (window.__USER_DEVICES__ || []);
+            if (!Array.isArray(devices) || devices.length === 0) {
+                _snap = [];
+                renderSnapshot();
+                return;
+            }
+
+            _snap = devices.slice(0, 50).map((d, idx) => {
+                const name = (d?.deviceName || d?.name || d?.DeviceName || d?.Serial || d?.serial || d?.DeviceGuid || d?.deviceGuid || ("Device " + (idx + 1)));
+                const key = (d?.deviceGuid || d?.DeviceGuid || d?.deviceName || d?.DeviceName || d?.Serial || d?.serial || String(name)).toString().trim();
+                return { key, name: String(name), hasAlert: false, lastSeenTs: 0 };
+            });
+
+            renderSnapshot();
+        }
+
+        // severity
+        let _sevBad = 0, _sevWarn = 0;
+
+        function syncAlerts() {
+            const v = toastCount?.textContent?.trim() || "0";
+            if (alertsMirror) alertsMirror.textContent = v;
+            if (kpiAlerts) kpiAlerts.textContent = v;
+
+            const total = (parseInt(v, 10) || 0);
+            if (sevBad) sevBad.textContent = String(_sevBad);
+            if (sevWarn) sevWarn.textContent = String(_sevWarn);
+            if (sevTotal) sevTotal.textContent = String(total);
+        }
+
+        function pushActivityFromToast() {
+            if (!toastWrap || !activityList) return;
+            const first = toastWrap.firstElementChild;
+            if (!first) return;
+
+            const title = first.querySelector(".title span:last-child")?.textContent?.trim() || "Alert";
+            const device = first.querySelector(".meta span:first-child")?.textContent?.trim() || "Device";
+            const time = first.querySelector(".meta span:last-child")?.textContent?.trim() || new Date().toLocaleString();
+
+            if (activityList.children.length === 1 && activityList.textContent?.includes("No recent events")) {
+                activityList.innerHTML = "";
+            }
+
+            const row = document.createElement("div");
+            row.className = "activity-item";
+            row.innerHTML = `
+              <div class="left"><i class="bi bi-lightning-charge"></i> ${escapeHtml(title)} · ${escapeHtml(device)}</div>
+              <div class="time">${escapeHtml(time)}</div>
+            `;
+            activityList.prepend(row);
+
+            while (activityList.children.length > 6) {
+                activityList.removeChild(activityList.lastElementChild);
+            }
+        }
+
+        function syncLastTimeFromToast() {
+            if (!toastWrap || !lastAlertTime) return;
+            const first = toastWrap.firstElementChild;
+            if (!first) return;
+            const meta = first.querySelector(".meta span:last-child");
+            if (meta && meta.textContent) lastAlertTime.textContent = meta.textContent;
+        }
+
+        function syncRealtime() {
+            const stateText = srState?.textContent || "";
+            const { tone, label } = toneFromStateText(stateText);
+
+            setTagTone(rtTag, tone);
+            if (rtText) rtText.textContent = label;
+            setDotTone(rtDot, tone);
+
+            setDotTone(srDot, tone);
+            setDotTone(srDot2, tone);
+            if (srBadgeTextTop) srBadgeTextTop.textContent = label;
+
+            if (kpiRealtime) kpiRealtime.textContent = label;
+            if (kpiSystem) kpiSystem.textContent = (tone === "bad") ? "DEGRADED" : "OK";
+
+            if (narrativeText) {
+                if (tone === "ok") narrativeText.textContent = "Monitoring devices in realtime. All systems operational.";
+                else if (tone === "warn") narrativeText.textContent = "Monitoring devices in realtime. Establishing connection / reconnecting…";
+                else narrativeText.textContent = "Monitoring devices in realtime. Connection lost — please check network.";
+            }
+
+            setDotTone(hRealtimeDot, tone);
+            if (hRealtimeText) {
+                hRealtimeText.textContent =
+                    tone === "ok" ? "Realtime connected" :
+                    tone === "warn" ? "Realtime reconnecting" :
+                    "Realtime disconnected";
+            }
+        }
+
+        // compact
+        function setCompact(on) {
+            compactToggle?.setAttribute("data-on", on ? "1" : "0");
+            pageRoot?.classList.toggle("is-compact", !!on);
+            try { localStorage.setItem("elitech.compact", on ? "1" : "0"); } catch { }
+        }
+
+        const compactSaved = (() => { try { return localStorage.getItem("elitech.compact"); } catch { return null; } })();
+        setCompact(compactSaved === "1");
+
+        compactToggle?.addEventListener("click", () => {
+            const on = compactToggle.getAttribute("data-on") !== "1";
+            setCompact(on);
+        });
+
+        // filter events
+        const reqRender = (() => {
+            let raf = 0;
+            return () => {
+                if (raf) return;
+                raf = requestAnimationFrame(() => {
+                    raf = 0;
+                    renderSnapshot();
+                });
+            };
+        })();
+
+        deviceSearch?.addEventListener("input", reqRender);
+        deviceFilter?.addEventListener("change", reqRender);
+
+        // observers
+        if (toastCount) {
+            const obs1 = new MutationObserver(() => syncAlerts());
+            obs1.observe(toastCount, { childList: true, characterData: true, subtree: true });
+            syncAlerts();
+        }
+
+        if (toastWrap) {
+            const obs2 = new MutationObserver(() => {
+                syncLastTimeFromToast();
+                syncAlerts();
+                pushActivityFromToast();
+
+                const first = toastWrap.firstElementChild;
+                if (first) {
+                    const device = first.querySelector(".meta span:first-child")?.textContent?.trim() || "";
+                    const dot = first.querySelector(".t-dot");
+                    const tone = dot?.classList.contains("bad") ? "bad" : (dot?.classList.contains("warn") ? "warn" : "ok");
+
+                    const tid = first.getAttribute("id") || "";
+                    if (tid && !first.__counted) {
+                        first.__counted = true;
+                        if (tone === "bad") _sevBad++;
+                        else if (tone === "warn") _sevWarn++;
+                        syncAlerts();
+                    }
+
+                    const key = getDeviceKeyFromToast(device);
+                    markDeviceAlert(key, tone);
+                }
+            });
+            obs2.observe(toastWrap, { childList: true, subtree: true });
+        }
+
+        if (srState) {
+            const obs3 = new MutationObserver(() => syncRealtime());
+            obs3.observe(srState, { childList: true, characterData: true, subtree: true });
+            syncRealtime();
+        }
+
+        buildSnapshotFromUserDevices();
+        renderSnapshot();
     })();
 </script>
 

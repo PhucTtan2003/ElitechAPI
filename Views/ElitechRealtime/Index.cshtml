@@ -5,14 +5,13 @@
 
 <style>
     :root {
-        --brand: #F58220; /* cam chủ đạo */
+        --brand: #F58220;
         --brand-600: #e36f15;
         --brand-700: #cc6200;
         --brand-50: #fff6ec;
-        --brand-100: #ffe8d3;
-        --ink: #1f2937; /* màu chữ chính */
+        --ink: #1f2937;
         --muted: #6b7280;
-        --bg: #fafafa; /* nền sáng */
+        --bg: #fafafa;
         --glass: rgba(255,255,255,.8);
         --glass-stroke: rgba(31,41,55,.08);
         --shadow: 0 14px 40px rgba(0,0,0,.06);
@@ -43,7 +42,7 @@
         padding: 4px 10px;
         border-radius: 999px;
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 900;
     }
 
     .glass-card {
@@ -54,16 +53,28 @@
         box-shadow: var(--shadow);
     }
 
-    .toolbar .form-control {
+    .muted {
+        color: var(--muted);
+    }
+
+    .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
+
+    /* Toolbar */
+    .toolbar .form-control,
+    .toolbar select.form-select {
         background: #fff;
         border: 1px solid #e5e7eb;
         color: var(--ink);
         height: 42px;
+        border-radius: 10px;
+        font-weight: 800;
     }
 
     .toolbar .btn {
         height: 42px;
-        font-weight: 800;
+        font-weight: 900;
         border-radius: 10px;
         border: 1px solid #e5e7eb;
         background: #fff;
@@ -83,9 +94,42 @@
             background: linear-gradient(180deg,#fff,#fff);
         }
 
-    .muted {
-        color: var(--muted);
+    .toolbar .mini {
+        font-size: 12px;
+        font-weight: 900;
+        color: #334155;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 10px 26px rgba(15,23,42,.08);
     }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        display: inline-block;
+    }
+
+        .dot.ok {
+            background: var(--ok);
+        }
+
+        .dot.warn {
+            background: var(--warn);
+        }
+
+        .dot.alarm {
+            background: var(--crit);
+        }
+
+        .dot.info {
+            background: var(--info);
+        }
 
     .grid {
         display: grid;
@@ -111,7 +155,8 @@
             border-bottom: 1px solid #f1f5f9;
             padding: 12px 12px;
             position: sticky;
-            top: 0; /* nếu trong container cuộn */
+            top: 0;
+            z-index: 1;
         }
 
         .table-realtime td {
@@ -124,16 +169,17 @@
         }
 
         .table-realtime tbody tr:hover td {
-            background: #fffaf5; /* nhấn hover tông cam nhạt */
+            background: #fffaf5;
         }
 
     .pill {
         padding: 2px 10px;
         border-radius: 999px;
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 900;
         border: 1px solid transparent;
         display: inline-block;
+        white-space: nowrap;
     }
 
     .ok {
@@ -154,74 +200,130 @@
         border-color: #fecaca;
     }
 
-    .mono {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    .info {
+        color: #1d4ed8;
+        background: #dbeafe;
+        border-color: #bfdbfe;
     }
 
-    /* Status chips for cells */
     .v-bad {
         color: #b91c1c;
-        font-weight: 800;
+        font-weight: 900;
     }
 
     .v-good {
         color: #065f46;
-        font-weight: 800;
+        font-weight: 900;
     }
 
-    /* Tiny footnote */
     .footer-note {
         color: #64748b;
         font-size: 12px;
     }
 
-    /* Subtle loading shimmer (khi refresh) */
-    .shimmer td {
+    /* Shimmer while loading */
+    #rtBody.is-loading td {
         position: relative;
         overflow: hidden;
+        color: transparent;
     }
 
-        .shimmer td::after {
+        #rtBody.is-loading td::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(120deg, transparent 0%, #ffffff66 50%, transparent 100%);
-            animation: shine 1.2s linear infinite;
+            background: linear-gradient(120deg, transparent 0%, #ffffffaa 50%, transparent 100%);
+            animation: shine 1.1s linear infinite;
             transform: translateX(-100%);
         }
-
     @@keyframes shine {
-        from {
-            transform: translateX(-100%);
-        }
+        from
 
-        to {
-            transform: translateX(100%);
-        }
+    {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+
+    }
+
+    /* small responsive tuning */
+    @@media (max-width: 576px) {
+        .realtime-root
+
+    {
+        padding: 14px;
+    }
+
+    .toolbar .mini {
+        width: 100%;
+        justify-content: space-between;
+    }
+
     }
 </style>
 
 <div class="realtime-root">
-    <div class="d-flex align-items-center justify-content-between mb-3">
-        <div class="d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
             <h2 class="title mb-0">📡 Elitech Realtime Monitor</h2>
             <span class="badge-live">Live</span>
+            <span class="mini" style="background:#fff; border:1px solid #e5e7eb;">
+                <span class="dot info"></span>
+                <span class="muted">GUIDs:</span>
+                <span class="mono" id="guidShow">@deviceGuids</span>
+            </span>
         </div>
-        <small class="muted">
-            Device GUIDs: <span class="mono" id="guidShow">@deviceGuids</span>
-        </small>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="mini">
+                <span class="muted">Cập nhật:</span>
+                <span class="mono" id="tickSec">5s</span>
+            </span>
+            <span class="mini">
+                <span class="muted">Lần cuối:</span>
+                <span id="lastUpdate" class="mono">—</span>
+            </span>
+            <span class="mini">
+                <span class="muted">Hiển thị:</span>
+                <span class="mono" id="shownCount">0</span>
+            </span>
+        </div>
     </div>
 
     <div class="glass-card p-3 mb-3 toolbar">
         <form method="get" class="d-flex gap-2 flex-wrap align-items-center">
             <input name="deviceGuids" type="text" class="form-control"
                    placeholder="Nhập GUID, ngăn cách dấu phẩy"
-                   value="@deviceGuids" />
+                   value="@deviceGuids" style="min-width:260px;" />
+
             <button class="btn btn-primary" type="submit">Load</button>
-            <button class="btn btn-outline-light" type="button" id="btnExport">Export CSV</button>
-            <div class="ms-auto d-flex align-items-center gap-3">
-                <span class="muted">Cập nhật mỗi <span class="mono" id="tickSec">5s</span></span>
-                <span class="muted">Lần cuối: <span id="lastUpdate" class="mono">—</span></span>
+
+            <select class="form-select" id="statusFilter" style="min-width:160px;">
+                <option value="ALL">Trạng thái: ALL</option>
+                <option value="OK">OK</option>
+                <option value="WARN">WARN</option>
+                <option value="ALARM">ALARM</option>
+            </select>
+
+            <input id="searchBox" type="text" class="form-control"
+                   placeholder="Search: GUID / Tên / Địa chỉ…"
+                   style="min-width:260px;" />
+
+            <button class="btn btn-outline-light" type="button" id="btnClear">
+                Clear
+            </button>
+
+            <button class="btn btn-outline-light" type="button" id="btnExport">
+                Export CSV
+            </button>
+
+            <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
+                <span class="mini"><span class="dot ok"></span> OK</span>
+                <span class="mini"><span class="dot warn"></span> WARN</span>
+                <span class="mini"><span class="dot alarm"></span> ALARM</span>
             </div>
         </form>
     </div>
@@ -249,7 +351,7 @@
                 </table>
             </div>
             <div class="mt-2 footer-note">
-                * Demo rule: nhiệt độ an toàn 2–8°C; độ ẩm 30–70%RH. Có thể điều chỉnh theo cấu hình hệ thống.
+                * Demo rule: nhiệt độ an toàn 2–8°C; độ ẩm 30–70%RH (fallback khi API không trả warn/alarm state).
             </div>
         </div>
     </div>
@@ -258,109 +360,247 @@
 <script>
     const qs = new URLSearchParams(window.location.search);
     const deviceGuids = (qs.get('deviceGuids') || '@deviceGuids').trim();
+
     const rtBody = document.getElementById('rtBody');
     const lastUpdate = document.getElementById('lastUpdate');
+    const tickLabel = document.getElementById('tickSec');
+    const shownCountEl = document.getElementById('shownCount');
+
+    const statusFilterEl = document.getElementById('statusFilter');
+    const searchBoxEl = document.getElementById('searchBox');
+    const btnClearEl = document.getElementById('btnClear');
+
+    // ===== Config =====
+    const INTERVAL_MS = 5000; // ✅ đúng 5s
+    if (tickLabel) tickLabel.textContent = (INTERVAL_MS / 1000) + 's';
+
+    // ===== State =====
+    let ALL_ROWS = [];     // raw from API
+    let VIEW_ROWS = [];    // after filter/search
+    let inflight = false;
 
     // ===== Helpers =====
-    function c(u){ return u==null || u===undefined ? "" : String(u); }
-    function asNumber(x){
-        if(!x) return null;
-        const m = String(x).match(/-?\d+(\.\d+)?/);
+    const c = (u) => (u == null ? "" : String(u));
+
+    function escapeHtml(s) {
+        return String(s ?? '').replace(/[&<>"']/g, m => ({
+            '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+        }[m]));
+    }
+
+    function asNumber(x) {
+        if (x === null || x === undefined) return null;
+        const s = String(x).trim();
+        if (!s) return null;
+        const m = s.match(/-?\d+(\.\d+)?/);
         return m ? parseFloat(m[0]) : null;
     }
-    function tsSecToLocal(sec){
-        if(!sec) return "";
-        const d = new Date(sec*1000);
-        return d.toLocaleString();
+
+    function tsSecToLocal(sec) {
+        const n = Number(sec);
+        if (!n || !isFinite(n)) return "";
+        return new Date(n * 1000).toLocaleString();
     }
-    function classify(temp, hum){
-        const badT = (temp!=null) && (temp < 2 || temp > 8);
-        const badH = (hum!=null) && (hum < 30 || hum > 70);
-        if (badT || badH) return "alarm";
-        return "ok";
+
+    // ưu tiên state từ API; fallback theo rule demo
+    function buildState(x, temp, hum) {
+        const isAlarm = !!x?.alarmState;
+        const isWarn = !!x?.warnState;
+
+        if (isAlarm) return { cls: 'alarm', label: 'ALARM' };
+        if (isWarn)  return { cls: 'warn',  label: 'WARN'  };
+
+        const badT = (temp != null) && (temp < 2 || temp > 8);
+        const badH = (hum  != null) && (hum  < 30 || hum  > 70);
+
+        if (badT || badH) return { cls: 'alarm', label: 'ALARM' };
+        return { cls: 'ok', label: 'OK' };
+    }
+
+    function normalizeText(s) {
+        return (s ?? '').toString().trim().toLowerCase();
+    }
+
+    function computeRowMeta(x) {
+        // precompute for faster search + filter
+        const t1 = asNumber(x.tmp1);
+        const h1 = asNumber(x.hum1);
+        const st = buildState(x, t1, h1);
+
+        return {
+            __t1: t1,
+            __h1: h1,
+            __state: st.label,   // "OK" | "WARN" | "ALARM"
+            __stateCls: st.cls,  // ok | warn | alarm
+            __search: normalizeText(
+                [x.deviceName, x.deviceGuid, x.address, x.power, x.signal].map(c).join(' ')
+            )
+        };
+    }
+
+    // ===== Filtering =====
+    function applyFilterAndRender() {
+        const f = (statusFilterEl?.value || 'ALL').toUpperCase();
+        const q = normalizeText(searchBoxEl?.value || '');
+
+        const filtered = ALL_ROWS.filter(x => {
+            const state = x.__state || 'OK';
+            const passState = (f === 'ALL') ? true : (state === f);
+            const passSearch = !q ? true : (x.__search || '').includes(q);
+            return passState && passSearch;
+        });
+
+        VIEW_ROWS = filtered;
+        renderRows(filtered);
+        if (shownCountEl) shownCountEl.textContent = String(filtered.length);
     }
 
     // ===== Render =====
-    function renderRows(rows){
-        if(rows.length === 0){
-            rtBody.innerHTML = `<tr><td colspan="9" class="muted">Không có dữ liệu.</td></tr>`;
+    function renderRows(rows) {
+        if (!rows || rows.length === 0) {
+            rtBody.innerHTML = `<tr><td colspan="9" class="muted">Không có dữ liệu theo bộ lọc hiện tại.</td></tr>`;
             return;
         }
 
-        rtBody.innerHTML = rows.map(x=>{
-            const t1 = asNumber(x.tmp1);
-            const h1 = asNumber(x.hum1);
-            const cls = classify(t1, h1);
-            const stateLabel = x.alarmState ? "ALARM" : (x.warnState ? "WARN" : "OK");
+        rtBody.innerHTML = rows.map(x => {
+            const t1 = x.__t1;
+            const h1 = x.__h1;
 
-            const tClass = t1!=null ? (t1<2||t1>8?'v-bad':'v-good') : '';
-            const hClass = h1!=null ? (h1<30||h1>70?'v-bad':'v-good') : '';
+            const tClass = (t1 != null) ? ((t1 < 2 || t1 > 8) ? 'v-bad' : 'v-good') : '';
+            const hClass = (h1 != null) ? ((h1 < 30 || h1 > 70) ? 'v-bad' : 'v-good') : '';
 
             return `
                 <tr>
-                    <td class="mono">${c(x.deviceName) || "-"}</td>
-                    <td class="mono">${c(x.deviceGuid)}</td>
-                    <td class="${tClass}">${c(x.tmp1) || "-"}</td>
-                    <td class="${hClass}">${c(x.hum1) || "-"}</td>
-                    <td>${c(x.power) || "-"}</td>
-                    <td>${c(x.signal) || "-"}</td>
-                    <td title="${c(x.address)||''}">${c(x.address)||"-"}</td>
-                    <td class="mono">${tsSecToLocal(x.lastSessionTime)}</td>
-                    <td><span class="pill ${cls}">${stateLabel}</span></td>
+                    <td class="mono">${escapeHtml(c(x.deviceName) || "-")}</td>
+                    <td class="mono">${escapeHtml(c(x.deviceGuid) || "-")}</td>
+                    <td class="${tClass}">${escapeHtml(c(x.tmp1) || "-")}</td>
+                    <td class="${hClass}">${escapeHtml(c(x.hum1) || "-")}</td>
+                    <td>${escapeHtml(c(x.power) || "-")}</td>
+                    <td>${escapeHtml(c(x.signal) || "-")}</td>
+                    <td title="${escapeHtml(c(x.address) || '')}">${escapeHtml(c(x.address) || "-")}</td>
+                    <td class="mono">${escapeHtml(tsSecToLocal(x.lastSessionTime) || "-")}</td>
+                    <td><span class="pill ${x.__stateCls}">${escapeHtml(x.__state)}</span></td>
                 </tr>
             `;
         }).join("");
     }
 
     // ===== Data fetch =====
-    async function loadOnce(){
-        if(!deviceGuids){
+    async function loadOnce() {
+        if (inflight) return;
+        inflight = true;
+
+        if (!deviceGuids) {
             rtBody.innerHTML = `<tr><td colspan="9" class="muted">Hãy nhập deviceGuids để bắt đầu.</td></tr>`;
+            if (shownCountEl) shownCountEl.textContent = '0';
+            inflight = false;
             return;
         }
+
         const url = `/api/elitech/realtime?deviceGuids=${encodeURIComponent(deviceGuids)}`;
+        rtBody.classList.add('is-loading');
 
-        // shimmer nhẹ trong lúc load
-        const current = rtBody.innerHTML;
-        rtBody.querySelectorAll('tr').forEach(tr=>tr.classList.add('shimmer'));
+        try {
+            const res = await fetch(url, { method: 'GET' });
 
-        try{
-            const res = await fetch(url);
-            if(!res.ok){
+            if (!res.ok) {
                 rtBody.innerHTML = `<tr><td colspan="9" class="muted">API lỗi: ${res.status}</td></tr>`;
+                if (shownCountEl) shownCountEl.textContent = '0';
                 return;
             }
-            const json = await res.json();
-            const rows = (json?.data ?? []);
-            renderRows(rows);
-            lastUpdate.textContent = new Date().toLocaleTimeString();
-        }catch(err){
-            rtBody.innerHTML = `<tr><td colspan="9" class="muted">Không thể tải dữ liệu.</td></tr>`;
-        }finally{
-            rtBody.querySelectorAll('.shimmer').forEach(tr=>tr.classList.remove('shimmer'));
+
+            const json = await res.json().catch(() => null);
+            if (!json) {
+                rtBody.innerHTML = `<tr><td colspan="9" class="muted">Không đọc được JSON.</td></tr>`;
+                if (shownCountEl) shownCountEl.textContent = '0';
+                return;
+            }
+
+            if (json.code !== undefined && json.code !== 0) {
+                const msg = json.message || json.msg || 'Không tải được dữ liệu.';
+                rtBody.innerHTML = `<tr><td colspan="9" class="muted">${escapeHtml(msg)}</td></tr>`;
+                if (shownCountEl) shownCountEl.textContent = '0';
+                return;
+            }
+
+            const rows = (json.data ?? json?.rows ?? []);
+            ALL_ROWS = (rows || []).map(r => Object.assign(r, computeRowMeta(r)));
+
+            applyFilterAndRender();
+
+            if (lastUpdate) lastUpdate.textContent = new Date().toLocaleTimeString();
+        } catch (err) {
+            rtBody.innerHTML = `<tr><td colspan="9" class="muted">Không thể tải dữ liệu (mạng/server).</td></tr>`;
+            if (shownCountEl) shownCountEl.textContent = '0';
+        } finally {
+            rtBody.classList.remove('is-loading');
+            inflight = false;
         }
     }
+
+    // ===== Events =====
+    statusFilterEl?.addEventListener('change', applyFilterAndRender);
+    searchBoxEl?.addEventListener('input', applyFilterAndRender);
+
+    btnClearEl?.addEventListener('click', () => {
+        if (searchBoxEl) searchBoxEl.value = '';
+        if (statusFilterEl) statusFilterEl.value = 'ALL';
+        applyFilterAndRender();
+        searchBoxEl?.focus();
+    });
 
     // ===== Start =====
     loadOnce();
 
-    // Nhịp cập nhật 5 giây (đúng với label hiển thị)
-    const INTERVAL_MS = 180000;
-    const tickLabel = document.getElementById('tickSec');
-    if(tickLabel) tickLabel.textContent = (INTERVAL_MS/1000)+'s';
+    let timer = setInterval(loadOnce, INTERVAL_MS);
 
-    const timer = setInterval(loadOnce, INTERVAL_MS);
-    window.addEventListener('beforeunload', () => clearInterval(timer));
+    // Pause when tab hidden (đỡ spam API)
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clearInterval(timer);
+            timer = null;
+        } else {
+            if (!timer) {
+                loadOnce();
+                timer = setInterval(loadOnce, INTERVAL_MS);
+            }
+        }
+    });
 
-    // Export CSV
-    document.getElementById('btnExport').addEventListener('click', ()=>{
-        const rows = [...document.querySelectorAll('#rtTable tr')].map(tr =>
-            [...tr.children].map(td => `"${td.textContent.replaceAll('"','""').trim()}"`).join(',')
-        ).join('\n');
-        const blob = new Blob([rows], {type:'text/csv;charset=utf-8;'});
+    window.addEventListener('beforeunload', () => {
+        if (timer) clearInterval(timer);
+    });
+
+    // ===== Export CSV (export đúng VIEW_ROWS) =====
+    document.getElementById('btnExport')?.addEventListener('click', () => {
+        const headers = ["Thiết bị","GUID","Nhiệt (°C)","Ẩm (%RH)","Nguồn","Tín hiệu","Địa chỉ","Thời điểm","Trạng thái"];
+        const lines = [];
+        lines.push(headers.map(h => `"${h.replaceAll('"','""')}"`).join(','));
+
+        (VIEW_ROWS || []).forEach(x => {
+            const row = [
+                c(x.deviceName) || "-",
+                c(x.deviceGuid) || "-",
+                c(x.tmp1) || "-",
+                c(x.hum1) || "-",
+                c(x.power) || "-",
+                c(x.signal) || "-",
+                c(x.address) || "-",
+                tsSecToLocal(x.lastSessionTime) || "-",
+                c(x.__state) || "OK"
+            ].map(v => `"${String(v).replaceAll('"','""').trim()}"`).join(',');
+
+            lines.push(row);
+        });
+
+        const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
-        const a = Object.assign(document.createElement('a'), {href:url, download:'elitech_realtime.csv'});
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'elitech_realtime_filtered.csv';
+        document.body.appendChild(a);
         a.click();
-        setTimeout(()=>URL.revokeObjectURL(url), 1500);
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1200);
     });
 </script>

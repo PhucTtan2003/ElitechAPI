@@ -13,21 +13,21 @@ public class AlertSmsService
         _logger = logger;
     }
 
-    public async Task<(bool ok, string? reason)> SendToUserAsync(
-        string userId,
-        string message,
-        string requestId,
-        CancellationToken ct)
-    {
-        var phone = await _accounts.GetPhoneByUserIdAsync(userId);
-        if (string.IsNullOrWhiteSpace(phone))
-            return (false, "User has no phone");
+    //public async Task<(bool ok, string? reason)> SendToUserAsync(
+    //    string userId,
+    //    string message,
+    //    string requestId,
+    //    CancellationToken ct)
+    //{
+    //    var phone = await _accounts.GetPhoneByUserIdAsync(userId);
+    //    if (string.IsNullOrWhiteSpace(phone))
+    //        return (false, "User has no phone");
 
-        var (ok, raw) = await _sms.SendDomesticAsync(phone, message, requestId, ct);
+    //    var (ok, raw) = await _sms.SendDomesticAsync(phone, message, requestId, ct);
 
-        if (!ok)
-            _logger.LogWarning("SMS failed userId={UserId}, phone={Phone}, raw={Raw}", userId, phone, raw);
+    //    if (!ok)
+    //        _logger.LogWarning("SMS failed userId={UserId}, phone={Phone}, raw={Raw}", userId, phone, raw);
 
-        return ok ? (true, null) : (false, raw);
-    }
+    //    return ok ? (true, null) : (false, raw);
+    //}
 }

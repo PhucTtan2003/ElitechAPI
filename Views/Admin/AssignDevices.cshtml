@@ -3,8 +3,485 @@
     ViewData["Title"] = "Admin - Gán thiết bị cho User";
 }
 
-<div id="root"></div>
+<style>
+    :root {
+        --elx-orange: #F58220;
+        --elx-orange-600: #E36F15;
+        --elx-blue: #0D47A1;
+        --elx-blue-500: #1E88E5;
+        --ink: #0e1320;
+        --mut: #64748b;
+        --bg1: #ffffff;
+        --bg2: #fff7ef;
+        --card: rgba(255,255,255,.88);
+        --stroke: rgba(148,163,184,.45);
+        --shadow: 0 18px 45px rgba(15,23,42,.14);
+        --shadow2: 0 10px 26px rgba(15,23,42,.10);
+        --radius: 22px;
+    }
 
+    body {
+        background: linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
+        color: var(--ink);
+    }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(900px 650px at 10% 0%, rgba(30,136,229,.16), transparent 70%), radial-gradient(900px 650px at 92% 100%, rgba(245,130,32,.16), transparent 70%);
+            opacity: .8;
+            pointer-events: none;
+        }
+
+    .ad-wrap {
+        font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        padding: 14px 18px 28px;
+    }
+
+    /* Hero */
+    .ad-hero {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .ad-hero-left {
+        flex: 1 1 520px;
+        min-width: 320px;
+        background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 14px 16px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .ad-hero-left::after {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: radial-gradient(420px 220px at 18% 0%, rgba(30,136,229,.18), transparent 70%), radial-gradient(420px 220px at 85% 120%, rgba(245,130,32,.18), transparent 70%);
+            pointer-events: none;
+            opacity: .8;
+            filter: saturate(1.1);
+        }
+
+    .ad-hero-top {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 1;
+    }
+
+    .ad-badge {
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, var(--elx-orange), var(--elx-orange-600));
+        box-shadow: 0 12px 28px rgba(245,130,32,.45);
+        color: #111827;
+        flex: 0 0 auto;
+    }
+
+        .ad-badge i {
+            font-size: 26px;
+        }
+
+    .ad-title {
+        margin: 0;
+        font-weight: 1000;
+        letter-spacing: .01em;
+        font-size: 1.25rem;
+        line-height: 1.25;
+    }
+
+    .ad-sub {
+        margin: 2px 0 0 0;
+        color: var(--mut);
+        font-weight: 650;
+        font-size: .92rem;
+    }
+
+    .ad-hero-meta {
+        position: relative;
+        z-index: 1;
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.85);
+        border: 1px solid rgba(148,163,184,.55);
+        box-shadow: var(--shadow2);
+        font-size: .82rem;
+        font-weight: 900;
+        color: #111827;
+        backdrop-filter: blur(10px);
+    }
+
+        .pill i {
+            color: var(--elx-orange-600);
+        }
+
+    /* Right panel */
+    .ad-hero-right {
+        flex: 0 0 360px;
+        min-width: 320px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ad-card {
+        background: var(--card);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow2);
+        padding: 12px 14px;
+        overflow: hidden;
+    }
+
+        .ad-card h6 {
+            margin: 0 0 6px 0;
+            font-weight: 1000;
+            font-size: .95rem;
+        }
+
+        .ad-card p {
+            margin: 0;
+            color: var(--mut);
+            font-size: .86rem;
+            line-height: 1.35rem;
+            font-weight: 650;
+        }
+
+    /* Actions */
+    .ad-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .btnx {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(148,163,184,.55);
+        background: #fff;
+        color: #111827;
+        font-weight: 1000;
+        font-size: .86rem;
+        cursor: pointer;
+        box-shadow: var(--shadow2);
+        text-decoration: none;
+        user-select: none;
+        position: relative;
+        overflow: hidden;
+        transition: transform .14s ease, box-shadow .14s ease;
+    }
+
+        .btnx:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 35px rgba(15,23,42,.14);
+            text-decoration: none;
+            color: #111827;
+        }
+
+        .btnx.primary {
+            border: 0;
+            background: linear-gradient(180deg, var(--elx-blue-500), var(--elx-blue));
+            color: #fff;
+        }
+
+        .btnx.orange {
+            border: 0;
+            background: linear-gradient(180deg, var(--elx-orange), var(--elx-orange-600));
+            color: #111827;
+        }
+
+    /* Main area: React mount + frame */
+    .ad-main {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .ad-frame {
+        background: rgba(255,255,255,.9);
+        border: 1px solid rgba(226,232,240,.95);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    .ad-frame-head {
+        padding: 12px 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(180deg, rgba(248,250,252,.92), rgba(248,250,252,.72));
+        border-bottom: 1px dashed rgba(148,163,184,.45);
+    }
+
+        .ad-frame-head .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 220px;
+        }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #10B981;
+        box-shadow: 0 0 0 4px rgba(16,185,129,.14);
+    }
+
+    .ad-frame-title {
+        font-weight: 1000;
+        margin: 0;
+        font-size: .95rem;
+    }
+
+    .ad-frame-hint {
+        color: var(--mut);
+        font-size: .82rem;
+        font-weight: 750;
+        margin: 0;
+    }
+
+    .ad-frame-body {
+        padding: 12px 12px 14px;
+    }
+
+    /* Nice empty skeleton (shows before React renders) */
+    .ad-skeleton {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap: 12px;
+    }
+
+    .sk {
+        border-radius: 16px;
+        border: 1px solid rgba(226,232,240,.95);
+        background: rgba(248,250,252,.75);
+        overflow: hidden;
+        position: relative;
+        height: 210px;
+    }
+
+        .sk::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+            transform: translateX(-60%);
+            animation: shimmer 1.2s infinite;
+        }
+    @@keyframes shimmer {
+        to
+
+    {
+        transform: translateX(60%);
+    }
+
+    }
+
+    .sk.small {
+        height: 210px;
+    }
+
+    .skbar {
+        height: 14px;
+        border-radius: 999px;
+        background: rgba(226,232,240,.9);
+        margin: 12px 12px 0;
+    }
+
+        .skbar.w1 {
+            width: 65%;
+        }
+
+        .skbar.w2 {
+            width: 42%;
+        }
+
+        .skbar.w3 {
+            width: 80%;
+        }
+
+    @@media (max-width: 992px) {
+        .ad-hero-right
+
+    {
+        flex: 1 1 360px;
+    }
+
+    .ad-skeleton {
+        grid-template-columns: 1fr;
+    }
+
+    .sk {
+        height: 190px;
+    }
+
+    }
+</style>
+
+<div class="ad-wrap">
+
+    <div class="ad-hero">
+        <div class="ad-hero-left">
+            <div class="ad-hero-top">
+                <div class="ad-badge">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+                <div>
+                    <h1 class="ad-title">Gán thiết bị cho User</h1>
+                    <p class="ad-sub">Quản lý phân quyền thiết bị • đồng bộ nhanh • tránh gán nhầm GUID</p>
+                </div>
+            </div>
+
+            <div class="ad-hero-meta">
+                <span class="pill"><i class="bi bi-shield-lock"></i> Admin only</span>
+                <span class="pill"><i class="bi bi-activity"></i> Sync realtime</span>
+                <span class="pill"><i class="bi bi-clock"></i> @DateTime.Now.ToString("HH:mm dd/MM")</span>
+            </div>
+
+            <div class="ad-actions">
+                <a class="btnx primary" asp-controller="Admin" asp-action="Index">
+                    <i class="bi bi-grid-1x2"></i> Về Dashboard
+                </a>
+
+                <button class="btnx orange" type="button" id="btnFocusApp">
+                    <i class="bi bi-lightning-charge"></i> Mở nhanh module
+                </button>
+
+                <button class="btnx" type="button" id="btnHelp">
+                    <i class="bi bi-info-circle"></i> Hướng dẫn
+                </button>
+            </div>
+        </div>
+
+        <div class="ad-hero-right">
+            <div class="ad-card">
+                <h6><i class="bi bi-bullseye" style="color:var(--elx-blue-500)"></i> Tip chống lỗi</h6>
+                <p>
+                    Luôn kiểm tra <b>DeviceGuid</b> trước khi gán. Nếu danh sách trống, có thể thiết bị chưa “bind”
+                    vào account Elitech.
+                </p>
+            </div>
+
+            <div class="ad-card">
+                <h6><i class="bi bi-terminal" style="color:var(--elx-orange-600)"></i> Trạng thái</h6>
+                <p id="assignStatus">Đang chờ React module render…</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ad-main">
+        <div class="ad-frame">
+            <div class="ad-frame-head">
+                <div class="left">
+                    <span class="dot" id="dotApp"></span>
+                    <div>
+                        <p class="ad-frame-title">Assignment Console</p>
+                        <p class="ad-frame-hint">Khu vực thao tác gán thiết bị</p>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                    <span class="pill" style="font-size:.78rem;"><i class="bi bi-cpu"></i> UI v1.1</span>
+                    <span class="pill" style="font-size:.78rem;"><i class="bi bi-braces"></i> React mount: #root</span>
+                </div>
+            </div>
+
+            <div class="ad-frame-body">
+                <!-- React sẽ mount vào đây -->
+                <div id="root">
+                    <!-- Skeleton fallback trước khi React render -->
+                    <div class="ad-skeleton" aria-hidden="true">
+                        <div class="sk">
+                            <div class="skbar w1"></div>
+                            <div class="skbar w3"></div>
+                            <div class="skbar w2"></div>
+                        </div>
+                        <div class="sk small">
+                            <div class="skbar w2"></div>
+                            <div class="skbar w1"></div>
+                            <div class="skbar w3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // UX nhỏ: focus vào app sau khi load / khi bấm nút
+    const statusEl = document.getElementById('assignStatus');
+    const dot = document.getElementById('dotApp');
+    const root = document.getElementById('root');
+
+    function setStatus(text, ok=true){
+        if (statusEl) statusEl.textContent = text;
+        if (dot) {
+            dot.style.background = ok ? '#10B981' : '#F59E0B';
+            dot.style.boxShadow = ok ? '0 0 0 4px rgba(16,185,129,.14)' : '0 0 0 4px rgba(245,158,11,.16)';
+        }
+    }
+
+    // Sau 1 chút nếu React chưa render thì báo "đang tải"
+    setTimeout(() => {
+        // Nếu React đã render thường sẽ thay đổi nội dung root (tuỳ app của bạn)
+        // Ở đây mình chỉ cập nhật text cho đẹp.
+        setStatus('Module đang tải dữ liệu…', false);
+    }, 450);
+
+    // Sau 2.5s coi như app đã mount (chỉ UI hint)
+    setTimeout(() => setStatus('Sẵn sàng thao tác gán thiết bị ✅', true), 2500);
+
+    document.getElementById('btnFocusApp')?.addEventListener('click', () => {
+        root?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setStatus('Đã mở module. Bạn bắt đầu gán thiết bị nhé.', true);
+    });
+
+    document.getElementById('btnHelp')?.addEventListener('click', () => {
+        alert(
+            "Hướng dẫn nhanh:\\n" +
+            "1) Chọn User\\n" +
+            "2) Chọn thiết bị/GUID\\n" +
+            "3) Bấm Assign/Save\\n\\n" +
+            "Tip: Nếu danh sách GUID rỗng → kiểm tra thiết bị đã bind Elitech chưa."
+        );
+    });
+</script>
 
 <script type="module" src="/app/entry-admin.js"></script>
-

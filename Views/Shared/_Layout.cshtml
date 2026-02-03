@@ -33,6 +33,12 @@
             --elx-stroke-soft: rgba(255,255,255,0.14);
             --elx-muted-footer: #9aa6bf;
             --elx-stroke: rgba(255,255,255,.08);
+            /* UI-only tokens */
+            --elx-radius-xl: 18px;
+            --elx-shadow-lg: 0 22px 55px rgba(9,20,48,.22);
+            --elx-glass: rgba(255,255,255,.72);
+            --elx-glass-2: rgba(255,255,255,.86);
+            --elx-focus: rgba(59,130,246,.35);
         }
 
         html, body {
@@ -61,10 +67,15 @@
         }
 
         .elx-topbar-blur {
-            backdrop-filter: blur(14px) saturate(160%);
             background: radial-gradient(900px 420px at 0% 0%, rgba(255,255,255,.22), transparent 60%), linear-gradient(180deg, rgba(10,27,69,.96), rgba(10,25,61,.88));
             border-bottom: 1px solid rgba(255,255,255,.08);
             box-shadow: 0 12px 30px rgba(9,20,48,.38);
+        }
+
+        @@supports (backdrop-filter: blur(1px)) {
+            .elx-topbar-blur {
+                backdrop-filter: blur(14px) saturate(160%);
+            }
         }
 
         .elx-topbar {
@@ -112,7 +123,7 @@
             color: rgba(226,232,255,.8);
         }
 
-        /* Nav pills (desktop) */
+        /* Nav pills */
         .elx-nav {
             display: flex;
             align-items: center;
@@ -175,49 +186,13 @@
                     color: #94a3c7;
                 }
 
-        /* Right user */
-        .elx-user {
-            display: flex;
-            align-items: center;
-            gap: .75rem;
-        }
-
-        .elx-pill-status {
-            display: inline-flex;
-            align-items: center;
-            gap: .3rem;
-            padding: 4px 9px;
-            border-radius: 999px;
-            border: 1px solid rgba(52,211,153,.4);
-            background: radial-gradient(circle at 0 0, rgba(16,185,129,.35), transparent 70%);
-            color: #bbf7d0;
-            font-size: .72rem;
-            font-weight: 600;
-        }
-
-        .elx-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 999px;
-            background: #22c55e;
-            box-shadow: 0 0 0 0 rgba(34,197,94,.7);
-            animation: elx-dot-pulse 1.6s infinite;
-        }
-
-        @@keyframes elx-dot-pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(34,197,94,.7);
+            /* focus premium */
+            .elx-search:focus-within {
+                border-color: rgba(147,197,253,.85);
+                box-shadow: 0 0 0 4px var(--elx-focus);
             }
 
-            70% {
-                box-shadow: 0 0 0 10px rgba(34,197,94,0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(34,197,94,0);
-            }
-        }
-
+        /* Avatar */
         .elx-avatar {
             width: 30px;
             height: 30px;
@@ -232,21 +207,70 @@
             box-shadow: 0 10px 22px rgba(15,23,42,.7);
         }
 
-        /* Main */
+        /* ===== Main ===== */
         .elx-main {
             flex: 1 0 auto;
-            padding: 18px 0 24px;
+            padding: 14px 0 24px;
             min-height: calc(100vh - 160px);
         }
 
-        /* Fix dropdown clarity + clean background (glass dropdown) */
+        /* ===== Pagebar ===== */
+        .elx-pagebar {
+            border-radius: var(--elx-radius-xl);
+            border: 1px solid rgba(226,232,240,.75);
+            background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.72));
+            box-shadow: var(--elx-shadow-soft);
+            padding: 12px 14px;
+            margin: 6px 0 14px;
+            overflow: hidden;
+        }
+
+        @@supports (backdrop-filter: blur(1px)) {
+            .elx-pagebar {
+                backdrop-filter: blur(14px) saturate(160%);
+            }
+        }
+
+        .elx-pagebar .ttl {
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: .1px;
+            font-size: 1.02rem;
+            line-height: 1.15;
+        }
+
+        .elx-bc {
+            margin-top: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            color: #64748b;
+            font-weight: 750;
+            font-size: .85rem;
+        }
+
+            .elx-bc a {
+                color: #2563eb;
+                text-decoration: none;
+                font-weight: 850;
+            }
+
+                .elx-bc a:hover {
+                    text-decoration: underline;
+                }
+
+            .elx-bc .sep {
+                opacity: .55;
+            }
+
+        /* Dropdown glass */
         .elx-topbar-wrap, .elx-topbar-blur, .elx-topbar, .dropdown, .dropdown-menu {
             position: relative;
             z-index: 9999 !important;
         }
 
         .dropdown-menu {
-            backdrop-filter: blur(22px) saturate(180%);
             background: rgba(248, 250, 252, 0.82) !important;
             border: 1px solid rgba(255, 255, 255, 0.55) !important;
             box-shadow: 0 18px 35px rgba(0,0,0,0.28);
@@ -256,20 +280,25 @@
             z-index: 20000 !important;
         }
 
+        @@supports (backdrop-filter: blur(1px)) {
+            .dropdown-menu {
+                backdrop-filter: blur(22px) saturate(180%);
+            }
+        }
+
         .dropdown-item {
-            font-weight: 600;
-            font-size: .9rem;
+            font-weight: 650;
+            font-size: .92rem;
             padding: 10px 18px !important;
             color: #0f172a !important;
         }
 
             .dropdown-item:hover {
                 background: rgba(255,255,255,0.55) !important;
-                backdrop-filter: blur(25px);
                 border-radius: 10px;
             }
 
-        /* ========= Mobile topbar / hamburger ========= */
+        /* Mobile menu */
         .elx-menu-toggle {
             display: none;
             align-items: center;
@@ -304,13 +333,80 @@
             }
         }
 
+        /* ===== Reduced motion ===== */
         @@media (prefers-reduced-motion: reduce) {
             body {
                 background-attachment: scroll;
             }
+
+            .elx-topbar-blur {
+                backdrop-filter: none !important;
+            }
+
+            .dropdown-menu {
+                backdrop-filter: none !important;
+            }
+
+            .elx-pagebar {
+                backdrop-filter: none !important;
+            }
         }
 
-        /* ===== Footer (dark) ===== */
+        /* ===== Bell badge ===== */
+        .elx-bell {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .elx-bell-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            display: none;
+            place-items: center;
+            background: #ef4444;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            border: 2px solid rgba(10,25,61,.95);
+            box-shadow: 0 10px 20px rgba(0,0,0,.35);
+            line-height: 1;
+        }
+
+            .elx-bell-badge.show {
+                display: grid;
+            }
+
+        /* ===== (NEW) Top loading bar (UI-only) ===== */
+        .elx-loadbar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 3px;
+            width: 0%;
+            z-index: 25000;
+            background: linear-gradient(90deg, #F58220, #60a5fa);
+            box-shadow: 0 10px 18px rgba(0,0,0,.25);
+            opacity: 0;
+            transition: width .25s ease, opacity .12s ease;
+        }
+
+            .elx-loadbar.on {
+                opacity: 1;
+            }
+
+        @@media (prefers-reduced-motion: reduce) {
+            .elx-loadbar {
+                transition: none;
+            }
+        }
+
+        /* ===== Footer dark (GIỮ MÀU CŨ) ===== */
         .elx-footer-dark {
             background: radial-gradient(900px 380px at 85% -15%, rgba(39,195,243,.08), transparent 45%), radial-gradient(800px 380px at 5% 0%, rgba(245,130,32,.08), transparent 55%), var(--elx-navy-900);
             color: #eaf0ff;
@@ -461,10 +557,120 @@
                 .elx-footer-bottom a:hover {
                     text-decoration: underline;
                 }
+
+        /* ===== (NEW) Quick Action FAB (UI-only) ===== */
+        .elx-fab {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 24000;
+            display: grid;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+            .elx-fab .btn {
+                pointer-events: auto;
+                border-radius: 999px;
+                box-shadow: 0 18px 38px rgba(0,0,0,.22);
+                font-weight: 850;
+            }
+
+            .elx-fab .fab-main {
+                width: 56px;
+                height: 56px;
+                display: grid;
+                place-items: center;
+                background: linear-gradient(180deg, #ffb066, var(--elx-orange));
+                border: 1px solid rgba(255,255,255,.35);
+                color: #fff;
+            }
+
+            .elx-fab .fab-item {
+                display: none;
+                align-items: center;
+                gap: 10px;
+                background: rgba(17,24,39,.92);
+                border: 1px solid rgba(255,255,255,.12);
+                color: #fff;
+                padding: 10px 12px;
+                backdrop-filter: blur(10px);
+            }
+
+            .elx-fab.open .fab-item {
+                display: inline-flex;
+            }
+
+            .elx-fab .fab-item i {
+                font-size: 1rem;
+                opacity: .95;
+            }
+
+            .elx-fab .fab-item span {
+                font-size: .86rem;
+            }
+
+        @@media (max-width: 768px) {
+            .elx-fab {
+                right: 14px;
+                bottom: 14px;
+            }
+        }
+
+        @@media (prefers-reduced-motion: reduce) {
+            .elx-fab .btn {
+                transition: none;
+            }
+        }
     </style>
 </head>
 
 <body>
+    @{
+        // ===== detect admin/user once =====
+        bool isAdmin = false;
+        string brandTitle = "Elitech System";
+
+        if (User?.Identity?.IsAuthenticated == true)
+        {
+            isAdmin = User.IsInRole("Admin");
+            brandTitle = isAdmin ? "Elitech Admin" : "Elitech User";
+        }
+
+        // ✅ GIỮ FOOTER MÀU CŨ: luôn dark
+        var footerClass = "elx-footer-dark";
+
+        // Breadcrumb + page title
+        var pageTitle = (ViewData["Title"]?.ToString() ?? "").Trim();
+        var ctrl = (ViewContext.RouteData.Values["controller"]?.ToString() ?? "").Trim();
+        var act = (ViewContext.RouteData.Values["action"]?.ToString() ?? "").Trim();
+        var showPageBar = !string.IsNullOrWhiteSpace(pageTitle);
+
+        string ctrlLabel = ctrl switch
+        {
+            "Admin" => "Admin",
+            "User" => "User",
+            "ElitechRealtime" => "Realtime",
+            "ElitechHistoryPage" => "History",
+            _ => ctrl
+        };
+        string actLabel = act switch
+        {
+            "Index" => "Home",
+            "AssignDevices" => "Assign Devices",
+            "MyDevices" => "My Devices",
+            _ => act
+        };
+
+        // FAB target links (UI-only)
+        var linkDashboard = isAdmin ? Url.Action("Index", "Admin") : Url.Action("Index", "User");
+        var linkRealtime = Url.Action("Index", "ElitechRealtime");
+        var linkHistory = Url.Action("Index", "ElitechHistoryPage");
+        var linkMyDevices = Url.Action("MyDevices", "User");
+    }
+
+    <div class="elx-loadbar" id="elxLoadbar"></div>
+
     <div class="elx-shell">
 
         <!-- ===== Topbar ===== -->
@@ -473,19 +679,7 @@
                 <div class="container-xl">
                     <div class="elx-topbar d-flex align-items-center justify-content-between gap-3">
 
-                        @* BRAND TITLE + ROLE *@
-                        @{
-                            string brandTitle = "Elitech System";
-                            bool isAdmin = false;
-
-                            if (User?.Identity?.IsAuthenticated == true)
-                            {
-                                isAdmin = User.IsInRole("Admin");
-                                brandTitle = isAdmin ? "Elitech Admin" : "Elitech User";
-                            }
-                        }
-
-                        @* BRAND LINK: giữ đúng logic route như bạn muốn *@
+                        @* BRAND LINK: giữ đúng logic route *@
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
                             if (isAdmin)
@@ -535,8 +729,6 @@
 
                             <!-- Nav center (desktop) -->
                             <nav class="elx-nav d-none d-md-flex ms-3">
-
-                                @* ===== MENU (Admin vs User) giữ như đoạn 1 ===== *@
                                 @if (isAdmin)
                                 {
                                     <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="Admin"?"active":"")"
@@ -544,10 +736,11 @@
                                         <i class="bi bi-speedometer2 me-1"></i>Dashboard
                                     </a>
 
-                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechHistoryPage"?"active":"")"
-                                       asp-controller="ElitechHistoryPage" asp-action="Index">
+                                    <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechDevicePage"?"active":"")"
+                                       asp-controller="ElitechDevicePage" asp-action="Index">
                                         <i class="bi bi-cpu me-1"></i>Devices
                                     </a>
+
 
                                     <a class="elx-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString()=="ElitechRealtime"?"active":"")"
                                        asp-controller="ElitechRealtime" asp-action="Index">
@@ -589,14 +782,17 @@
                                 <div class="elx-search-wrap d-none d-sm-flex">
                                     <div class="elx-search w-100">
                                         <i class="bi bi-search"></i>
-                                        <input type="search" placeholder="Search devices…" />
+                                        <input id="elxSearchInput" type="search" placeholder="Search devices…" />
                                         <span class="small text-uppercase" style="font-size:.65rem;opacity:.7;">Ctrl+K</span>
                                     </div>
                                 </div>
 
                                 <ul class="navbar-nav ms-auto flex-row align-items-center">
                                     <li class="nav-item me-2">
-                                        <a class="nav-link text-light" href="#"><i class="bi bi-bell-fill"></i></a>
+                                        <a class="nav-link text-light elx-bell" href="#" aria-label="Notifications">
+                                            <i class="bi bi-bell-fill"></i>
+                                            <span id="elxBellBadge" class="elx-bell-badge" title="Có cảnh báo mới">•</span>
+                                        </a>
                                     </li>
 
                                     <li class="nav-item dropdown">
@@ -640,7 +836,6 @@
                         }
                         else
                         {
-                            <!-- CHƯA ĐĂNG NHẬP -->
                             <div class="ms-auto">
                                 <a asp-controller="Login" asp-action="Index"
                                    class="btn btn-sm btn-light fw-bold px-3 py-1 rounded-pill">
@@ -691,12 +886,14 @@
         <!-- ===== Main ===== -->
         <main class="elx-main">
             <div class="container-xl">
+
+
                 @RenderBody()
             </div>
         </main>
 
-        <!-- ===== Footer ===== -->
-        <footer class="elx-footer-dark pt-5 mt-auto">
+        <!-- ===== Footer (dark, màu cũ) ===== -->
+        <footer class="@footerClass pt-5 mt-auto">
             <div class="container-xl position-relative">
                 <div class="row g-4 align-items-start">
                     <div class="col-lg-4">
@@ -719,7 +916,6 @@
                     <div class="col-lg-4">
                         <h6>SMARTTECH VIETNAM</h6>
                         <div class="ratio ratio-16x9 mb-2">
-                            @* FIX: iframe phải dùng /embed/ *@
                             <iframe src="https://www.youtube.com/embed/Jm8bJoOCHlM"
                                     title="SmartTech Video"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -766,20 +962,39 @@
                 </div>
             </div>
         </footer>
-        
+
+        <!-- ===== Quick Action FAB (UI-only) ===== -->
+        @if (User?.Identity?.IsAuthenticated == true)
+        {
+            <div class="elx-fab" id="elxFab">
+                <a class="btn fab-item" href="@linkDashboard"><i class="bi bi-house-door"></i><span>Dashboard</span></a>
+                <a class="btn fab-item" href="@linkRealtime"><i class="bi bi-bell"></i><span>Realtime</span></a>
+                <a class="btn fab-item" href="@linkHistory"><i class="bi bi-activity"></i><span>History</span></a>
+
+                @if (!isAdmin)
+                {
+                    <a class="btn fab-item" href="@linkMyDevices"><i class="bi bi-cpu"></i><span>Thiết bị của tôi</span></a>
+                }
+
+                <button type="button" class="btn fab-main" id="elxFabBtn" aria-label="Quick actions">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
+        }
+
         <div id="elitechToastHost" style="position:fixed;right:18px;top:18px;z-index:4000;max-width:420px"></div>
         <audio id="alarmAudio" preload="auto">
             <source src="/sounds/alarm.mp3" type="audio/mpeg" />
         </audio>
 
+        @* =========================
+           ✅ SCRIPT QUAN TRỌNG — GIỮ NGUYÊN 100%
+           ========================= *@
         <script>
             (function () {
               const host = document.getElementById('elitechToastHost');
               if (!host) return;
 
-              // =========================
-              // (A) Persist "seen" across page reloads / navigation
-              // =========================
               const LS_KEY = 'elitech_seen_alert_ids_v1';
 
               function loadSeen() {
@@ -802,13 +1017,9 @@
 
               const seen = loadSeen();
 
-              // =========================
-              // (B) Audio MP3 (loop while toast exists)
-              // =========================
               const AUDIO_KEY = 'elitech_audio_unlocked_v1';
               let audioUnlocked = false;
 
-              // 2 audio để ưu tiên HIGH > WARN (nếu sau này bạn cần)
               const audioHigh = new Audio('/sounds/alarm.mp3');
               const audioWarn = new Audio('/sounds/alarm.mp3');
 
@@ -819,21 +1030,16 @@
               audioHigh.volume = 0.85;
               audioWarn.volume = 0.60;
 
-              // Đếm số toast đang hiện
               let activeHighCount = 0;
               let activeWarnCount = 0;
+              let pendingLevel = null;
 
-              // Nếu toast tới trước khi unlock
-              let pendingLevel = null; // 'high' | 'warn' | null
-
-              // (chỉ là hint) đã unlock trước đó
               try {
                 if (localStorage.getItem(AUDIO_KEY) === '1') audioUnlocked = true;
               } catch { }
 
               function normalizeLevel(level) {
                 const lv = String(level || '').toLowerCase();
-                // Backend bạn đang set Level="ALARM" => coi là HIGH
                 if (lv === 'warn' || lv === 'warning') return 'warn';
                 return 'high';
               }
@@ -852,7 +1058,6 @@
                   return;
                 }
 
-                // ưu tiên HIGH
                 if (needHigh) {
                   if (!audioWarn.paused) { audioWarn.pause(); audioWarn.currentTime = 0; }
                   if (audioHigh.paused) {
@@ -862,7 +1067,6 @@
                   return;
                 }
 
-                // chỉ WARN
                 if (!audioHigh.paused) { audioHigh.pause(); audioHigh.currentTime = 0; }
                 if (audioWarn.paused) {
                   audioWarn.currentTime = 0;
@@ -874,7 +1078,6 @@
                 if (audioUnlocked) return;
 
                 try {
-                  // warm up -> qua autoplay policy
                   await audioHigh.play();
                   audioHigh.pause(); audioHigh.currentTime = 0;
 
@@ -884,7 +1087,6 @@
                   audioUnlocked = true;
                   try { localStorage.setItem(AUDIO_KEY, '1'); } catch { }
 
-                  // nếu toast tới trước lúc unlock -> áp pending
                   if (pendingLevel) {
                     if (pendingLevel === 'warn') activeWarnCount++;
                     else activeHighCount++;
@@ -899,7 +1101,6 @@
                 }
               }
 
-              // user click/keydown 1 lần để unlock
               window.addEventListener('click', unlockAudio, { once: true });
               window.addEventListener('keydown', unlockAudio, { once: true });
 
@@ -927,9 +1128,6 @@
                 syncAudio();
               }
 
-              // =========================
-              // Helper: stable id key
-              // =========================
               function stableKey(a) {
                 const raw = a?.id ?? a?._id ?? a?.Id ?? a?.ID;
                 if (typeof raw === 'string' && raw.trim()) return raw.trim();
@@ -942,7 +1140,6 @@
               function toastAlert(a) {
                 const key = stableKey(a);
 
-                // ✅ chống spam khi reload/chuyển trang
                 if (seen.has(key)) return;
                 seen.add(key);
                 saveSeen(seen);
@@ -952,7 +1149,6 @@
                 const whenRaw = a?.occurredAtUtc ?? a?.OccurredAtUtc ?? a?.ts;
                 const when = whenRaw ? new Date(whenRaw).toLocaleString() : '';
 
-                // ✅ lấy Level từ backend (Worker đang set "ALARM")
                 const level = (a?.level ?? a?.Level ?? 'high');
 
                 const el = document.createElement('div');
@@ -985,13 +1181,10 @@
 
                 host.appendChild(el);
 
-                // ✅ div xuất hiện -> bật chuông MP3 (loop)
                 beginSound(level);
 
-                // auto fade/remove
                 setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .25s'; }, 9000);
                 setTimeout(() => {
-                  // ✅ div biến mất -> tắt chuông
                   endSound(level);
                   el.remove();
                 }, 9400);
@@ -1017,6 +1210,102 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* =========================
+       UI-only enhancements (không đụng script quan trọng)
+       - Ctrl+K focus search
+       - Bell badge mirror from toast host
+       - Top loading bar when navigating internal links
+       - FAB quick actions
+       ========================= *@
+    <script>
+        (function elxUiEnhance() {
+            // Ctrl+K focus search
+            const input = document.getElementById('elxSearchInput');
+            window.addEventListener('keydown', (e) => {
+                const key = (e.key || '').toLowerCase();
+                if ((e.ctrlKey || e.metaKey) && key === 'k') {
+                    if (!input) return;
+                    e.preventDefault();
+                    input.focus();
+                    input.select?.();
+                }
+                if (key === 'escape' && document.activeElement === input) {
+                    input.blur();
+                }
+            }, { passive: false });
+
+            // Bell badge: show dot when has toast in #elitechToastHost
+            const host = document.getElementById('elitechToastHost');
+            const badge = document.getElementById('elxBellBadge');
+            if (host && badge) {
+                const sync = () => {
+                    const has = host.children && host.children.length > 0;
+                    badge.classList.toggle('show', !!has);
+                };
+                sync();
+                const obs = new MutationObserver(sync);
+                obs.observe(host, { childList: true, subtree: false });
+            }
+
+            // Top loading bar for internal navigation (lightweight)
+            const bar = document.getElementById('elxLoadbar');
+            let timer = null;
+
+            function barStart() {
+                if (!bar) return;
+                bar.classList.add('on');
+                bar.style.width = '20%';
+                clearTimeout(timer);
+                timer = setTimeout(() => { bar.style.width = '68%'; }, 180);
+            }
+
+            function barDone() {
+                if (!bar) return;
+                bar.style.width = '100%';
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    bar.classList.remove('on');
+                    bar.style.width = '0%';
+                }, 240);
+            }
+
+            // click on internal links
+            document.addEventListener('click', (e) => {
+                const a = e.target && e.target.closest ? e.target.closest('a') : null;
+                if (!a) return;
+                const href = a.getAttribute('href') || '';
+                if (!href || href.startsWith('#')) return;
+                if (a.target && a.target === '_blank') return;
+                // internal only
+                const isExternal = /^https?:\/\//i.test(href);
+                if (isExternal) return;
+
+                barStart();
+                // if navigation is canceled, still auto-clear
+                setTimeout(barDone, 1800);
+            }, { passive: true });
+
+            window.addEventListener('pageshow', barDone);
+
+            // FAB toggle
+            const fab = document.getElementById('elxFab');
+            const fabBtn = document.getElementById('elxFabBtn');
+            if (fab && fabBtn) {
+                fabBtn.addEventListener('click', () => {
+                    fab.classList.toggle('open');
+                });
+
+                // click outside to close
+                document.addEventListener('click', (e) => {
+                    if (!fab.classList.contains('open')) return;
+                    if (fab.contains(e.target)) return;
+                    fab.classList.remove('open');
+                });
+            }
+        })();
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

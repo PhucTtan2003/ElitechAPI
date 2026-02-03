@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Elitech")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+400d063d9d560f8a6d17d34e6ebe7cd29ba64556")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ea8529d3565ac9e449047a9c1a993b431f7ca1c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Elitech")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Elitech")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

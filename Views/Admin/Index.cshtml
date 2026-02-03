@@ -205,9 +205,12 @@
     }
 
     @@media (min-width: 768px) {
-        .elx-col-6 {
-            grid-column: span 6;
-        }
+        .elx-col-6
+
+    {
+        grid-column: span 6;
+    }
+
     }
 
     .elx-help {
@@ -289,9 +292,12 @@
     }
 
     @@media (min-width: 768px) {
-        .elx-mod {
-            grid-column: span 6;
-        }
+        .elx-mod
+
+    {
+        grid-column: span 6;
+    }
+
     }
 
     .elx-mod:hover {
@@ -462,6 +468,7 @@
         display: none;
         overflow: hidden;
         backdrop-filter: blur(10px);
+        cursor: pointer;
     }
 
         .elx-toast.show {
@@ -512,117 +519,55 @@
     }
 
     @@keyframes elx-ripple {
-        to {
-            transform: scale(10);
-            opacity: 0;
-        }
+        to
+
+    {
+        transform: scale(10);
+        opacity: 0;
     }
 
-    /* ===== Dock bottom ===== */
-    .elx-dock {
-        position: sticky;
-        bottom: 18px;
-        display: flex;
-        justify-content: center;
-        margin-top: 18px;
-        z-index: 5;
     }
 
-    .elx-dock-inner {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        padding: 8px 14px;
+    /* ===== Avatar (GLOBAL) ===== */
+    .elx-th-ava {
+        width: 64px;
+    }
+
+    .elx-ava {
+        width: 34px;
+        height: 34px;
         border-radius: 999px;
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 10px 25px rgba(15,23,42,.18), 0 1px 3px rgba(15,23,42,.08);
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(148,163,184,.55);
+        background: #fff;
+        box-shadow: 0 8px 18px rgba(15,23,42,.12);
     }
 
-    .elx-dock a {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 5px 10px;
-        border-radius: 999px;
-        font-size: .82rem;
-        font-weight: 900;
-        color: #111827;
-        transition: background .15s ease, color .15s ease, transform .12s ease;
+        .elx-ava img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            display: block !important;
+        }
+
+        .elx-ava i {
+            font-size: 18px;
+            color: #64748b;
+  }
+
+    
+
+    .elx-mod-headbar {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-        .elx-dock a i {
-            font-size: 15px;
-        }
+    .elx-mod-head-hint {
+        text-align: left;
+    }
 
-        .elx-dock a.active {
-            background: linear-gradient(180deg,#F58220,#E36F15);
-            color: #111827;
-        }
-
-    @@media (max-width: 576px) {
-        .elx-dock {
-            bottom: 12px;
-            margin-top: 14px;
-        }
-
-        .elx-dock-inner {
-            width: calc(100% - 24px);
-            box-sizing: border-box;
-            justify-content: space-between;
-            gap: 6px;
-            padding: 6px 10px;
-            flex-wrap: wrap;
-        }
-
-        .elx-dock a {
-            flex: 1 1 25%;
-            justify-content: center;
-            padding: 4px 4px;
-            font-size: .78rem;
-        }
-
-            .elx-dock a i {
-                font-size: 14px;
-            }
-
-        .elx-mod-headbar {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .elx-mod-head-hint {
-            text-align: left;
-        }
-        /* ===== Avatar in Accounts table (GLOBAL) ===== */
-
-        .elx-th-ava {
-            width: 64px;
-        }
-        /* ===== Avatar (GLOBAL) ===== */
-        .elx-ava {
-            width: 34px;
-            height: 34px;
-            border-radius: 999px;
-            overflow: hidden;
-            display: grid;
-            place-items: center;
-            border: 1px solid rgba(148,163,184,.55);
-            background: #fff;
-            box-shadow: 0 8px 18px rgba(15,23,42,.12);
-        }
-
-            .elx-ava img {
-                width: 100% !important;
-                height: 100% !important;
-                object-fit: cover !important;
-                display: block !important;
-            }
-
-            .elx-ava i {
-                font-size: 18px;
-                color: #64748b;
-            }
     }
 </style>
 
@@ -692,7 +637,6 @@
                 </div>
             </div>
 
-
             <!-- Module #2 (Login Sessions) -->
             <div class="elx-mod">
                 <button type="button" class="elx-mod-toggle" data-mod-toggle>
@@ -741,7 +685,6 @@
                     </div>
                 </div>
             </div>
-
 
             <!-- Module #4 (Add Device - API #8) -->
             <div class="elx-mod">
@@ -865,7 +808,7 @@
         </div>
     </div>
 
-    <!-- Create User hero strip (đã bỏ nút Login Sessions ở đây vì đã chuyển vào Module #2) -->
+    <!-- Create User hero strip -->
     <div class="elx-hero" style="margin-top: 0;">
         <div class="elx-hero-left" style="display:flex;gap:14px;align-items:center;">
             <div style="
@@ -905,26 +848,6 @@
         </div>
     </div>
 
-
-
-
-    <!-- Dock -->
-    <div class="elx-dock">
-        <div class="elx-dock-inner">
-            <a asp-controller="Admin" asp-action="Index" class="active">
-                <i class="bi bi-grid-1x2"></i> Dashboard
-            </a>
-            <a asp-controller="ElitechHistoryPage" asp-action="Index">
-                <i class="bi bi-clock-history"></i> History
-            </a>
-            <a asp-controller="ElitechDevicePage" asp-action="Index">
-                <i class="bi bi-bell"></i> Alerts
-            </a>
-            <a asp-controller="ElitechRealtime" asp-action="Index">
-                <i class="bi bi-geo-alt"></i> Map
-            </a>
-        </div>
-    </div>
 </div>
 
 @section Scripts {
@@ -947,13 +870,35 @@
             else card.classList.remove('is-open');
         });
 
+        // ===== Shared helpers =====
+        function escapeHtml(s) {
+            return String(s ?? '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
+        }
+
+        function setLoading(btn, isLoading, htmlIdle, htmlLoading) {
+            if (!btn) return;
+            btn.disabled = !!isLoading;
+            btn.setAttribute('aria-busy', isLoading ? 'true' : 'false');
+            btn.innerHTML = isLoading ? htmlLoading : htmlIdle;
+        }
+
         // ===== Toast helper =====
         const toastEl = document.getElementById('elxToast');
         const toastDot = document.getElementById('elxToastDot');
         const toastText = document.getElementById('elxToastText');
         const toastMsg = document.getElementById('elxToastMsg');
 
+        function hideToast() {
+            toastEl?.classList.remove('show');
+        }
+
+        toastEl?.addEventListener('click', hideToast);
+
         function showToast(type, title, msg) {
+            if (!toastEl) return;
+
             toastEl.classList.add('show');
             toastText.textContent = title || 'Thông báo';
             toastMsg.textContent = msg || '';
@@ -964,7 +909,7 @@
             else toastDot.classList.add('err');
 
             clearTimeout(window.__elxToastT);
-            window.__elxToastT = setTimeout(() => toastEl.classList.remove('show'), 3200);
+            window.__elxToastT = setTimeout(hideToast, 3200);
         }
 
         // Ripple effect
@@ -1012,8 +957,13 @@
                 return;
             }
 
-            $btnAdd.disabled = true;
-            $btnAdd.innerHTML = '<i class="bi bi-arrow-repeat"></i> Đang gửi...';
+            setLoading(
+                $btnAdd,
+                true,
+                '<i class="bi bi-plus-circle"></i> Add Device',
+                '<i class="bi bi-arrow-repeat"></i> Đang gửi...'
+            );
+
             if ($rs) $rs.style.display = 'none';
 
             try {
@@ -1027,37 +977,37 @@
                 try { json = await res.json(); } catch { /* ignore */ }
 
                 const isOk = res.ok && (json?.code === 0 || json?.code === '0');
-
-                let uiMsg = isOk
+                const uiMsg = isOk
                     ? (json?.message ?? json?.msg ?? 'OK')
                     : (json?.message ?? json?.msg ?? 'Vui lòng thử lại');
 
                 if ($rs) $rs.style.display = 'grid';
                 if ($rHttp) $rHttp.textContent = String(res.status);
                 if ($rCode) $rCode.textContent = (json?.code ?? '-');
-                if ($rMsg)  $rMsg.textContent = uiMsg;
+                if ($rMsg) $rMsg.textContent = uiMsg;
                 if ($rAdded) $rAdded.textContent = (json?.added ?? json?.data ?? '-');
                 if ($rGuid) $rGuid.textContent = (json?.deviceGuid ?? deviceGuid);
                 if ($rName) $rName.textContent = (json?.deviceName ?? deviceName);
 
-                if (isOk) {
-                    showToast('ok', 'Add Device thành công', `GUID: ${deviceGuid}`);
-                } else {
-                    showToast('err', 'Add Device thất bại', uiMsg);
-                }
-            } catch (err) {
+                if (isOk) showToast('ok', 'Add Device thành công', `GUID: ${deviceGuid}`);
+                else showToast('err', 'Add Device thất bại', uiMsg);
+            } catch {
                 if ($rs) $rs.style.display = 'grid';
                 if ($rHttp) $rHttp.textContent = '-';
                 if ($rCode) $rCode.textContent = '-';
-                if ($rMsg)  $rMsg.textContent = 'Vui lòng thử lại';
+                if ($rMsg) $rMsg.textContent = 'Vui lòng thử lại';
                 if ($rAdded) $rAdded.textContent = '-';
                 if ($rGuid) $rGuid.textContent = deviceGuid;
                 if ($rName) $rName.textContent = deviceName;
 
                 showToast('err', 'Lỗi mạng / server', 'Vui lòng thử lại');
             } finally {
-                $btnAdd.disabled = false;
-                $btnAdd.innerHTML = '<i class="bi bi-plus-circle"></i> Add Device';
+                setLoading(
+                    $btnAdd,
+                    false,
+                    '<i class="bi bi-plus-circle"></i> Add Device',
+                    '<i class="bi bi-arrow-repeat"></i> Đang gửi...'
+                );
             }
         });
 
@@ -1067,19 +1017,14 @@
         const $guidsTableWrap = document.getElementById('guidsTableWrap');
         const $guidsTbody = document.getElementById('guidsTbody');
 
-        function escapeHtml(s) {
-            return String(s ?? '').replace(/[&<>"']/g, m => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#39;'
-            }[m]));
-        }
-
         $btnLoadGuids?.addEventListener('click', async () => {
-            $btnLoadGuids.disabled = true;
-            $btnLoadGuids.innerHTML = '<i class="bi bi-arrow-repeat"></i> Đang tải...';
+            setLoading(
+                $btnLoadGuids,
+                true,
+                '<i class="bi bi-arrow-repeat"></i> Load GUIDs',
+                '<i class="bi bi-arrow-repeat"></i> Đang tải...'
+            );
+
             if ($guidsTableWrap) $guidsTableWrap.style.display = 'none';
             if ($guidsTbody) $guidsTbody.innerHTML = '';
 
@@ -1118,11 +1063,15 @@
 
                 if ($guidsHint) $guidsHint.textContent = `Đã tải ${arr.length} GUID.`;
                 showToast('ok', 'Load GUIDs thành công', `Tổng: ${arr.length}`);
-            } catch (e) {
+            } catch {
                 showToast('err', 'Lỗi mạng / server', 'Không gọi được /api/elitech/device-guids');
             } finally {
-                $btnLoadGuids.disabled = false;
-                $btnLoadGuids.innerHTML = '<i class="bi bi-arrow-repeat"></i> Load GUIDs';
+                setLoading(
+                    $btnLoadGuids,
+                    false,
+                    '<i class="bi bi-arrow-repeat"></i> Load GUIDs',
+                    '<i class="bi bi-arrow-repeat"></i> Đang tải...'
+                );
             }
         });
 
@@ -1139,101 +1088,96 @@
             }
         });
 
-
-        // ===== Accounts list =====
+        // ===== Accounts list (guard null) =====
         const $btnLoadAccounts = document.getElementById('btnLoadAccounts');
         const $accountsHint = document.getElementById('accountsHint');
         const $accountsTableWrap = document.getElementById('accountsTableWrap');
         const $accountsTbody = document.getElementById('accountsTbody');
 
-        function escapeHtml(s) {
-          return String(s ?? '').replace(/[&<>"']/g, m => ({
-            '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-          }[m]));
-        }
-
         function roleLabel(role) {
-          if (role === 1) return 'Admin';
-          if (role === 2) return 'User';
-          return String(role ?? '-');
+            if (role === 1) return 'Admin';
+            if (role === 2) return 'User';
+            return String(role ?? '-');
         }
 
         function fmtDate(iso) {
-          try { return new Date(iso).toLocaleString(); }
-          catch { return iso ?? '-'; }
+            try { return new Date(iso).toLocaleString(); }
+            catch { return iso ?? '-'; }
         }
 
         $btnLoadAccounts?.addEventListener('click', async () => {
-          $btnLoadAccounts.disabled = true;
-          $btnLoadAccounts.innerHTML = '<i class="bi bi-arrow-repeat"></i> Đang tải...';
-          $accountsTableWrap.style.display = 'none';
-          $accountsTbody.innerHTML = '';
+            setLoading(
+                $btnLoadAccounts,
+                true,
+                '<i class="bi bi-arrow-repeat"></i> Load Accounts',
+                '<i class="bi bi-arrow-repeat"></i> Đang tải...'
+            );
 
-          try {
-            const res = await fetch('/api/admin/accounts', { method: 'GET' });
-            const json = await res.json().catch(() => null);
+            if ($accountsTableWrap) $accountsTableWrap.style.display = 'none';
+            if ($accountsTbody) $accountsTbody.innerHTML = '';
 
-            if (!res.ok || !json || json.code !== 0) {
-              const msg = json?.message ?? 'Không tải được danh sách accounts.';
-              showToast('err', 'Load Accounts thất bại', msg);
-              $accountsHint.textContent = msg;
-              return;
-            }
+            try {
+                const res = await fetch('/api/admin/accounts', { method: 'GET' });
+                const json = await res.json().catch(() => null);
 
-            const arr = json.data || [];
-            if (!arr.length) {
-              showToast('warn', 'Không có account', 'Collection Accounts đang rỗng.');
-              $accountsHint.textContent = 'Danh sách rỗng.';
-              return;
-            }
+                if (!res.ok || !json || json.code !== 0) {
+                    const msg = json?.message ?? 'Không tải được danh sách accounts.';
+                    showToast('err', 'Load Accounts thất bại', msg);
+                    if ($accountsHint) $accountsHint.textContent = msg;
+                    return;
+                }
 
-            $accountsTableWrap.style.display = 'block';
-            $accountsTbody.innerHTML = arr.map((a, i) => {
-              const statusChip = a.isActive
-                ? `<span class="elx-chip-status ok">Active</span>`
-                : `<span class="elx-chip-status crit">Disabled</span>`;
+                const arr = json.data || [];
+                if (!arr.length) {
+                    showToast('warn', 'Không có account', 'Collection Accounts đang rỗng.');
+                    if ($accountsHint) $accountsHint.textContent = 'Danh sách rỗng.';
+                    return;
+                }
 
-              const roleChip = a.role === 1
-                ? `<span class="elx-chip-status info">${roleLabel(a.role)}</span>`
-                : `<span class="elx-chip-status warn">${roleLabel(a.role)}</span>`;
+                if ($accountsTableWrap) $accountsTableWrap.style.display = 'block';
 
-                      return `
-                              <tr>
+                if ($accountsTbody) {
+                    $accountsTbody.innerHTML = arr.map((a, i) => {
+                        const statusChip = a.isActive
+                            ? `<span class="elx-chip-status ok">Active</span>`
+                            : `<span class="elx-chip-status crit">Disabled</span>`;
+
+                        const roleChip = a.role === 1
+                            ? `<span class="elx-chip-status info">${roleLabel(a.role)}</span>`
+                            : `<span class="elx-chip-status warn">${roleLabel(a.role)}</span>`;
+
+                        const ava = a.avatarUrl
+                            ? `<img src="${escapeHtml(a.avatarUrl)}" alt="avatar"
+                                    onerror="this.outerHTML='<i class=\\'bi bi-person-fill\\'></i>';" />`
+                            : `<i class="bi bi-person-fill"></i>`;
+
+                        return `
+                            <tr>
                                 <td>${i + 1}</td>
-
-                                <td>
-                                  <span class="elx-ava">
-                                    ${
-                                            a.avatarUrl
-                                                ? `<img src="${escapeHtml(a.avatarUrl)}" alt="avatar"
-                                                     style="width:34px;height:34px;object-fit:cover;display:block"
-                                                     onerror="this.outerHTML='<i class=\\'bi bi-person-fill\\'></i>';" />`
-                                                : `<i class="bi bi-person-fill"></i>`
-
-                                    }
-                                  </span>
-                                </td>
-
+                                <td><span class="elx-ava">${ava}</span></td>
                                 <td style="font-weight:900">${escapeHtml(a.username)}</td>
                                 <td>${roleChip}</td>
                                 <td>${statusChip}</td>
                                 <td>${escapeHtml(fmtDate(a.createdAtUtc))}</td>
-                              </tr>
-                            `;
+                            </tr>
+                        `;
+                    }).join('');
+                }
 
-            }).join('');
-
-            $accountsHint.textContent = `Đã tải ${arr.length} accounts.`;
-            showToast('ok', 'Load Accounts thành công', `Tổng: ${arr.length}`);
-          } catch (e) {
-            showToast('err', 'Lỗi mạng / server', 'Không gọi được /api/admin/accounts');
-          } finally {
-            $btnLoadAccounts.disabled = false;
-            $btnLoadAccounts.innerHTML = '<i class="bi bi-arrow-repeat"></i> Load Accounts';
-          }
+                if ($accountsHint) $accountsHint.textContent = `Đã tải ${arr.length} accounts.`;
+                showToast('ok', 'Load Accounts thành công', `Tổng: ${arr.length}`);
+            } catch {
+                showToast('err', 'Lỗi mạng / server', 'Không gọi được /api/admin/accounts');
+            } finally {
+                setLoading(
+                    $btnLoadAccounts,
+                    false,
+                    '<i class="bi bi-arrow-repeat"></i> Load Accounts',
+                    '<i class="bi bi-arrow-repeat"></i> Đang tải...'
+                );
+            }
         });
     </script>
-
 
     <script type="module" src="/app/entry-admin.js"></script>
 }
